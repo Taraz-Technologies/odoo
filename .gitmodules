@@ -1,0 +1,3 @@
+[submodule "odoo/addons_custom"]
+	path = odoo/addons_custom
+	url = https://github.com/Taraz-Technologies/odoo_addons_custom
