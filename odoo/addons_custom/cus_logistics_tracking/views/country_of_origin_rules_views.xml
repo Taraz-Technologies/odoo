@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record id="country_of_origin_rules_view_form" model="ir.ui.view">
+		<field name="name">country.of.origin.rules.view.form</field>
+		<field name="model">country.of.origin.rules</field>
+		<field name="arch" type="xml">
+            <form string="Country Of Origin Rules">
+                <sheet>
+                    <group col="4">
+                        <field name="x_name"/>
+                        <field name="company_id" readonly="1"/>
+                        <field name="x_country_ids" widget="many2many_tags" options="{'no_create': True, 'no_create_edit': True}"/>
+                        <field name="x_country_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+	<record id="country_of_origin_rules_view_tree" model="ir.ui.view">
+		<field name="name">country.of.origin.rules.view.tree</field>
+		<field name="model">country.of.origin.rules</field>
+		<field name="arch" type="xml">
+            <tree string="Country Of Origin Rules">
+                <field name="x_name"/>
+                <field name="company_id"/>
+                <field name="x_country_ids" widget="many2many_tags"/>
+                <field name="x_country_id"/>
+            </tree>
+        </field>
+    </record>
+
+	<record id="country_of_origin_rules_view_search" model="ir.ui.view">
+		<field name="name">country.of.origin.rules.view.search</field>
+		<field name="model">country.of.origin.rules</field>
+		<field name="arch" type="xml">
+			<search string="Country Of Origin Rules">
+                <field name="x_name"/>
+                <field name="x_country_ids"/>
+                <field name="x_country_id"/>
+				<group col="4" colspan="4" expand="0" string="Group By">
+                    <filter string="Company" name="company" context="{'group_by':'company_id'}"/>
+                    <filter string="Import from Country" name="country" context="{'group_by':'x_country_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_country_of_origin_rules" model="ir.actions.act_window">
+		<field name="name">Country Of Origin Rules</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">country.of.origin.rules</field>
+		<field name="view_mode">tree,form</field>
+		<field name="view_id" ref="country_of_origin_rules_view_tree"/>
+		<field name="search_view_id" ref="country_of_origin_rules_view_search"/>
+    </record>
+</odoo>

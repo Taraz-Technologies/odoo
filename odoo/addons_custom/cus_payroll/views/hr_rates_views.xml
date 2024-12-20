@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="payroll_currency_rate_view_form_cus_payroll" model="ir.ui.view">
+            <field name="name">payroll_currency_rate_view_form_cus_payroll</field>
+            <field name="model">payroll.currency.rate</field>
+            <field name="arch" type="xml">
+                <form string="Payroll Currency Rate">
+                    <sheet>
+                        <group col="4">
+                            <field name="x_date_from"/>
+                            <field name="x_journal_id"/>
+                            <field name="x_in_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="x_out_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="x_balance_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                        <group col="4">
+                            <field name="name"/>
+                            <field name="currency_id"/>
+                            <field name="salary_expense"/>
+                            <field name="rate_fifo"/>
+                            <field name="notes" placeholder="Notes"/>
+                            <field name="rate"/>
+                        </group>
+                        <separator colspan="4" string="Invoices"/>
+                        <field name="x_swift_inward_ids" readonly="0">
+                            <tree>
+                                <field name="x_rate_id" invisible="1"/>
+                                <field name="x_date"/>
+                                <field name="x_invoice_id" widget="many2one"/>
+                                <field name="x_amount" sum="Total"/>
+                                <field name="x_amount_currency" sum="Total"/>
+                                <field name="x_rate" avg="Average"/>
+                            </tree>
+                            <form>
+                                <group>
+                                    <field name="x_rate_id" invisible="1"/>
+                                    <field name="x_date"/>
+                                    <field name="x_invoice_id"/>
+                                    <field name="x_amount"/>
+                                    <field name="x_amount_currency"/>
+                                    <field name="x_rate"/>
+                                </group>
+                            </form>
+                        </field>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="payroll_currency_rate_view_tree_cus_payroll" model="ir.ui.view">
+            <field name="name">payroll_currency_rate_view_tree_cus_payroll</field>
+            <field name="model">payroll.currency.rate</field>
+            <field name="arch" type="xml">
+                <tree string="Payroll Currency Rate">
+                    <field name="currency_id"/>
+                    <field name="name"/>
+                    <field name="rate_fifo"/>
+                    <field name="rate"/>
+                    <field name="notes"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="payroll_currency_rate_view_search_cus_payroll" model="ir.ui.view">
+           <field name="name">payroll_currency_rate_view_search_cus_payroll</field>
+           <field name="model">payroll.currency.rate</field>
+            <field name="arch" type="xml">
+                <search string="Payroll Currency Rate">
+                    <field name="name"/>
+                 </search>
+           </field>
+        </record>
+
+        <record id="payroll_currency_rate_action" model="ir.actions.act_window">
+            <field name="name">Payroll Currency Rate</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">payroll.currency.rate</field>
+            <field name="view_mode">tree,form</field>
+		    <field name="search_view_id" ref="payroll_currency_rate_view_search_cus_payroll"/>
+        </record>
+
+        <menuitem id="menu_payroll_currency_rates"
+                  name="Currency Rates"
+                  action="payroll_currency_rate_action"
+                  parent="om_hr_payroll.menu_hr_payroll_root"
+                  groups="om_hr_payroll.group_hr_payroll_user"
+                  sequence="51"/>
+    </data>
+</odoo>

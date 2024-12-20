@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_demand_list">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page" style="font-family: Arial; font-size:16px">
+                        <style>
+                            table, th, td {
+                                border: 1px solid black;
+                                border-collapse: collapse;
+                            }
+                        </style>
+                        <h4 class="mt8 mb8">
+                            <span>Products</span>
+                        </h4>
+                        <table class="table-sm" name="product_table" style="width: 100%;">
+                            <tbody>
+                                <t t-foreach="o.x_cable_assembly_id.x_bom_ids" t-as="line">
+                                    <tr>
+                                        <td class="text-center" style="width: 60%;">
+                                            <span t-field="line.x_product_id"/>
+                                        </td>
+                                        <td class="text-center" style="width: 40%;">
+                                            <span t-field="line.x_quantity"/>
+                                            <span>Unit(s)</span>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <h3 class="mt8 mb8" style="color:#009999;">
+                            <span t-field="o.x_name"/>
+                        </h3>
+                        <h4 class="mt8 mb8">
+                            <span>Product List</span>
+                        </h4>
+                        <table class="table-sm" name="product_list_table" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <t t-set="colspan" t-value="6"/>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Product Name</span>
+                                    </th>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Description</span>
+                                    </th>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Required Qty</span>
+                                    </th>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Received Qty</span>
+                                    </th>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Consumed Qty</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.x_product_demand_list_line_ids" t-as="line">
+                                    <tr>
+                                        <td class="text-center" style="width: 15%;">
+                                            <span t-field="line.x_name"/>
+                                        </td>
+                                        <td class="text-center" style="width: 30%;">
+                                            <span t-field="line.x_description"/>
+                                        </td>
+                                        <td class="text-center" style="width: 15%;">
+                                            <span t-field="line.x_quantity"/>
+                                            <span t-field="line.x_uom_id"/>
+                                        </td>
+                                        <td class="text-center" style="width: 20%;"/>
+                                        <td class="text-center" style="width: 20%;"/>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <h4 class="mt8 mb8">
+                            <span>Connector List</span>
+                        </h4>
+                        <table class="table-sm" name="connector_list_table" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <t t-set="colspan" t-value="6"/>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Connector Name</span>
+                                    </th>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Description</span>
+                                    </th>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Required Qty</span>
+                                    </th>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Received Qty</span>
+                                    </th>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Consumed Qty</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.x_connector_demand_list_line_ids" t-as="line">
+                                    <tr>
+                                        <td class="text-center" style="width: 15%;">
+                                            <span t-field="line.x_product_id"/>
+                                        </td>
+                                        <td class="text-center" style="width: 30%;">
+                                            <strong t-field="line.x_label"/>:
+                                            <span t-field="line.x_description"/>
+                                        </td>
+                                        <td class="text-center" style="width: 15%;">
+                                            <span t-field="line.x_required_qty"/>
+                                            <span t-field="line.x_uom_id"/>
+                                        </td>
+                                        <td class="text-center" style="width: 20%;"/>
+                                        <td class="text-center" style="width: 20%;"/>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <h4 class="mt8 mb8">
+                            <span>Wire List</span>
+                        </h4>
+                        <table class="table-sm" name="wire_list_table" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <t t-set="colspan" t-value="6"/>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Wire Name</span>
+                                    </th>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Description</span>
+                                    </th>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Required Qty</span>
+                                    </th>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Received Qty</span>
+                                    </th>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Consumed Qty</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.x_wire_demand_list_line_ids" t-as="line">
+                                    <tr>
+                                        <td class="text-center" style="width: 15%;">
+                                            <span t-field="line.x_product_id"/>
+                                        </td>
+                                        <td class="text-center" style="width: 30%;">
+                                            <strong t-field="line.x_label"/>:
+                                            <span t-field="line.x_description"/>
+                                        </td>
+                                        <td class="text-center" style="width: 15%;">
+                                            <span t-esc="'%.2f'%(line.x_required_qty)"/>
+                                            <span t-field="line.x_uom_id"/>
+                                        </td>
+                                        <td class="text-center" style="width: 20%;"/>
+                                        <td class="text-center" style="width: 20%;"/>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

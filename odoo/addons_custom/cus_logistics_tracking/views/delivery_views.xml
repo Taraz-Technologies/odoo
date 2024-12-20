@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_delivery_carrier_form_custom_0" model="ir.ui.view">
+        <field name="name">delivery.carrier.form.custom</field>
+        <field name="model">delivery.carrier</field>
+        <field name="inherit_id" ref="delivery.view_delivery_carrier_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <field name="integration_level" position="before">
+                    <field name="x_average_delivery_days"/>
+                    <field name="x_tracking_url"
+                           placeholder="Use '{Tracking Ref}' as tracking ref identifier in link."/>
+                </field>
+            </data>
+        </field>
+    </record>
+
+    <record id="view_picking_form_cus_logistics_tracking" model="ir.ui.view">
+        <field name="name">view_picking_form_cus_logistics_tracking</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <field name="origin" position="after">
+                <field name="x_sale_id" attrs="{'invisible': [('x_sale_id', '=', False)]}"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="stock_picking_kanban_cus_logistics_tracking" model="ir.ui.view">
+        <field name="name">stock_picking_kanban_cus_logistics_tracking</field>
+        <field name="model">stock.picking</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="x_delivery_order_state" create="0"
+                    class="oe_background_grey o_kanban_dashboard o_emphasize_colors o_stock_kanban">
+                <field name="color"/>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="location_dest_id"/>
+                <field name="state"/>
+                <field name="date"/>
+                <field name="activity_state"/>
+                <field name="picking_type_code"/>
+                <field name="x_sale_id"/>
+                <field name="x_folder_name"/>
+                <field name="x_remaining_days"/>
+                <field name="x_tag_ids"/>
+                <field name="x_shipping_invoice_lines"/>
+                <progressbar field="activity_state"
+                             colors="{&quot;planned&quot;: &quot;success&quot;, &quot;today&quot;: &quot;warning&quot;, &quot;overdue&quot;: &quot;danger&quot;}"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click #{!selection_mode ? kanban_color(record.color.raw_value) : ''}">
+                            <div class="o_kanban_record_top mb8">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title"><span><t
+                                            t-esc="record.name.value"/></span></strong>
+                                </div>
+                                <strong>
+                                    <field name="state" widget="label_selection"
+                                           options="{'classes': {'draft': 'default', 'cancel': 'default', 'none': 'danger', 'waiting': 'warning', 'confirmed': 'warning', 'partially_available': 'warning', 'done': 'success'}}"/>
+                                </strong>
+                            </div>
+                            <div class="o_kanban_record_body"
+                                 attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}">
+                                <strong attrs="{'invisible': [('x_sale_id', '=', False)]}">
+                                    <t t-esc="record.x_folder_name.value"/>
+                                </strong>
+                                <span attrs="{'invisible': [('x_tag_ids', '=', False)]}">
+                                    <field name="x_tag_ids" widget="form.many2many_tags"
+                                           options="{'color_field': 'color'}"/>
+                                </span>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_picking_tree_delivery" model="ir.actions.act_window">
+        <field name="name">Delivery Order</field>
+        <field name="res_model">stock.picking</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">kanban,tree,form,calendar</field>
+        <field name="view_id" ref="stock_picking_kanban_cus_logistics_tracking"/>
+        <field name="context">{
+            'search_default_draft': 1,
+            'search_default_waiting': 1,
+            'search_default_available': 1,
+        }</field>
+        <field name="domain">[('picking_type_code', '=', 'outgoing')]</field>
+    </record>
+
+    <menuitem id="picking_tree_delivery"
+              name="Deliveries"
+              action="action_picking_tree_delivery"
+              parent="stock.menu_stock_root"
+              groups="stock.group_stock_manager"
+              sequence="2"/>
+
+    <menuitem id="picking_tree_delivery_mrp"
+              name="Deliveries"
+              action="action_picking_tree_delivery"
+              parent="mrp.menu_mrp_root"
+              groups="mrp.group_mrp_manager"
+              sequence="20"/>
+
+    <menuitem id="picking_tree_delivery_sale"
+              name="Deliveries"
+              action="action_picking_tree_delivery"
+              parent="sale.sale_menu_root"
+              groups="sales_team.group_sale_manager"
+              sequence="4"/>
+</odoo>

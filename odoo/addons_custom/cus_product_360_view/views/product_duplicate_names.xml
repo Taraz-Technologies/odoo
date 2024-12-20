@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_product_duplicate_names_form" model="ir.ui.view">
+        <field name="name">product.duplicate.names.form.view</field>
+        <field name="model">product.duplicate.names</field>
+        <field name="arch" type="xml">
+			<form string="Product Duplicate Names">
+				<sheet>
+					<group col="4">
+						<field name="x_product_id"/>
+						<field name="x_other_name_tag_ids" widget="many2many_tags"/>
+						<field name="x_product_ids" widget="many2many_tags"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+    <record id="view_product_duplicate_names_tree" model="ir.ui.view">
+        <field name="name">product.duplicate.names.tree.view</field>
+        <field name="model">product.duplicate.names</field>
+        <field name="arch" type="xml">
+			<tree string="Product Duplicate Names" editable="bottom">
+				<field name="x_product_id"/>
+				<field name="x_description"/>
+				<field name="x_other_name_tag_ids" widget="many2many_tags"/>
+				<button name="move_other_products_data" type="object" icon="fa-play" string="Move Duplicate Product Data"/>
+				<field name="x_product_ids" widget="many2many_tags"/>
+			</tree>
+		</field>
+	</record>
+
+    <record id="view_product_duplicate_names_search" model="ir.ui.view">
+        <field name="name">product.duplicate.names.search.view</field>
+        <field name="model">product.duplicate.names</field>
+        <field name="arch" type="xml">
+			<search string="Product Duplicate Names">
+				<field name="x_product_id"/>
+				<field name="x_description"/>
+				<field name="x_other_name_tag_ids"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="action_view_product_duplicate_names" model="ir.actions.act_window">
+		<field name="name">Product Duplicate Names</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">product.duplicate.names</field>
+		<field name="view_mode">tree,form</field>
+		<field name="view_id" ref="view_product_duplicate_names_tree"/>
+		<field name="search_view_id" ref="view_product_duplicate_names_search"/>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				No content to show
+			</p>
+		</field>
+	</record>
+
+	<menuitem id="menu_product_duplicate_names"
+	          name="Product Duplicate Names"
+	          sequence="1"
+			  parent="stock.menu_product_in_config_stock"
+			  action="action_view_product_duplicate_names"/>
+</odoo>

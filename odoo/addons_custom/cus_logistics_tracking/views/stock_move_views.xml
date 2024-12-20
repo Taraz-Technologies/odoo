@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="backorder_purchase_stock_move_action" model="ir.actions.act_window">
+            <field name="name">Backorder Parts (Purchase)</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.move</field>
+            <field name="search_view_id" ref="stock.view_move_search"/>
+            <field name="domain">
+                [
+                ('picking_id.x_backorder', '!=', False),
+                ('picking_id.picking_type_code', '=', 'incoming'),
+                ('state', 'not in', ('done', 'cancel')),
+                ]
+            </field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

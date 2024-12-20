@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!--Rule Category-->
+        <record id="BASIC" model="hr.salary.rule.category">
+            <field name="name">Basic</field>
+            <field name="code">BASIC</field>
+        </record>
+        <record id="ALW" model="hr.salary.rule.category">
+            <field name="name">Allowance</field>
+            <field name="code">ALW</field>
+        </record>
+        <record id="GROSS" model="hr.salary.rule.category">
+            <field name="name">Gross</field>
+            <field name="code">GROSS</field>
+        </record>
+        <record id="DED" model="hr.salary.rule.category">
+            <field name="name">Deduction</field>
+            <field name="code">DED</field>
+        </record>
+        <record id="NET" model="hr.salary.rule.category">
+            <field name="name">Net</field>
+            <field name="code">NET</field>
+        </record>
+        <record id="COMP" model="hr.salary.rule.category">
+            <field name="name">Company Contribution</field>
+            <field name="code">COMP</field>
+        </record>
+        <record id="LOAN" model="hr.salary.rule.category">
+            <field name="name">Loan</field>
+            <field name="code">LOAN</field>
+        </record>
+        <record id="LOANR" model="hr.salary.rule.category">
+            <field name="name">Loan Return</field>
+            <field name="code">LOANR</field>
+        </record>
+        <record id="BONUS" model="hr.salary.rule.category">
+            <field name="name">Bonuses</field>
+            <field name="code">BONUS</field>
+        </record>
+        <record id="EOBI" model="hr.salary.rule.category">
+            <field name="name">EOBI</field>
+            <field name="code">EOBI</field>
+        </record>
+        <record id="EOBI COP" model="hr.salary.rule.category">
+            <field name="name">EOBI - Company Part</field>
+            <field name="code">EOBI COP</field>
+        </record>
+        <record id="TAX" model="hr.salary.rule.category">
+            <field name="name">Taxes</field>
+            <field name="code">TAX</field>
+        </record>
+        <record id="LEV" model="hr.salary.rule.category">
+            <field name="name">Leaves</field>
+            <field name="code">LEV</field>
+        </record>
+        <!-- Contribution Registers -->
+        <record id="contrib_register_employees" model="hr.contribution.register">
+            <field name="name">Employees</field>
+            <field name="partner_id" eval="False"/>
+        </record>
+        <record id="contribution_register_advances" model="hr.contribution.register">
+            <field name="name">Advances</field>
+        </record>
+        <record id="contribution_register_bonuses" model="hr.contribution.register">
+            <field name="name">Bonuses</field>
+        </record>
+        <record id="contribution_register_basic_salary" model="hr.contribution.register">
+            <field name="name">Basic Salary</field>
+        </record>
+        <record id="contribution_register_fines" model="hr.contribution.register">
+            <field name="name">Fines</field>
+        </record>
+        <record id="contribution_register_income_tax_withheld" model="hr.contribution.register">
+            <field name="name">Income Tax Withheld</field>
+        </record>
+        <record id="contribution_register_loans_to_employees" model="hr.contribution.register">
+            <field name="name">Loans to Employees</field>
+        </record>
+        <record id="contribution_register_rnd_allowance" model="hr.contribution.register">
+            <field name="name">R&amp;D Allowance</field>
+        </record>
+        <record id="contribution_register_transportation_allowance" model="hr.contribution.register">
+            <field name="name">Transportation Allowance</field>
+        </record>
+        <record id="contribution_register_eobi" model="hr.contribution.register">
+            <field name="name">	[EOBI] Employees Old-Age Benefits Institution</field>
+        </record>
+        <!--Rules-->
+        <record id="hr_rule_basic" model="hr.salary.rule">
+            <field name="name">Basic Salary</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">BASIC</field>
+            <field name="category_id" ref="om_hr_payroll.BASIC"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="register_id" ref="contribution_register_basic_salary"/>
+            <field name="amount_python_compute">working_days = payslip.x_work_days_of_month
+worked_days = 0
+for line in payslip.worked_days_line_ids:
+    worked_days += line.number_of_days
+result = round(worked_days / working_days * contract.wage, 0)</field>
+        </record>
+        <record id="hr_rule_advance" model="hr.salary.rule">
+            <field name="name">Advance  Salary</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">BASIC</field>
+            <field name="category_id" ref="om_hr_payroll.BASIC"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="register_id" ref="contribution_register_advances"/>
+            <field name="amount_python_compute">result = round(payslip.x_advance)</field>
+        </record>
+        <record id="hr_rule_transport_allowance" model="hr.salary.rule">
+            <field name="name">Transport Allowance</field>
+            <field name="sequence" eval="11"/>
+            <field name="code">ALW1</field>
+            <field name="category_id" ref="om_hr_payroll.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="register_id" ref="contribution_register_transportation_allowance"/>
+            <field name="amount_python_compute">working_days = payslip.x_work_days_of_month
+worked_days = 0
+for line in payslip.worked_days_line_ids:
+    worked_days += line.number_of_days
+result = round(worked_days / working_days * contract.x_transportation_allowance, 0)</field>
+        </record>
+        <record id="hr_rule_rnd_allowance" model="hr.salary.rule">
+            <field name="name">R&amp;D Allowance</field>
+            <field name="sequence" eval="12"/>
+            <field name="code">ALW2</field>
+            <field name="category_id" ref="om_hr_payroll.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="register_id" ref="contribution_register_rnd_allowance"/>
+            <field name="amount_python_compute">working_days = payslip.x_work_days_of_month
+worked_days = 0
+for line in payslip.worked_days_line_ids:
+    worked_days += line.number_of_days
+result = round(worked_days / working_days * contract.x_rnd_allowance, 0)</field>
+        </record>
+        <record id="hr_rule_bonus" model="hr.salary.rule">
+            <field name="name">Bonus</field>
+            <field name="sequence" eval="21"/>
+            <field name="code">BONUS</field>
+            <field name="category_id" ref="om_hr_payroll.BONUS"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="register_id" ref="contribution_register_bonuses"/>
+            <field name="amount_python_compute">result = round(payslip.x_bonus)</field>
+        </record>
+        <record id="hr_rule_production_bonus" model="hr.salary.rule">
+            <field name="name">Production Bonus</field>
+            <field name="sequence" eval="21"/>
+            <field name="code">BONUS</field>
+            <field name="category_id" ref="om_hr_payroll.BONUS"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="register_id" ref="contribution_register_bonuses"/>
+            <field name="amount_python_compute">result = round(payslip.x_bonus)</field>
+        </record>
+        <record id="hr_rule_loan" model="hr.salary.rule">
+            <field name="name">Loan</field>
+            <field name="sequence" eval="31"/>
+            <field name="code">LOAN</field>
+            <field name="category_id" ref="om_hr_payroll.LOAN"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="register_id" ref="contribution_register_loans_to_employees"/>
+            <field name="amount_python_compute">result = round(payslip.x_loan)</field>
+        </record>
+        <record id="hr_rule_taxable" model="hr.salary.rule">
+            <field name="name">Gross</field>
+            <field name="sequence" eval="100"/>
+            <field name="code">GROSS</field>
+            <field name="category_id" ref="om_hr_payroll.GROSS"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = round(categories.BASIC + categories.ALW + categories.BONUS + categories.LOAN)</field>
+            <field name="register_id" ref="contrib_register_employees"/>
+        </record>
+        <record id="hr_rule_sick_leave" model="hr.salary.rule">
+            <field name="name">Sick Leaves</field>
+            <field name="sequence" eval="111"/>
+            <field name="code">LEV1</field>
+            <field name="category_id" ref="om_hr_payroll.LEV"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="register_id" ref="contribution_register_fines"/>
+            <field name="amount_python_compute">working_days = payslip.x_work_days_of_month
+total_salary = contract.wage + contract.x_transportation_allowance + contract.x_rnd_allowance
+result =  round(payslip.x_sick_leaves / working_days * total_salary * 0.5, 0)</field>
+        </record>
+        <record id="hr_rule_unpaid_leave" model="hr.salary.rule">
+            <field name="name">Unpaid Leaves</field>
+            <field name="sequence" eval="112"/>
+            <field name="code">LEV2</field>
+            <field name="category_id" ref="om_hr_payroll.LEV"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="register_id" ref="contribution_register_fines"/>
+            <field name="amount_python_compute">rworking_days = payslip.x_work_days_of_month
+total_salary = contract.wage + contract.x_transportation_allowance + contract.x_rnd_allowance
+result =  round(payslip.x_unpaid_leaves / working_days * total_salary, 0)</field>
+        </record>
+        <record id="hr_rule_fine" model="hr.salary.rule">
+            <field name="name">Fine</field>
+            <field name="sequence" eval="121"/>
+            <field name="code">DED1</field>
+            <field name="category_id" ref="om_hr_payroll.DED"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="register_id" ref="contribution_register_fines"/>
+            <field name="amount_python_compute">result = round(payslip.x_fine)</field>
+        </record>
+        <record id="hr_rule_advance_ded" model="hr.salary.rule">
+            <field name="name">Advance Salary</field>
+            <field name="sequence" eval="131"/>
+            <field name="code">DED2</field>
+            <field name="category_id" ref="om_hr_payroll.DED"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="register_id" ref="contribution_register_advances"/>
+            <field name="amount_python_compute">result = round(payslip.x_advance)</field>
+        </record>
+        <record id="hr_rule_loan_return" model="hr.salary.rule">
+            <field name="name">Loan Return</field>
+            <field name="sequence" eval="141"/>
+            <field name="code">LOANR</field>
+            <field name="category_id" ref="om_hr_payroll.LOANR"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="register_id" ref="contribution_register_loans_to_employees"/>
+            <field name="amount_python_compute">result = round(payslip.x_loan_return)</field>
+        </record>
+        <record id="hr_rule_wht_salary" model="hr.salary.rule">
+            <field name="name">WHT Salary</field>
+            <field name="sequence" eval="151"/>
+            <field name="code">TAX1</field>
+            <field name="category_id" ref="om_hr_payroll.TAX"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="register_id" ref="contribution_register_income_tax_withheld"/>
+            <field name="amount_python_compute">result = 0
+annual_salary = ((categories.BASIC + categories.ALW  + categories.BONUS) * 12)
+if annual_salary > 600000 and annual_salary &lt;= 1200000:
+	result = round((annual_salary - 600000) * 0.025 / 12, 0)
+elif annual_salary > 1200000 and annual_salary &lt;= 2400000:
+	result = round((15000 + (annual_salary - 1200000) * 0.125) / 12, 0)
+elif annual_salary > 2400000 and annual_salary &lt;= 3600000:
+	result = round((165000 + (annual_salary - 2400000) * 0.20) / 12, 0)
+elif annual_salary > 3600000 and annual_salary &lt;= 6000000:
+	result = round((405000 + (annual_salary - 3600000) * 0.25) / 12, 0)
+elif annual_salary > 6000000 and annual_salary &lt;= 12000000:
+	result = round((1005000 + (annual_salary - 6000000) * 0.325) / 12, 0)</field>
+        </record>
+        <record id="hr_rule_eobi" model="hr.salary.rule">
+            <field name="name">EOBI</field>
+            <field name="sequence" eval="152"/>
+            <field name="code">DED</field>
+            <field name="category_id" ref="om_hr_payroll.EOBI"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">fix</field>
+            <field name="amount_fix">175</field>
+            <field name="register_id" ref="contribution_register_eobi"/>
+        </record>
+        <record id="hr_rule_net" model="hr.salary.rule">
+            <field name="name">Net Salary</field>
+            <field name="sequence" eval="200"/>
+            <field name="code">NET</field>
+            <field name="category_id" ref="om_hr_payroll.NET"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = round(categories.GROSS - categories.TAX - categories.EOBI - categories.DED - categories.LEV - categories.LOANR)</field>
+            <field name="register_id" ref="contrib_register_employees"/>
+        </record>
+        <record id="hr_rule_eobi_cop" model="hr.salary.rule">
+            <field name="name">EOBI - Company Part</field>
+            <field name="sequence" eval="211"/>
+            <field name="code">EOBI COP</field>
+            <field name="category_id" ref="om_hr_payroll.EOBI COP"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">fix</field>
+            <field name="amount_fix">875</field>
+            <field name="register_id" ref="contribution_register_eobi"/>
+        </record>
+        <!-- Salary Structure -->
+        <record id="structure_salary_structure" model="hr.payroll.structure">
+            <field name="code">SSXX</field>
+            <field name="name">Salary Structure</field>
+            <field eval="[(6, 0, [ref('hr_rule_basic'),ref('hr_rule_transport_allowance'),ref('hr_rule_rnd_allowance'),
+            ref('hr_rule_bonus'),ref('hr_rule_loan'),ref('hr_rule_taxable'),ref('hr_rule_sick_leave'),
+            ref('hr_rule_unpaid_leave'),ref('hr_rule_fine'),ref('hr_rule_advance_ded'),ref('hr_rule_loan_return'),
+            ref('hr_rule_wht_salary'),ref('hr_rule_eobi'),ref('hr_rule_net'),ref('hr_rule_eobi_cop')])]" name="rule_ids"/>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+        <record id="structure_advance" model="hr.payroll.structure">
+            <field name="code">ADVANCE</field>
+            <field name="name">Advance Salary</field>
+            <field eval="[(6, 0, [ref('hr_rule_advance')])]" name="rule_ids"/>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+        <record id="structure_bonus" model="hr.payroll.structure">
+            <field name="code">BONUS</field>
+            <field name="name">Bonus</field>
+            <field eval="[(6, 0, [ref('hr_rule_bonus')])]" name="rule_ids"/>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+        <record id="structure_bonus_production" model="hr.payroll.structure">
+            <field name="code">BONUS</field>
+            <field name="name">Bonus [Production]</field>
+            <field eval="[(6, 0, [ref('hr_rule_production_bonus')])]" name="rule_ids"/>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+        <record id="structure_loan_structure" model="hr.payroll.structure">
+            <field name="code">LSXX</field>
+            <field name="name">Loan Structure</field>
+            <field eval="[(6, 0, [ref('hr_rule_loan'),ref('hr_rule_taxable'),
+            ref('hr_rule_loan_return'),ref('hr_rule_net')])]" name="rule_ids"/>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+        <!-- Decimal Precision -->
+        <record forcecreate="True" id="decimal_payroll" model="decimal.precision">
+            <field name="name">Payroll</field>
+            <field name="digits">2</field>
+        </record>
+        <record forcecreate="True" id="decimal_payroll_rate" model="decimal.precision">
+            <field name="name">Payroll Rate</field>
+            <field name="digits">4</field>
+        </record>
+    </data>
+</odoo>

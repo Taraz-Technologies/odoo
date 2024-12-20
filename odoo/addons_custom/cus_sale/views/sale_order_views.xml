@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+		<record id="cus_sale_view_order_form" model="ir.ui.view">
+			<field name="name">cus_sale_view_order_form</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form"/>
+			<field name="arch" type="xml">
+				<data>
+					<button name="action_draft" position="after">
+						<button name="action_create_related_bill" string="Create Related Bill" type="object" class="oe_highlight"
+								attrs="{'invisible': [('state', 'not in', ('sale','done'))]}"/>
+					</button>
+					<div class="oe_button_box"  position="inside">
+						<button name="action_view_related_bills" type="object" class="oe_stat_button" icon="fa-calendar"
+								attrs="{'invisible': [('x_bill_count', '=', 0)]}">
+							<div class="o_stat_info">
+								<field name="x_bill_count" class="o_stat_value"/>
+								<span class="o_stat_text" attrs="{'invisible': [('x_bill_count', '&lt;', 2)]}"> Related Bills</span>
+								<span class="o_stat_text" attrs="{'invisible': [('x_bill_count', '&gt;', 1)]}"> Related Bill</span>
+							</div>
+						</button>
+					</div>
+					<field name="sale_order_template_id" position="after">
+						<field name="x_custom_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+					</field>
+					<field name="partner_id" position="after">
+						<field name="x_repair_count" invisible="1"/>
+					</field>
+					<div class="oe_button_box" position="inside">
+						<button name="action_view_repairs" type="object" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('x_repair_count', '=', 0)]}">
+							<div class="o_stat_info">
+								<span>Repairs</span>
+							</div>
+						</button>
+					</div>
+					<field name="payment_term_id" position="after">
+						<field name="company_id"/>
+					</field>
+				</data>
+			</field>
+		</record>
+
+		<record id="cus_sale_view_sale_order_form_customization" model="ir.ui.view">
+			<field name="name">cus_sale_view_order_form</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="customizations.view_sale_order_form_customization"/>
+			<field name="arch" type="xml">
+				<data>
+					<field name="x_hs_code_and_coo" position="replace">
+						<field name="x_show_hs_code"/>
+						<field name="x_show_coo"/>
+					</field>
+				</data>
+			</field>
+		</record>
+
+		<record id="cus_sale_view_sale_order_tree_customization" model="ir.ui.view">
+			<field name="name">cus_sale_view_order_tree</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_tree"/>
+			<field name="arch" type="xml">
+				<data>
+					<field name="tag_ids" position="replace">
+						<field name="x_is_commented" invisible="1"/>
+						<button name="action_show_notes" type="object" icon="fa-comment" string="Show Notes"
+                                    attrs="{'invisible': [('x_is_commented', '=', False)]}"/>
+						<field name="x_custom_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+					</field>
+				</data>
+			</field>
+		</record>
+
+		<record id="cus_sale_view_sale_order_search_customization" model="ir.ui.view">
+			<field name="name">cus_sale_view_order_search</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.sale_order_view_search_inherit_sale"/>
+			<field name="arch" type="xml">
+				<data>
+					<field name="name" position="attributes">
+						<attribute name="filter_domain">
+							['|', '|', '|', '|', '|', '|', '|', '|',
+                           	('name', 'ilike', self),
+                           	('client_order_ref', 'ilike', self),
+                           	('partner_id', 'child_of', self),
+                           	('partner_id.country_id', 'ilike', self),
+                           	('partner_invoice_id.country_id', 'ilike', self),
+                           	('partner_shipping_id.country_id', 'ilike', self),
+                           	('x_end_user.country_id', 'ilike', self),
+							('x_custom_tag_ids', 'ilike', self),
+							('x_internal_notes', 'ilike', self),
+							]
+						</attribute>
+					</field>
+					<field name="partner_id" position="after">
+						<field name="x_internal_notes" string="Comments"/>
+					</field>
+					<filter name="order_date" position="after">
+						<separator/>
+						<filter string="Tagged" name="tagged" domain="[('x_custom_tag_ids', '!=', False)]"/>
+						<separator/>
+						<filter string="Commented" name="commented" domain="[('x_internal_notes', '!=', False)]"/>
+					</filter>
+				</data>
+			</field>
+		</record>
+
+		<record id="cus_sale_view_quotation_tree_customization" model="ir.ui.view">
+			<field name="name">cus_sale_view_order_search</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_quotation_tree"/>
+			<field name="arch" type="xml">
+				<data>
+					<field name="tag_ids" position="replace">
+						<field name="x_custom_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+					</field>
+				</data>
+			</field>
+		</record>
+
+		<record id="cus_sale_sale_order_view_search_customization" model="ir.ui.view">
+			<field name="name">cus_sale_view_order_search</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+			<field name="arch" type="xml">
+				<data>
+					<field name="name" position="attributes">
+						<attribute name="filter_domain">
+							['|', '|', '|', '|', '|', '|', '|', '|',
+                           	('name', 'ilike', self),
+                           	('client_order_ref', 'ilike', self),
+                           	('partner_id', 'child_of', self),
+                           	('partner_id.country_id', 'ilike', self),
+                           	('partner_invoice_id.country_id', 'ilike', self),
+                           	('partner_shipping_id.country_id', 'ilike', self),
+                           	('x_end_user.country_id', 'ilike', self),
+							('x_custom_tag_ids', 'ilike', self),
+							('x_internal_notes', 'ilike', self)],
+							]
+						</attribute>
+					</field>
+					<field name="partner_id" position="after">
+						<field name="x_internal_notes" string="Comments"/>
+					</field>
+					<filter name="filter_create_date" position="after">
+						<separator/>
+						<filter string="Tagged" name="tagged" domain="[('x_custom_tag_ids', '!=', False)]"/>
+						<separator/>
+						<filter string="Commented" name="commented" domain="[('x_internal_notes', '!=', False)]"/>
+					</filter>
+				</data>
+			</field>
+		</record>
+
+    </data>
+</odoo>

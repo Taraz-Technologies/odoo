@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_picklist">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <div class="page" style="font-family: Arial; font-size:16px">
+                        <style>
+                            table {
+                                width: 100%;
+                                margin: auto;
+                                margin-top: 10px;
+                            }
+                            tr:nth-child(odd)>td {
+                                background-color: rgba(220, 220, 220, 0.02);
+                            }
+                            table, th, td {
+                                border: 1px solid black;
+                            }
+                            th, td {
+                                padding: 3px;
+                                padding-bottom: 0px;
+                            }
+                        </style>
+                        <table style="text-align: center;">
+                            <tbody>
+                                <tr>
+                                    <th style="width:25%;">
+                                        <strong>Product</strong>
+                                    </th>
+                                    <th style="width:15%;">
+                                        <strong>Quantity</strong>
+                                    </th>
+                                    <th style="width:25%;">
+                                        <strong>Manufacturing Order</strong>
+                                    </th>
+                                    <th style="width:15%;">
+                                        <strong>Picking</strong>
+                                    </th>
+                                    <th style="width:20%;">
+                                        <strong>Scheduled Date</strong>
+                                    </th>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span t-esc="o.x_product_id.name"/>
+                                    </td>
+                                    <td style="width:15%;">
+                                        <span t-esc="o.x_bom_id.product_qty"/>
+                                        <span t-esc="o.x_bom_id.product_uom_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="o.origin"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="o.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="o.scheduled_date.strftime('%d-%b-%Y')"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table t-if="o.move_line_ids and o.move_ids_without_package">
+                            <thead>
+                                <tr>
+                                    <th style="width:5%;">
+                                        <strong>Sr #</strong>
+                                    </th>
+                                    <th style="width:25%;">
+                                        <strong>Ref Des</strong>
+                                    </th>
+                                    <th style="width:25%;">
+                                        <strong>Component</strong>
+                                    </th>
+                                    <th style="width:9%;">
+                                        <strong>Demand</strong>
+                                    </th>
+                                    <th style="width:9%;">
+                                        <strong>Required</strong>
+                                    </th>
+                                    <th style="width:7%;">
+                                        <strong>UoM</strong>
+                                    </th>
+                                    <th style="width:20%;">
+                                        <strong>Location</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="serial_no" t-value="1"/>
+                                <t t-foreach="o.move_line_ids_without_package.sorted(key=lambda m: m.location_id.id)" t-as="ml">
+                                    <tr>
+                                        <td>
+                                            <span t-esc="serial_no"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="ml.x_ref_des"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="ml.product_id.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="'{0:,.2f}'.format(ml.move_id.product_uom_qty)"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="'{0:,.2f}'.format(ml.product_uom_qty)"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="ml.product_uom_id" groups="uom.group_uom"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="ml.location_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <t t-set="serial_no" t-value="serial_no + 1"/>
+                                </t>
+                                <t t-foreach="o.move_lines.filtered(lambda m: m.product_uom_qty != 0 and not m.move_line_ids)" t-as="m">
+                                    <tr>
+                                        <td>
+                                            <span t-esc="serial_no"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="m.x_ref_des"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="m.product_id.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="'{0:,.2f}'.format(m.product_uom_qty)"/>
+                                        </td>
+                                        <td>
+                                            <span t-if="o.state != 'done'" t-esc="'{0:,.2f}'.format(m.reserved_availability)"/>
+                                            <span t-if="o.state == 'done'" t-esc="'{0:,.2f}'.format(m.qty_done)"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="m.product_uom" groups="uom.group_uom"/>
+                                        </td>
+                                        <td>
+                                            <span/>
+                                        </td>
+                                    </tr>
+                                    <t t-set="serial_no" t-value="serial_no + 1"/>
+                                </t>
+                              </tbody>
+                        </table>
+                        <p t-field="o.note"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_picklist_landscape">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <div class="page" style="font-family: Arial; font-size:16px">
+                        <style>
+                            table {
+                                width: 100%;
+                                margin: auto;
+                                margin-top: 10px;
+                            }
+                            tr:nth-child(odd)>td {
+                                background-color: rgba(220, 220, 220, 0.02);
+                            }
+                            table, th, td {
+                                border: 1px solid black;
+                            }
+                            th, td {
+                                padding: 3px;
+                                padding-bottom: 0px;
+                            }
+                        </style>
+                        <table style="text-align: center;">
+                            <tbody>
+                                <tr>
+                                    <th style="width:30%;">
+                                        <strong>Product</strong>
+                                    </th>
+                                    <th style="width:10%;">
+                                        <strong>Quantity</strong>
+                                    </th>
+                                    <th style="width:20%;">
+                                        <strong>Manufacturing Order</strong>
+                                    </th>
+                                    <th style="width:20%;">
+                                        <strong>Picking</strong>
+                                    </th>
+                                    <th style="width:20%;">
+                                        <strong>Scheduled Date</strong>
+                                    </th>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span t-esc="o.x_product_id.name"/>
+                                    </td>
+                                    <td style="width:15%;">
+                                        <span t-esc="o.x_bom_id.product_qty"/>
+                                        <span t-esc="o.x_bom_id.product_uom_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="o.origin"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="o.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="o.scheduled_date.strftime('%d-%b-%Y')"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table t-if="o.move_line_ids and o.move_ids_without_package">
+                            <thead>
+                                <tr>
+                                    <th style="width:3%;">
+                                        <strong>Sr#</strong>
+                                    </th>
+                                    <th style="width:25%;">
+                                        <strong>Ref Des</strong>
+                                    </th>
+                                    <th style="width:5%;">
+                                        <strong>Image</strong>
+                                    </th>
+                                    <th style="width:15%;">
+                                        <strong>Component</strong>
+                                    </th>
+                                    <th style="width:5%;">
+                                        <strong>Demand</strong>
+                                    </th>
+                                    <th style="width:5%;">
+                                        <strong>To be Picked</strong>
+                                    </th>
+                                    <th style="width:5%;">
+                                        <strong>UoM</strong>
+                                    </th>
+                                    <th style="width:14%;">
+                                        <strong>Location</strong>
+                                    </th>
+                                    <th style="width:14%;">
+                                        <strong>Comment</strong>
+                                    </th>
+                                    <th style="width:9%;">
+                                        <strong>Station</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="serial_no" t-value="1"/>
+                                <t t-foreach="o.move_line_ids_without_package.sorted(key=lambda m: m.location_id.id)" t-as="ml">
+                                    <tr>
+                                        <td>
+                                            <span t-esc="serial_no"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="ml.x_ref_des"/>
+                                        </td>
+                                        <td>
+                                            <span>
+                                                <t t-if="ml.x_image_128">
+                                                    <img t-att-src="image_data_uri(ml.x_image_128)" alt="Image" width="50" height="50"/>
+                                                </t>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span t-field="ml.product_id"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="'{0:,.2f}'.format(ml.move_id.product_uom_qty)"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="'{0:,.2f}'.format(ml.product_uom_qty)"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="ml.product_uom_id" groups="uom.group_uom"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="ml.location_id.name"/>
+                                        </td>
+                                        <td>
+                                            <span/>
+                                        </td>
+                                        <td>
+                                            <span t-field="ml.move_id.move_dest_ids[0].bom_line_id.operation_id.workcenter_id"/>
+                                        </td>
+                                    </tr>
+                                    <t t-set="serial_no" t-value="serial_no + 1"/>
+                                </t>
+                                <t t-foreach="o.move_lines.filtered(lambda m: m.product_uom_qty != 0 and not m.move_line_ids)" t-as="m">
+                                    <tr>
+                                        <td>
+                                            <span t-esc="serial_no"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="m.x_ref_des"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="m.product_id"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="'{0:,.2f}'.format(m.product_uom_qty)"/>
+                                        </td>
+                                        <td>
+                                            <span t-if="o.state != 'done'" t-esc="'{0:,.2f}'.format(m.reserved_availability)"/>
+                                            <span t-if="o.state == 'done'" t-esc="'{0:,.2f}'.format(m.qty_done)"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="m.product_uom" groups="uom.group_uom"/>
+                                        </td>
+                                        <td>
+                                            <span/>
+                                        </td>
+                                        <td>
+                                            <span/>
+                                        </td>
+                                        <td>
+                                            <span t-field="m.move_dest_ids[0].bom_line_id.operation_id.workcenter_id"/>
+                                        </td>
+                                    </tr>
+                                    <t t-set="serial_no" t-value="serial_no + 1"/>
+                                </t>
+                            </tbody>
+                        </table>
+                        <div class="mt16">
+                            <strong>Source Details</strong>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:15%;">
+                                        <strong>Demand Type</strong>
+                                    </th>
+                                    <th style="width:15%;">
+                                        <strong>Sale Order</strong>
+                                    </th>
+                                    <th style="width:15%;">
+                                        <strong>Delivery Order</strong>
+                                    </th>
+                                    <th style="width:15%;">
+                                        <strong>DO Deadline</strong>
+                                    </th>
+                                    <th style="width:10%;">
+                                        <strong>Quantity</strong>
+                                    </th>
+                                    <th style="width:30%;">
+                                        <strong>Master Product</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <thead>
+                                <t t-foreach="o.move_lines[0].move_dest_ids[0].raw_material_production_id.x_mrp_demand_ids" t-as="source">
+                                    <tr>
+                                        <td>
+                                            <span t-field="source.x_demand_type"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="source.x_sale_id"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="source.x_picking_id"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="source.x_deadline"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="source.x_demand"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="source.x_product_id"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </thead>
+                        </table>
+                        <div class="mt16">
+                            <strong>Routing: <span t-field="o.move_lines[0].move_dest_ids[0].raw_material_production_id.routing_id"/></strong>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:25%;">
+                                        <strong>Station</strong>
+                                    </th>
+                                    <th style="width:25%;">
+                                        <strong>Employee</strong>
+                                    </th>
+                                    <th style="width:25%;">
+                                        <strong>Sign</strong>
+                                    </th>
+                                    <th style="width:25%;">
+                                        <strong>Comments</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <thead>
+                                <t t-foreach="o.move_lines[0].move_dest_ids[0].raw_material_production_id.workorder_ids" t-as="workorder">
+                                    <tr>
+                                        <td>
+                                            <span t-field="workorder.workcenter_id"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="workorder.user_id"/>
+                                        </td>
+                                        <td>
+                                            <span/>
+                                        </td>
+                                        <td>
+                                            <span/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </thead>
+                        </table>
+                        <p t-field="o.note"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_picklist_landscape_workorder">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <div class="page" style="font-family: Arial; font-size:16px">
+                        <style>
+                            table {
+                                width: 100%;
+                                margin: auto;
+                                margin-top: 10px;
+                            }
+                            tr:nth-child(odd)>td {
+                                background-color: rgba(220, 220, 220, 0.02);
+                            }
+                            table, th, td {
+                                border: 1px solid black;
+                            }
+                            th, td {
+                                padding: 3px;
+                                padding-bottom: 0px;
+                            }
+                        </style>
+                        <table style="text-align: center;">
+                            <tbody>
+                                <tr>
+                                    <th style="width:30%;">
+                                        <strong>Product</strong>
+                                    </th>
+                                    <th style="width:10%;">
+                                        <strong>Quantity</strong>
+                                    </th>
+                                    <th style="width:20%;">
+                                        <strong>Manufacturing Order</strong>
+                                    </th>
+                                    <th style="width:20%;">
+                                        <strong>Workorder</strong>
+                                    </th>
+                                    <th style="width:20%;">
+                                        <strong>Scheduled Date</strong>
+                                    </th>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span t-esc="o.product_id.name"/>
+                                    </td>
+                                    <td style="width:15%;">
+                                        <span t-esc="o.qty_production"/>
+                                        <span t-esc="o.product_uom_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="o.production_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="o.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="o.production_id.picking_ids.mapped('scheduled_date')[0].strftime('%d-%b-%Y')"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table t-if="o.production_id.picking_ids.mapped('move_line_ids') and o.production_id.picking_ids.mapped('move_ids_without_package')">
+                            <thead>
+                                <tr>
+                                    <th style="width:3%;">
+                                        <strong>Sr#</strong>
+                                    </th>
+                                    <th style="width:25%;">
+                                        <strong>Ref Des</strong>
+                                    </th>
+                                    <th style="width:20%;">
+                                        <strong>Component</strong>
+                                    </th>
+                                    <th style="width:5%;">
+                                        <strong>Demand</strong>
+                                    </th>
+                                    <th style="width:5%;">
+                                        <strong>To be Picked</strong>
+                                    </th>
+                                    <th style="width:5%;">
+                                        <strong>UoM</strong>
+                                    </th>
+                                    <th style="width:14%;">
+                                        <strong>Location</strong>
+                                    </th>
+                                    <th style="width:14%;">
+                                        <strong>Comment</strong>
+                                    </th>
+                                    <th style="width:9%;">
+                                        <strong>Station (Code)</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="serial_no" t-value="1"/>
+                                <t t-foreach="o.production_id.picking_ids.mapped('move_line_ids_without_package').sorted(key=lambda m: m.move_id.move_dest_ids[0].bom_line_id.operation_id.id, reverse=True)" t-as="ml">
+                                    <tr>
+                                        <td>
+                                            <span t-esc="serial_no"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="ml.x_ref_des"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="ml.product_id"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="'{0:,.2f}'.format(ml.move_id.product_uom_qty)"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="'{0:,.2f}'.format(ml.product_uom_qty)"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="ml.product_uom_id" groups="uom.group_uom"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="ml.location_id.name"/>
+                                        </td>
+                                        <td>
+                                            <span/>
+                                        </td>
+                                        <td>
+                                            <span t-field="ml.move_id.move_dest_ids[0].bom_line_id.operation_id"/>
+                                        </td>
+                                    </tr>
+                                    <t t-set="serial_no" t-value="serial_no + 1"/>
+                                </t>
+                                <t t-foreach="o.production_id.picking_ids.mapped('move_lines').filtered(lambda m: m.product_uom_qty != 0 and not m.move_line_ids)" t-as="m">
+                                    <tr>
+                                        <td>
+                                            <span t-esc="serial_no"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="m.x_ref_des"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="m.product_id"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="'{0:,.2f}'.format(m.product_uom_qty)"/>
+                                        </td>
+                                        <td>
+                                            <span t-if="o.state != 'done'" t-esc="'{0:,.2f}'.format(m.reserved_availability)"/>
+                                            <span t-if="o.state == 'done'" t-esc="'{0:,.2f}'.format(m.qty_done)"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="m.product_uom" groups="uom.group_uom"/>
+                                        </td>
+                                        <td>
+                                            <span/>
+                                        </td>
+                                        <td>
+                                            <span/>
+                                        </td>
+                                        <td>
+                                            <span t-field="m.move_dest_ids[0].bom_line_id.operation_id.workcenter_id"/>
+                                        </td>
+                                    </tr>
+                                    <t t-set="serial_no" t-value="serial_no + 1"/>
+                                </t>
+                            </tbody>
+                        </table>
+                        <div class="mt16">
+                            <strong>Source Details</strong>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:15%;">
+                                        <strong>Demand Type</strong>
+                                    </th>
+                                    <th style="width:15%;">
+                                        <strong>Sale Order</strong>
+                                    </th>
+                                    <th style="width:15%;">
+                                        <strong>Delivery Order</strong>
+                                    </th>
+                                    <th style="width:15%;">
+                                        <strong>DO Deadline</strong>
+                                    </th>
+                                    <th style="width:10%;">
+                                        <strong>Quantity</strong>
+                                    </th>
+                                    <th style="width:30%;">
+                                        <strong>Master Product</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <thead>
+                                <t t-foreach="o.production_id.x_mrp_demand_ids" t-as="source">
+                                    <tr>
+                                        <td>
+                                            <span t-field="source.x_demand_type"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="source.x_sale_id"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="source.x_picking_id"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="source.x_deadline"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="source.x_demand"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="source.x_product_id"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </thead>
+                        </table>
+                        <div class="mt16">
+                            <strong>Routing: <span t-field="o.production_id.routing_id"/></strong>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:25%;">
+                                        <strong>Station</strong>
+                                    </th>
+                                    <th style="width:25%;">
+                                        <strong>Employee</strong>
+                                    </th>
+                                    <th style="width:25%;">
+                                        <strong>Sign</strong>
+                                    </th>
+                                    <th style="width:25%;">
+                                        <strong>Comments</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <thead>
+                                <t t-foreach="o.production_id.workorder_ids" t-as="workorder">
+                                    <tr>
+                                        <td>
+                                            <span t-field="workorder.workcenter_id"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="workorder.user_id"/>
+                                        </td>
+                                        <td>
+                                            <span/>
+                                        </td>
+                                        <td>
+                                            <span/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </thead>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

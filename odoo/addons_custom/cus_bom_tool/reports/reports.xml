@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <report id="base_bom_lines_excel_report"
+                model="bom.tool"
+                string="BASE BOM (Excel)"
+                report_type="xlsx"
+                name="cus_bom_tool.base_bom_lines_excel_report"
+                file="cus_bom_tool.base_bom_lines_excel_report"
+                print_report_name="object.x_base_bom_id.x_name"/>
+</odoo>

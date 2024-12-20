@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--        <record id="view_employee_form_customization_0" model="ir.ui.view">-->
+<!--                <field name="name">hr.employee.form.customization</field>-->
+<!--                <field name="model">hr.employee</field>-->
+<!--                <field name="inherit_id" ref="hr.view_employee_form"/>-->
+<!--                <field name="priority" eval="99" />-->
+<!--                <field name="arch" type="xml">-->
+<!--                        <data>-->
+<!--                                <xpath expr="//field[@name='pin']" position="before">-->
+<!--                                        <field name="x_leave_allocation"/>-->
+<!--                                </xpath>-->
+<!--                                <xpath expr="/form/sheet/notebook/page[2]/div/div/group[4]" position="after">-->
+<!--                                        <field name="x_resource_calendar_id" invisible="1"/>-->
+<!--                                        <group string="Schedule Log">-->
+<!--                                                <field name="x_employee_schedule_log" nolabel="1">-->
+<!--                                                        <tree>-->
+<!--                                                                <field name="x_employee_id" invisible="1"/>-->
+<!--                                                                <field name="x_start_date"/>-->
+<!--                                                                <field name="x_resource_calendar_id"/>-->
+<!--                                                        </tree>-->
+<!--                                                </field>-->
+<!--                                        </group>-->
+<!--                                </xpath>-->
+<!--                        </data>-->
+<!--                </field>-->
+<!--        </record>-->
+<!--        <record id="view_employee_tree_customization_0" model="ir.ui.view">-->
+<!--                <field name="name">hr.employee.tree.customization</field>-->
+<!--                <field name="model">hr.employee</field>-->
+<!--                <field name="inherit_id" ref="hr.view_employee_tree"/>-->
+<!--                <field name="priority" eval="99" />-->
+<!--                <field name="arch" type="xml">-->
+<!--                        <data>-->
+<!--                                <xpath expr="//field[@name='work_phone']" position="before">-->
+<!--                                        <field name="x_leave_allocation"/>-->
+<!--                                </xpath>-->
+<!--                        </data>-->
+<!--                </field>-->
+<!--        </record>-->
+</odoo>

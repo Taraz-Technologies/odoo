@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--        QuickBooks Data Export-->
+    <record id="view_quickbooks_data_export_form" model="ir.ui.view">
+        <field name="name">data.quickbooks.form</field>
+        <field name="model">data.quickbooks</field>
+        <field name="arch" type="xml">
+            <form string="Data QuickBooks">
+                <header>
+                    <button name="generate_excel_report" string="Export" type="object" class="oe_highlight"/>
+                </header>
+                <div class="oe_title">
+                    <h1>
+                        <field name="x_name"/>
+                    </h1>
+                </div>
+                <group>
+                    <group>
+                        <label for="x_date_from" string="Period"/>
+                        <div>
+                            <field name="x_date_from" class="oe_inline"/>
+                            -
+                            <field name="x_date_to" class="oe_inline"/>
+                        </div>
+                        <field name="x_journal_ids" widget="many2many_tags"/>
+                    </group>
+                    <group>
+                        <field name="x_invoice_count"/>
+                        <field name="x_bill_count"/>
+                        <field name="x_internal_transfer_count"/>
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Invoices">
+                        <group>
+                            <field name="x_invoice_ids" nolabel="1"/>
+                        </group>
+                    </page>
+                    <page string="Bills">
+                        <group>
+                            <field name="x_export_bills" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <field name="x_bill_ids" nolabel="1">
+                                <tree>
+                                    <field name="invoice_date" string="Bill Date"/>
+                                    <field name="name"/>
+                                    <field name="invoice_partner_display_name" string="Vendor"/>
+                                    <field name="x_purchase_type" optional="show"/>
+                                    <field name="x_item_type" optional="show"/>
+                                    <field name="invoice_origin" optional="show"/>
+                                    <field name="x_payment_method"/>
+                                    <field name="amount_untaxed" optional="show" sum="Total"/>
+                                    <field name="amount_total" optional="show" sum="Total"/>
+                                    <field name="amount_residual" optional="show" sum="Total"/>
+                                    <field name="x_assessed_value" optional="show" sum="Total"/>
+                                    <field name="state" optional="show"/>
+                                    <field name="x_registered_payments"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                    <page string="Internal Transfers">
+                        <group>
+                            <field name="x_internal_transfer_ids" nolabel="1"/>
+                        </group>
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_quickbooks_data_export_tree" model="ir.ui.view">
+        <field name="name">data.quickbooks.tree</field>
+        <field name="model">data.quickbooks</field>
+        <field name="arch" type="xml">
+            <tree string="Data QuickBooks">
+                <field name="x_name"/>
+                <field name="x_date_from"/>
+                <field name="x_date_to"/>
+                <field name="x_invoice_count"/>
+                <field name="x_bill_count"/>
+                <field name="x_internal_transfer_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_quickbooks_data_export" model="ir.actions.act_window">
+        <field name="name">QuickBooks Data Export</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">data.quickbooks</field>
+        <field name="view_mode">tree,form</field>
+        <!--                <field name="search_view_id" ref="view_dashboard_item_filter"/>-->
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create new Record
+            </p>
+        </field>
+    </record>
+    <!--        QuickBooks Accounts-->
+    <record id="view_quickbooks_accounts_form" model="ir.ui.view">
+        <field name="name">accounts.quickbooks.form</field>
+        <field name="model">accounts.quickbooks</field>
+        <field name="arch" type="xml">
+            <form string="Accounts QuickBooks">
+                <sheet>
+                    <group col="4">
+                        <field name="x_name"/>
+                        <field name="x_type"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_quickbooks_accounts_tree" model="ir.ui.view">
+        <field name="name">accounts.quickbooks.tree</field>
+        <field name="model">accounts.quickbooks</field>
+        <field name="arch" type="xml">
+            <tree string="Accounts QuickBooks">
+                <field name="x_name"/>
+                <field name="x_type"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_quickbooks_accounts" model="ir.actions.act_window">
+        <field name="name">QuickBooks Accounts</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">accounts.quickbooks</field>
+        <field name="view_mode">tree,form</field>
+        <!--                <field name="search_view_id" ref="view_dashboard_item_filter"/>-->
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create new Record
+            </p>
+        </field>
+    </record>
+    <!--        QuickBooks Contacts-->
+    <record id="view_quickbooks_contacts_form" model="ir.ui.view">
+        <field name="name">contacts.quickbooks.form</field>
+        <field name="model">contacts.quickbooks</field>
+        <field name="arch" type="xml">
+            <form string="Contacts QuickBooks">
+                <sheet>
+                    <group col="4">
+                        <field name="x_name"/>
+                        <field name="x_type" widget="radio" options="{'horizontal': true}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_quickbooks_contacts_tree" model="ir.ui.view">
+        <field name="name">contacts.quickbooks.tree</field>
+        <field name="model">contacts.quickbooks</field>
+        <field name="arch" type="xml">
+            <tree string="Contacts QuickBooks">
+                <field name="x_name"/>
+                <field name="x_type"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_quickbooks_contacts" model="ir.actions.act_window">
+        <field name="name">QuickBooks Contacts</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">contacts.quickbooks</field>
+        <field name="view_mode">tree,form</field>
+        <!--                <field name="search_view_id" ref="view_dashboard_item_filter"/>-->
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create new Record
+            </p>
+        </field>
+    </record>
+</odoo>

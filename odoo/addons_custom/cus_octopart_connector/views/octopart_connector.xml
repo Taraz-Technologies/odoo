@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record id="octopart_connector_view_form" model="ir.ui.view">
+		<field name="name">octopart.connector.view.form</field>
+		<field name="model">octopart.connector</field>
+		<field name="arch" type="xml">
+			<form string="OctoPart Connector">
+				<sheet>
+					<group>
+						<group>
+							<field name="x_product_id"/>
+							<field name="x_mpn"/>
+							<field name="x_manufacturer"/>
+							<field name="x_lifecycle_status"/>
+							<field name="x_data_date"/>
+						</group>
+						<group>
+							<field name="image_128" widget='image' class="oe_avatar" options='{"preview_image": "image_128"}' nolabel="1"/>
+						</group>
+					</group>
+					<field name="x_description"/>
+					<separator string="Seller Details"/>
+					<strong>To define preferred suppliers define "Vendor Code" in "Contacts"</strong>
+					<field name="x_seller_ids"/>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="octopart_connector_view_tree" model="ir.ui.view">
+		<field name="name">octopart.connector.view.tree</field>
+		<field name="model">octopart.connector</field>
+		<field name="arch" type="xml">
+			<tree string="OctoPart Connector">
+				<field name="x_data_date"/>
+				<field name="x_product_id"/>
+				<field name="x_mpn"/>
+				<field name="x_description"/>
+				<field name="x_manufacturer"/>
+				<field name="x_lifecycle_status"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="octopart_connector_view_search" model="ir.ui.view">
+		<field name="name">octopart.connector.view.search</field>
+		<field name="model">octopart.connector</field>
+		<field name="arch" type="xml">
+			<search string="OctoPart Connector">
+				<field name="x_product_id"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="action_octopart_connector" model="ir.actions.act_window">
+		<field name="name">OctoPart Connector</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">octopart.connector</field>
+		<field name="view_mode">tree,form</field>
+		<field name="view_id" ref="octopart_connector_view_tree"/>
+		<field name="search_view_id" ref="octopart_connector_view_search"/>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face"/>
+		</field>
+	</record>
+
+	<record id="part_seller_view_form" model="ir.ui.view">
+		<field name="name">part_seller_view_form</field>
+		<field name="model">part.seller</field>
+		<field name="arch" type="xml">
+			<form>
+				<sheet>
+					<div class="oe_title">
+						<h3>
+							<field name="display_name" widget="many2one"/>
+						</h3>
+					</div>
+					<field name="x_vendor_type" invisible="1"/>
+					<group col="4">
+						<field name="x_connector_id"/>
+						<field name="x_name"/>
+						<field name="x_partner_id"/>
+						<field name="x_click_url" widget="url"/>
+						<field name="x_inventory_level"/>
+						<field name="x_moq"/>
+						<field name="x_packaging"/>
+						<field name="x_quantity"/>
+						<field name="x_price"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="part_seller_view_tree" model="ir.ui.view">
+		<field name="name">part_seller_view_tree</field>
+		<field name="model">part.seller</field>
+		<field name="arch" type="xml">
+			<tree string="Part Seller">
+				<field name="x_name" optional="hide"/>
+				<field name="x_vendor_type" invisible="1"/>
+				<field name="x_partner_id"/>
+				<field name="x_packaging"/>
+				<field name="x_price"/>
+				<field name="x_inventory_level"/>
+				<field name="x_moq"/>
+				<field name="x_quantity" optional="hide"/>
+				<field name="x_ext_price" optional="hide"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="part_seller_view_search" model="ir.ui.view">
+	   <field name="name">part_seller_view_search</field>
+	   <field name="model">part.seller</field>
+	    <field name="arch" type="xml">
+	        <search string="Part Seller">
+				<field name="x_partner_id"/>
+				<filter name="preferred" string="Preferred" domain="[('x_vendor_type', '=', 'preferred')]"/>
+				<filter name="other" string="Other" domain="[('x_vendor_type', '=', 'other')]"/>
+				<group expand="0" string="Group By">
+					<filter string="Vendor" name="vendor" context="{'group_by': 'x_partner_id'}"/>
+					<filter string="Vendor Type" name="vendor_type" context="{'group_by': 'x_vendor_type'}"/>
+				</group>
+	    	</search>
+	   </field>
+	</record>
+</odoo>

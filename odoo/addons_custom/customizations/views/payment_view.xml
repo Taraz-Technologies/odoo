@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record model="ir.ui.view" id="acquirer_form_customization_0">
+                <field name="name">payment.acquirer.form.customization</field>
+                <field name="model">payment.acquirer</field>
+                <field name="inherit_id" ref="payment.acquirer_form"/>
+                <field name="priority" eval="99" />
+                <field name="arch" type="xml">
+                        <data>
+                                <xpath expr="//field[@name='cancel_msg']" position="after">
+                                        <field name="x_report_code"/>
+                                        <field name="x_report_msg"/>
+                                </xpath>
+                        </data>
+                </field>
+        </record>
+</odoo>

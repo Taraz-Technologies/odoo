@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--        Cable Assembly Reports-->
+        <report id="cable_assembly_bom_xlsx"
+                model="cable.assembly"
+                string="Export BOM"
+                report_type="xlsx"
+                name="cable_assembly.cable_assembly_bom_xlsx"
+                file="cable_assembly.cable_assembly_bom_xlsx"
+                print_report_name="'%s - BOM' % (object.x_name)"/>
+
+        <report id="cable_assembly_wire_label_e800tk_xlsx"
+                model="cable.assembly"
+                string="Export Wire Label E800TK"
+                report_type="xlsx"
+                name="cable_assembly.cable_assembly_wire_label_e800tk_xlsx"
+                file="cable_assembly.cable_assembly_wire_label_e800tk_xlsx"
+                print_report_name="'%s - Wire Label - E800TK' % (object.x_name)"/>
+
+        <report id="cable_assembly_wire_label_p600_xlsx"
+                model="cable.assembly"
+                string="Export Wire Label P600"
+                report_type="xlsx"
+                name="cable_assembly.cable_assembly_wire_label_p600_xlsx"
+                file="cable_assembly.cable_assembly_wire_label_p600_xlsx"
+                print_report_name="'%s - Wire Label - P600' % (object.x_name)"/>
+
+        <report id="cable_assembly_product_label_xlsx"
+                model="cable.assembly"
+                string="Export Product Label"
+                report_type="xlsx"
+                name="cable_assembly.cable_assembly_product_label_xlsx"
+                file="cable_assembly.cable_assembly_product_label_xlsx"
+                print_report_name="'%s - Product Label' % (object.x_name)"/>
+
+        <report id="cable_assembly_cut_list_xlsx"
+                model="cable.assembly"
+                string="Export Cut List"
+                report_type="xlsx"
+                name="cable_assembly.cable_assembly_cut_list_xlsx"
+                file="cable_assembly.cable_assembly_cut_list_xlsx"
+                print_report_name="'%s - Cut List' % (object.x_name)"/>
+
+        <report id="action_report_cut_list"
+                string="Cut List"
+                model="cable.assembly"
+                report_type="qweb-pdf"
+                file="cable_assembly.report_cut_list"
+                name="cable_assembly.report_cut_list"
+                print_report_name="'Cut List - %s' % (object.x_name)"
+                paperformat="base.paperformat_euro_borderless"/>
+
+<!--        Demand List Report-->
+        <report id="action_report_demand_list"
+                string="Demand List"
+                model="cable.assembly.demand.list"
+                report_type="qweb-pdf"
+                file="cable_assembly.report_demand_list"
+                name="cable_assembly.report_demand_list"
+                print_report_name="'%s' % (object.x_name)"
+                paperformat="base.paperformat_euro_borderless"/>
+
+        <report id="action_report_demand_list_procurement"
+                string="Short Parts"
+                model="cable.assembly.demand.list"
+                report_type="qweb-pdf"
+                file="cable_assembly.report_demand_list_procurement"
+                name="cable_assembly.report_demand_list_procurement"
+                print_report_name="'%s Procurement' % (object.x_name)"
+                paperformat="base.paperformat_euro_borderless"/>
+</odoo>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--	Investment Return View-->
+	<record id="view_investment_return_form" model="ir.ui.view">
+		<field name="name">res.investment.return.form</field>
+		<field name="model">res.investment.return</field>
+		<field name="arch" type="xml">
+			<form string="Investment Returns">
+				<sheet>
+					<group>
+						<field name="x_name"/>
+						<field name="x_currency_id"/>
+						<field name="x_investment_ids" widget="many2many_tags"/>
+						<field name="x_investment_required" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+						<field name="x_investment_raised" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+						<field name="x_bill_id"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="view_investment_return_tree" model="ir.ui.view">
+		<field name="name">res.investment.return.tree</field>
+		<field name="model">res.investment.return</field>
+		<field name="arch" type="xml">
+			<tree string="Investment Returns">
+				<field name="x_name"/>
+				<field name="x_currency_id" invisible="1"/>
+				<field name="x_investment_ids" widget="many2many_tags"/>
+				<field name="x_investment_required" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+				<field name="x_investment_raised" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+				<field name="x_bill_id"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="view_investment_return_filter" model="ir.ui.view">
+		<field name="name">res.investment.return.select</field>
+		<field name="model">res.investment.return</field>
+		<field name="arch" type="xml">
+			<search string="Investment Returns">
+				<field name="x_name" string="Name" filter_domain="[('x_name','ilike',self)]"/>
+				<field name="x_investment_ids" string="Investments" filter_domain="[('x_investment_ids','ilike',self)]"/>
+				<field name="x_bill_id" string="Bill" filter_domain="[('x_bill_id','ilike',self)]"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="action_view_investment_return" model="ir.actions.act_window">
+		<field name="name">Investment Returns</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">res.investment.return</field>
+		<field name="view_mode">tree,form</field>
+		<field name="search_view_id" ref="view_investment_return_filter"/>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">Create new Record</p>
+		</field>
+	</record>
+</odoo>

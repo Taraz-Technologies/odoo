@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_inventory_sale_report_document">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="row" style="page-break-before:always;">
+                        <div class="col">
+                            <div id="textbox">
+                                <h4 style="float: left;"><strong>Production Process</strong></h4>
+                                <h4 style="float: right;"><strong>Annexure-A</strong></h4><br/>
+                            </div>
+                            <div style="clear: both;"/>
+<!--                            <span t-field="o.x_production_process"/>-->
+                            <p style="font-size: 14px;">
+                                The following processes will be carried out in the manufacturing facility;
+                                <br/><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]]>1) PCB Assembly Process
+                                <br/><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]]>2) Inductor/Transformer Making Process
+                                <br/><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]]>3) Final Assembly Process
+                            </p>
+                            <h6><b>PCB Assembly Process:</b></h6>
+                            <p style="text-align:justify;font-size: 15px;">
+                                Most of the raw materials will be sourced from abroad for this stage. Raw materials
+                                include ICs, resistors, capacitors, inductors, connectors, wires, and PCBs. An inline
+                                SMT assembly line will be installed to stuff the parts on PCBs and an assembled PCB
+                                will come out as a semi-finished good (SFG) at the end of this process.
+                            </p>
+                            <image t-field="o.x_smt_assembly" t-options='{"widget": "image"}'/>
+                            <h6 class="mt16"><b>Inductor/Transformer Making Process:</b></h6>
+                            <p style="text-align:justify;font-size: 15px;">
+                                Raw materials for this stage may be sourced locally, such as copper foils, copper wires,
+                                busbars, bobbins, and cores. The output of this process will be inductors and
+                                transformers. This process may take some time to setup, meanwhile, these parts will
+                                sourced from abroad.
+                            </p>
+                            <image t-field="o.x_making_process" t-options='{"widget": "image"}'/>
+                            <h6 class="mt16"><b>Final Assembly Process:</b></h6>
+                            <p style="text-align:justify;font-size: 15px;">
+                                Mechanical parts such as enclosures, body parts, fasteners, etc. will be sourced from
+                                Turkey. Some of these parts will be custom made and their manufacturing may be done
+                                outside the freezone. In this stage, SFGs from the above processes will be fitted in
+                                the enclosures, and wiring and assembly will be done. After final testing and
+                                inspection, finished goods will be packed and then either stored or shipped to the
+                                destination.
+                            </p>
+                            <image t-field="o.x_final_assembly" t-options='{"widget": "image"}'/>
+                        </div>
+                    </div>
+                    <t t-set="report_data" t-value="o.report_data()"/>
+                    <div name="raw_material_data_lines">
+                        <h4 class="text-right" style="page-break-before:always;"><strong>Annexure-A</strong></h4>
+                        <div class="row">
+                            <div class="col text-center">
+                                <h5>Section XII: Explanations Related to Activity in the Free Zone</h5>
+                            </div>
+                        </div>
+                        <t t-set="raw_material_data" t-value="report_data['raw_material_data']"/>
+                        <table style="width:100%;margin-top:20px;margin-bottom:20px;">
+                            <thead>
+                                <tr style="border-bottom: 0.25px solid black; page-break-inside: avoid;">
+                                    <th class="text-left" style="font-size: 24px" colspan="2">Raw Material to be Purchased</th>
+                                    <th class="text-center" colspan="2">Turkey</th>
+                                    <th class="text-center" colspan="2">Abroad</th>
+                                </tr>
+                                <tr style="border-bottom: 0.25px solid black; page-break-inside: avoid;">
+                                    <th class="text-left" style="width:45%;">Name of the Good</th>
+                                    <th class="text-left" style="width:15%;">Tariff Number</th>
+                                    <th class="text-right" style="width:8%;">Qty</th>
+                                    <th class="text-right" style="width:12%;">Value</th>
+                                    <th class="text-right" style="width:8%;">Qty</th>
+                                    <th class="text-right" style="width:12%;">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="local_qty" t-value="0"/>
+                                <t t-set="local_value" t-value="0"/>
+                                <t t-set="export_qty" t-value="0"/>
+                                <t t-set="export_value" t-value="0"/>
+                                <t t-foreach="raw_material_data" t-as="data_line">
+                                    <tr style="border-bottom: 0.25px solid black;">
+                                        <td class="text-left">
+                                            <t t-esc="data_line['column_1']" t-if="o.x_raw_material_show_by == 'part'"/>
+                                            <t t-esc="data_line['column_2']" t-if="o.x_raw_material_show_by == 'sub_type'"/>
+                                            <t t-esc="data_line['column_8']" t-if="o.x_raw_material_show_by == 'type'"/>
+                                        </td>
+                                        <td class="text-left">
+                                            <t t-esc="data_line['column_3']"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-esc="data_line['column_4']"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="o.x_currency_id.symbol"/>
+                                            <t t-set="str_value" t-value="str('{0:,.2f}'.format(data_line['column_5']))"/>
+                                            <t t-set="str_value" t-value="str_value.replace('.', '_')"/>
+                                            <t t-set="str_value" t-value="str_value.replace(',', '.')"/>
+                                            <t t-set="str_value" t-value="str_value.replace('_', ',')"/>
+                                            <t t-esc="str_value"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-esc="data_line['column_6']"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="o.x_currency_id.symbol"/>
+                                            <t t-set="str_value" t-value="str('{0:,.2f}'.format(data_line['column_7']))"/>
+                                            <t t-set="str_value" t-value="str_value.replace('.', '_')"/>
+                                            <t t-set="str_value" t-value="str_value.replace(',', '.')"/>
+                                            <t t-set="str_value" t-value="str_value.replace('_', ',')"/>
+                                            <t t-esc="str_value"/>
+                                        </td>
+                                    </tr>
+                                    <t t-set="local_qty" t-value="local_qty + data_line['column_4']"/>
+                                    <t t-set="local_value" t-value="local_value + data_line['column_5']"/>
+                                    <t t-set="export_qty" t-value="export_qty + data_line['column_6']"/>
+                                    <t t-set="export_value" t-value="export_value + data_line['column_7']"/>
+                                </t>
+                                <tr style="border-bottom: 0.25px solid black;">
+                                    <td class="text-left" colspan="2">
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <t t-esc="local_qty"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="o.x_currency_id.symbol"/>
+                                        <t t-set="str_value" t-value="str('{0:,.2f}'.format(local_value))"/>
+                                        <t t-set="str_value" t-value="str_value.replace('.', '_')"/>
+                                        <t t-set="str_value" t-value="str_value.replace(',', '.')"/>
+                                        <t t-set="str_value" t-value="str_value.replace('_', ',')"/>
+                                        <t t-esc="str_value"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <t t-esc="export_qty"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="o.x_currency_id.symbol"/>
+                                        <t t-set="str_value" t-value="str('{0:,.2f}'.format(export_value))"/>
+                                        <t t-set="str_value" t-value="str_value.replace('.', '_')"/>
+                                        <t t-set="str_value" t-value="str_value.replace(',', '.')"/>
+                                        <t t-set="str_value" t-value="str_value.replace('_', ',')"/>
+                                        <t t-esc="str_value"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <span t-field="o.x_raw_material_table_text"/>
+                    </div>
+                    <div name="manufacturing_data_lines">
+                        <h4 class="text-right" style="page-break-before:always;"><strong>Annexure-A</strong></h4>
+                        <div class="row">
+                            <div class="col text-center">
+                                <h5>Section XII: Explanations Related to Activity in the Free Zone</h5>
+                            </div>
+                        </div>
+                        <t t-set="manufacturing_data" t-value="report_data['manufacturing_data']"/>
+                        <table style="width:100%;margin-top:20px;margin-bottom:20px;">
+                            <thead>
+                                <tr style="border-bottom: 0.25px solid black; page-break-inside: avoid;">
+                                    <th class="text-left" style="font-size: 24px" colspan="4">Goods to be Produced</th>
+                                </tr>
+                                <tr style="border-bottom: 0.25px solid black; page-break-inside: avoid;">
+                                    <th class="text-left" style="width:60%;">Name of the Good</th>
+                                    <th class="text-left" style="width:15%;">Tariff Number</th>
+                                    <th class="text-right" style="width:10%;">Quantity</th>
+                                    <th class="text-right" style="width:15%;">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="export_qty" t-value="0"/>
+                                <t t-set="export_value" t-value="0"/>
+                                <t t-foreach="manufacturing_data" t-as="data_line">
+                                    <tr style="border-bottom: 0.25px solid black;">
+                                        <td class="text-left">
+                                            <strong t-esc="data_line['column_1']"/><br/>
+                                            <t t-esc="data_line['column_2']"/>
+                                        </td>
+                                        <td class="text-left">
+                                            <t t-esc="data_line['column_3']"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-esc="data_line['column_4']"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="o.x_currency_id.symbol"/>
+                                            <t t-set="str_value" t-value="str('{0:,.2f}'.format(data_line['column_5']))"/>
+                                            <t t-set="str_value" t-value="str_value.replace('.', '_')"/>
+                                            <t t-set="str_value" t-value="str_value.replace(',', '.')"/>
+                                            <t t-set="str_value" t-value="str_value.replace('_', ',')"/>
+                                            <t t-esc="str_value"/>
+                                        </td>
+                                    </tr>
+                                    <t t-set="export_qty" t-value="export_qty + data_line['column_4']"/>
+                                    <t t-set="export_value" t-value="export_value + data_line['column_5']"/>
+                                </t>
+                                <tr style="border-bottom: 0.25px solid black;">
+                                    <td class="text-left" colspan="2">
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <t t-esc="export_qty"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="o.x_currency_id.symbol"/>
+                                        <t t-set="str_value" t-value="str('{0:,.2f}'.format(export_value))"/>
+                                        <t t-set="str_value" t-value="str_value.replace('.', '_')"/>
+                                        <t t-set="str_value" t-value="str_value.replace(',', '.')"/>
+                                        <t t-set="str_value" t-value="str_value.replace('_', ',')"/>
+                                        <t t-esc="str_value"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <span t-field="o.x_manufacturing_table_text"/>
+                    </div>
+                    <div name="sales_data_lines">
+                        <h4 class="text-right" style="page-break-before:always;"><strong>Annexure-A</strong></h4>
+                        <div class="row">
+                            <div class="col text-center">
+                                <h5>Section XII: Explanations Related to Activity in the Free Zone</h5>
+                            </div>
+                        </div>
+                        <t t-set="sales_data" t-value="report_data['sales_data']"/>
+                        <table style="width:100%;margin-top:20px;margin-bottom:20px;">
+                            <thead>
+                                <tr style="border-bottom: 0.25px solid black; page-break-inside: avoid;">
+                                    <th class="text-left" style="font-size: 24px" colspan="2">Goods to be Sold</th>
+                                    <th class="text-center" colspan="2">Turkey</th>
+                                    <th class="text-center" colspan="2">Abroad</th>
+                                </tr>
+                                <tr style="border-bottom: 0.25px solid black; page-break-inside: avoid;">
+                                    <th class="text-left" style="width:45%;">Name of the Good</th>
+                                    <th class="text-left" style="width:15%;">Tariff Number</th>
+                                    <th class="text-right" style="width:8%;">Qty</th>
+                                    <th class="text-right" style="width:12%;">Value</th>
+                                    <th class="text-right" style="width:8%;">Qty</th>
+                                    <th class="text-right" style="width:12%;">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="local_qty" t-value="0"/>
+                                <t t-set="local_value" t-value="0"/>
+                                <t t-set="export_qty" t-value="0"/>
+                                <t t-set="export_value" t-value="0"/>
+                                <t t-foreach="sales_data" t-as="data_line">
+                                    <tr style="border-bottom: 0.25px solid black;">
+                                        <td class="text-left">
+                                            <strong t-esc="data_line['column_1']"/><br/>
+                                            <t t-esc="data_line['column_2']"/>
+                                        </td>
+                                        <td class="text-left">
+                                            <t t-esc="data_line['column_3']"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-esc="data_line['column_4']"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="o.x_currency_id.symbol"/>
+                                            <t t-set="str_value" t-value="str('{0:,.2f}'.format(data_line['column_5']))"/>
+                                            <t t-set="str_value" t-value="str_value.replace('.', '_')"/>
+                                            <t t-set="str_value" t-value="str_value.replace(',', '.')"/>
+                                            <t t-set="str_value" t-value="str_value.replace('_', ',')"/>
+                                            <t t-esc="str_value"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-esc="data_line['column_6']"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="o.x_currency_id.symbol"/>
+                                            <t t-set="str_value" t-value="str('{0:,.2f}'.format(data_line['column_7']))"/>
+                                            <t t-set="str_value" t-value="str_value.replace('.', '_')"/>
+                                            <t t-set="str_value" t-value="str_value.replace(',', '.')"/>
+                                            <t t-set="str_value" t-value="str_value.replace('_', ',')"/>
+                                            <t t-esc="str_value"/>
+                                        </td>
+                                    </tr>
+                                    <t t-set="local_qty" t-value="local_qty + data_line['column_4']"/>
+                                    <t t-set="local_value" t-value="local_value + data_line['column_5']"/>
+                                    <t t-set="export_qty" t-value="export_qty + data_line['column_6']"/>
+                                    <t t-set="export_value" t-value="export_value + data_line['column_7']"/>
+                                </t>
+                                <tr style="border-bottom: 0.25px solid black;">
+                                    <td class="text-left" colspan="2">
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <t t-esc="local_qty"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="o.x_currency_id.symbol"/>
+                                        <t t-set="str_value" t-value="str('{0:,.2f}'.format(local_value))"/>
+                                        <t t-set="str_value" t-value="str_value.replace('.', '_')"/>
+                                        <t t-set="str_value" t-value="str_value.replace(',', '.')"/>
+                                        <t t-set="str_value" t-value="str_value.replace('_', ',')"/>
+                                        <t t-esc="str_value"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <t t-esc="export_qty"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="o.x_currency_id.symbol"/>
+                                        <t t-set="str_value" t-value="str('{0:,.2f}'.format(export_value))"/>
+                                        <t t-set="str_value" t-value="str_value.replace('.', '_')"/>
+                                        <t t-set="str_value" t-value="str_value.replace(',', '.')"/>
+                                        <t t-set="str_value" t-value="str_value.replace('_', ',')"/>
+                                        <t t-esc="str_value"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <span t-field="o.x_sale_table_text"/>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_inventory_sale_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="cus_product_360_view.report_inventory_sale_report_document"/>
+                </t>
+            </t>
+        </template>
+
+        <template id="report_inventory_sale_report_products_document">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div id="textbox">
+                        <h3 style="float: left;"><nobr><strong>Products Portfolio</strong></nobr></h3>
+                        <h4 style="float: right;"><strong>Annexure-B</strong></h4><br/>
+                    </div>
+                    <div style="clear: both;"/>
+                    <t t-foreach="o.x_portfolio_products_ids" t-as="product">
+                        <div class="row mt16" name="product_info"
+                             style="border-bottom: 1px solid gray;page-break-inside: avoid;">
+                            <div class="col-8 text-left">
+                                <h4><span t-field="product.x_product_id.name"/></h4>
+                                <h6>
+                                    <strong>Product Description: </strong><br/>
+                                    <span t-field="product.x_product_id.description_sale"/><br/>
+                                    <strong>HS Code: </strong>
+                                    <span t-field="product.x_product_id.x_hs_code_tr_id.x_hs_code"/><br/>
+                                    <strong>Sale Price: </strong>
+                                    <span t-field="o.x_currency_id.symbol"/>
+                                    <t t-set="str_value" t-value="str('{0:,.0f}'.format(product.x_product_id.lst_price))"/>
+                                    <t t-set="str_value" t-value="str_value.replace('.', '_')"/>
+                                    <t t-set="str_value" t-value="str_value.replace(',', '.')"/>
+                                    <t t-set="str_value" t-value="str_value.replace('_', ',')"/>
+                                    <span t-esc="str_value"/><br/><br/>
+                                </h6>
+                            </div>
+                            <div class="mb8 col-4 text-right">
+                                <image t-field="product.x_product_id.image_1920" t-options='{"widget": "image"}'/>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_inventory_sale_report_products">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="cus_product_360_view.report_inventory_sale_report_products_document"/>
+                </t>
+            </t>
+        </template>
+	</data>
+</odoo>

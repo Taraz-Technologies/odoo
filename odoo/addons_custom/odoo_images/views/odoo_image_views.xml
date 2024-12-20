@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_odoo_image_form" model="ir.ui.view">
+                <field name="name">odoo.image.form</field>
+                <field name="model">odoo.image</field>
+                <field name="arch" type="xml">
+                        <form string="Odoo Image">
+                                <group col="4">
+                                        <field name="x_name"/>
+                                </group>
+                                <field name="x_image" widget="image"/>
+                        </form>
+                </field>
+        </record>
+
+        <record id="view_odoo_image_tree" model="ir.ui.view">
+                <field name="name">odoo.image.tree</field>
+                <field name="model">odoo.image</field>
+                <field name="arch" type="xml">
+                        <tree string="Odoo Images">
+                                <field name="x_sequence" widget="handle"/>
+                                <field name="x_name"/>
+                        </tree>
+                </field>
+        </record>
+
+        <record id="odoo_image_view_kanban" model="ir.ui.view">
+                <field name="name">odoo.image.view.kanban</field>
+                <field name="model">odoo.image</field>
+                <field name="arch" type="xml">
+                    <kanban string="Odoo Images" default_order="x_sequence">
+                        <field name="id"/>
+                        <field name="x_name"/>
+                        <field name="x_image"/>
+                        <field name="x_sequence" widget="handle"/>
+                        <templates>
+                            <t t-name="kanban-box">
+                                <div class="card oe_kanban_global_click p-0">
+<!--                                    <div>-->
+<!--                                        <img class="card-img-top" t-att-src="kanban_image('odoo.image', 'x_image', record.id.raw_value)" t-att-alt="record.x_name.value"/>-->
+<!--                                    </div>-->
+                                    <div class="card-body p-0">
+                                        <field name="x_image" widget="image"/>
+                                        <h4 class="card-title p-2 m-0 bg-200">
+                                            <small><field name="x_name"/></small>
+                                        </h4>
+                                    </div>
+                                    <!-- below 100 Kb: good -->
+                                    <t t-if="record.x_image.raw_value.length &lt; 100*1000">
+                                        <t t-set="size_status" t-value="'badge-success'"/>
+                                        <t t-set="message">Acceptable file size</t>
+                                    </t>
+                                    <!-- below 1000 Kb: decent -->
+                                    <t t-elif="record.x_image.raw_value.length &lt; 1000*1000">
+                                        <t t-set="size_status" t-value="'badge-warning'" />
+                                        <t t-set="message">Huge file size. The image should be optimized/reduced.</t>
+                                    </t>
+                                    <!-- above 1000 Kb: bad -->
+                                    <t t-else="1">
+                                        <t t-set="size_status" t-value="'badge-danger'"/>
+                                        <t t-set="message">Optimization required! Reduce the image size or increase your compression settings.</t>
+                                    </t>
+                                </div>
+                            </t>
+                        </templates>
+                    </kanban>
+                </field>
+        </record>
+
+        <record id="view_odoo_image_filter" model="ir.ui.view">
+                <field name="name">odoo.image.select</field>
+                <field name="model">odoo.image</field>
+                <field name="arch" type="xml">
+                        <search string="Odoo Images">
+                                <field name="x_name" string="Odoo Images" filter_domain="[('x_name','ilike',self)]"/>
+                        </search>
+                </field>
+        </record>
+
+        <record id="action_odoo_image" model="ir.actions.act_window">
+                <field name="name">Odoo Images</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">odoo.image</field>
+                <field name="view_mode">kanban,tree,form</field>
+                <field name="search_view_id" ref="view_odoo_image_filter"/>
+                <field name="help" type="html">
+                        <p class="o_view_nocontent_smiling_face">
+                                Add new Image
+                        </p>
+                </field>
+        </record>
+
+        <menuitem id="odoo_image_root"
+                  name="Odoo Images"
+                  sequence="100"
+                  groups="base.group_erp_manager"
+                  web_icon="odoo_images,static/description/icon.png"/>
+
+        <menuitem id="menu_odoo_image"
+                  name="Odoo Images"
+                  sequence="1"
+                  groups="base.group_erp_manager"
+                  parent="odoo_image_root"
+                  action="action_odoo_image"/>
+</odoo>

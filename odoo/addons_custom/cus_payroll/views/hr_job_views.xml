@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_hr_job_form_cus_payroll" model="ir.ui.view">
+            <field name="name">view_hr_job_form_cus_payroll</field>
+            <field name="model">hr.job</field>
+            <field name="inherit_id" ref="hr.view_hr_job_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='no_of_recruitment']" position="after">
+                    <field name="x_currency_id"/>
+                    <field name="x_wage" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+                </xpath>
+                <xpath expr="/form/sheet" position="inside">
+                    <separator string="Salary Details" colspan="4"/>
+                    <field name="x_salary_detail_ids" context="{'default_x_currency_id': x_currency_id}"/>
+                    <separator string="Skills Details" colspan="4"/>
+                    <field name="x_skill_increment_ids" context="{'default_x_currency_id': x_currency_id}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_hr_job_tree_cus_payroll" model="ir.ui.view">
+            <field name="name">view_hr_job_tree_cus_payroll</field>
+            <field name="model">hr.job</field>
+            <field name="inherit_id" ref="hr.view_hr_job_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='department_id']" position="after">
+                    <field name="x_currency_id" invisible="1"/>
+                    <field name="x_wage" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sale_order_amounts,access.sale.order.amounts,model_sale_order_amounts,,1,1,1,1
+
+

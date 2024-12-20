@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="cus_purchase_purchase_order_form" model="ir.ui.view">
+            <field name="name">cus_purchase_purchase_order_form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+<!--                <button name="action_view_invoice" position="attributes">-->
+<!--                    <attribute name="invisible">1</attribute>-->
+<!--                </button>-->
+                <button name="action_view_invoice" position="before">
+                    <button name="action_create_payment_bills" string="Create Payment Term Bills" type="object" class="oe_highlight"
+                            context="{'create_bill':True}"
+                            attrs="{'invisible': ['|',
+                            ('state', 'not in', ('purchase','done')),
+                            '&amp;',
+                            ('x_payment_invoice_ids', '!=', []),
+                            ('invoice_status', '=', 'invoiced'),
+                            ]}"/>
+                </button>
+                <button name="button_unlock" position="after">
+                    <button name="action_create_related_bill" string="Create Related/LC Bill" type="object" class="oe_highlight"
+                            attrs="{'invisible': [('state', 'not in', ('purchase','done'))]}"/>
+                </button>
+                <div class="oe_button_box"  position="inside">
+					<button name="action_view_related_bills" type="object" class="oe_stat_button" icon="fa-calendar"
+                            attrs="{'invisible': [('x_bill_count', '=', 0)]}">
+						<div class="o_stat_info">
+							<field name="x_bill_count" class="o_stat_value"/>
+							<span class="o_stat_text" attrs="{'invisible': [('x_bill_count', '&lt;', 2)]}"> Related/LC Bills</span>
+							<span class="o_stat_text" attrs="{'invisible': [('x_bill_count', '&gt;', 1)]}"> Related/LC Bill</span>
+						</div>
+					</button>
+					<button name="action_view_free_zone_operations" type="object" class="oe_stat_button" icon="fa-calendar"
+                            attrs="{'invisible': [('company_id', '!=', 2)]}">
+						<div class="o_stat_info">
+							<span class="o_stat_text">Free Zone<br/>Operations</span>
+						</div>
+					</button>
+                </div>
+                <field name="partner_ref" position="after">
+                    <field name="x_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                </field>
+                <field name="payment_term_id" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="invoice_status" position="after">
+                    <field name="x_payment_invoice_ids" widget="many2many_tags"/>
+                </field>
+                <xpath expr="//field[@name='order_line']/tree[1]/field[@name='product_id']" position="after">
+                    <field name="x_name_translation" optional="hide"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree[1]/field[@name='name']" position="after">
+                    <field name="x_description_translation" optional="hide"/>
+                </xpath>
+                <field name="product_uom" position="after">
+                    <field name="x_original_price_unit" optional="show" attrs="{'column_invisible': [('parent.company_id', '!=', 2)]}"/>
+                    <field name="x_original_price_subtotal" widget="monetary" optional="show" attrs="{'column_invisible': [('parent.company_id', '!=', 2)]}" sum="Total"/>
+                </field>
+                <xpath expr="//div[hasclass('oe_title')]" position="before">
+                    <div style="padding-bottom: 15px;">
+                    	<field name="x_internal_notes" placeholder="Internal Notes" style="border-radius: 5px; border: 1px solid black; font-style: italic; padding:5px; font-size: 15px;"/>
+					</div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="cus_purchase_purchase_order_view_tree" model="ir.ui.view">
+            <field name="name">cus_purchase_purchase_order_view_tree</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_view_tree"/>
+            <field name="arch" type="xml">
+                    <data>
+                        <field name="invoice_status" position="before">
+                            <field name="x_is_commented" invisible="1"/>
+                            <field name="x_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            <button name="action_show_notes" type="object" icon="fa-comment" string="Show Notes"
+                                    attrs="{'invisible': [('x_is_commented', '=', False)]}"/>
+                        </field>
+                    </data>
+            </field>
+        </record>
+
+        <record id="cus_purchase_purchase_order_tree" model="ir.ui.view">
+            <field name="name">cus_purchase_purchase_order_tree</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+            <field name="arch" type="xml">
+                    <data>
+                        <field name="state" position="before">
+                            <field name="x_is_commented" invisible="1"/>
+                            <field name="x_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            <button name="action_show_notes" type="object" icon="fa-comment" string="Show Notes"
+                                    attrs="{'invisible': [('x_is_commented', '=', False)]}"/>
+                        </field>
+                    </data>
+            </field>
+        </record>
+
+        <record id="cus_purchase_purchase_view_search" model="ir.ui.view">
+            <field name="name">cus_purchase_purchase_order_view_search</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_view_search"/>
+            <field name="arch" type="xml">
+                    <data>
+                        <field name="name" position="attributes">
+                            <attribute name="filter_domain">
+                                [
+                                '|', '|', '|', '|', '|',
+                                ('name', 'ilike', self),
+                                ('partner_ref', 'ilike', self),
+                                ('x_internal_ref', 'ilike', self),
+                                ('partner_id', 'child_of', self),
+                                ('x_tag_ids', 'ilike', self),
+                                ('x_internal_notes', 'ilike', self),
+                                ]
+                            </attribute>
+                        </field>
+                        <field name="product_id" position="after">
+                            <field name="x_internal_notes" string="Comments"/>
+                        </field>
+                        <filter name="activities_exception" position="after">
+                            <separator/>
+                            <filter name="tagged" string="Tagged" domain="[('x_tag_ids', '!=', False)]"/>
+                            <separator/>
+                            <filter name="commented" string="Commented" domain="[('x_internal_notes', '!=', False)]"/>
+                        </filter>
+                    </data>
+            </field>
+        </record>
+
+        <record id="cus_purchase_purchase_order_filter" model="ir.ui.view">
+            <field name="name">cus_purchase_purchase_order_filter</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="arch" type="xml">
+                    <data>
+                        <field name="name" position="attributes">
+                            <attribute name="filter_domain">
+                                [
+                                '|', '|', '|', '|', '|',
+                                ('name', 'ilike', self),
+                                ('partner_ref', 'ilike', self),
+                                ('x_internal_ref', 'ilike', self),
+                                ('partner_id', 'child_of', self),
+                                ('x_tag_ids', 'ilike', self),
+                                ('x_internal_notes', 'ilike', self),
+                                ]
+                            </attribute>
+                        </field>
+                        <field name="product_id" position="after">
+                            <field name="x_internal_notes" string="Comments"/>
+                        </field>
+                        <filter name="activities_exception" position="after">
+                            <separator/>
+                            <filter name="tagged" string="Tagged" domain="[('x_tag_ids', '!=', False)]"/>
+                            <separator/>
+                            <filter name="commented" string="Commented" domain="[('x_internal_notes', '!=', False)]"/>
+                        </filter>
+                    </data>
+            </field>
+        </record>
+    </data>
+</odoo>

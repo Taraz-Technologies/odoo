@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="ir_cron_update_inventory_period" model="ir.cron">
+            <field name="name">Product 360 View: Update Inventory Period</field>
+            <field name="model_id" ref="model_product_template"/>
+            <field name="type">ir.actions.server</field>
+            <field name="state">code</field>
+            <field name="code">model.update_period()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="priority">0</field>
+        </record>
+
+        <record id="ir_cron_get_product_details" model="ir.cron">
+            <field name="name">Product 360 View: Get Product Details from Digi-Key</field>
+            <field name="model_id" ref="model_product_template"/>
+            <field name="type">ir.actions.server</field>
+            <field name="state">code</field>
+            <field name="code">model.get_product_details()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+        </record>
+
+        <record id="ir_cron_extract_hs_code_details_from_pdf" model="ir.cron">
+            <field name="name">Product 360 View: Extract HS Codes with CD Rates from PDF</field>
+            <field name="model_id" ref="model_hs_code_database"/>
+            <field name="type">ir.actions.server</field>
+            <field name="state">code</field>
+            <field name="code">model.extract_hs_code_details_from_pdf()</field>
+            <field name="interval_number">12</field>
+            <field name="interval_type">months</field>
+            <field name="numbercall">-1</field>
+        </record>
+
+        <record id="ir_cron_extract_hs_code_details_from_xl" model="ir.cron">
+            <field name="name">Product 360 View: Extract HS Codes with CD Rates from Excel</field>
+            <field name="model_id" ref="model_hs_code_database"/>
+            <field name="type">ir.actions.server</field>
+            <field name="state">code</field>
+            <field name="code">model.extract_hs_code_details_from_xl()</field>
+            <field name="interval_number">12</field>
+            <field name="interval_type">months</field>
+            <field name="numbercall">-1</field>
+        </record>
+    </data>
+</odoo>

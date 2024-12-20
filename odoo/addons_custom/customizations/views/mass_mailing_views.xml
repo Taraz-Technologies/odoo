@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--  Email !-->
+    <record id="view_mail_mass_mailing_form_customization" model="ir.ui.view">
+        <field name="name">mailing.mailing.form.customization</field>
+        <field name="model">mailing.mailing</field>
+        <field name="inherit_id" ref="mass_mailing.view_mail_mass_mailing_form"/>
+        <field name="priority" eval="99" />
+        <field name="arch" type="xml">
+            <data>
+                <header position="inside">
+                    <button name="stop_resume_email" type="object" class="oe_highlight" string="Stop" attrs="{'invisible': [('state', 'in', ['draft', 'done', 'stopped'])]}"/>
+                </header>
+                <notebook position="inside">
+                    <page string="Recipients">
+                        <field name="x_contact_ids"/>
+                    </page>
+                </notebook>
+            </data>
+        </field>
+    </record>
+    <!--  Recipient List !-->
+    <record id="mailing_list_view_form_customization" model="ir.ui.view">
+        <field name="name">mailing.list.form.customization</field>
+        <field name="model">mailing.list</field>
+        <field name="inherit_id" ref="mass_mailing.mailing_list_view_form"/>
+        <field name="priority" eval="99" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="/form/sheet/group" position="after">
+                    <field name="contact_ids" nolabel="1"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+    <!--  Recipients !-->
+    <record id="mailing_contact_view_form_customization" model="ir.ui.view">
+        <field name="name">mailing.contact.view.form.customization</field>
+        <field name="model">mailing.contact</field>
+        <field name="inherit_id" ref="mass_mailing.view_mail_mass_mailing_contact_form"/>
+        <field name="priority" eval="99" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="/form/sheet/group[1]" position="before">
+                    <div class="oe_title">
+                        <label for="x_contact_id" class="oe_edit_only"/>
+                        <h1>
+                            <field name="x_contact_id" width="100%"/>
+                        </h1>
+                    </div>
+                </xpath>
+                <field name="name" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="tag_ids" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <label for="email"  position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </label>
+                <div name="email_details" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </div>
+                <field name="title_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="company_name" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="country_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="tag_ids" position="after">
+                    <field name="x_name"/>
+                    <field name="x_tag_ids" widget="many2many_tags"/>
+                </field>
+                <field name="country_id" position="after">
+                    <label for="x_email" class="oe_inline"/>
+                    <div class="o_row o_row_readonly" name="x_email_details">
+                        <i class="fa fa-ban" style="color: red;" role="img" title="This email is blacklisted for mass mailing" aria-label="Blacklisted" attrs="{'invisible': [('is_blacklisted', '=', False)]}" groups="base.group_user"/>
+                        <field name="x_email" widget="email"/>
+                        <field name="is_blacklisted" invisible="1"/>
+                    </div>
+                    <field name="x_title_id"/>
+                    <field name="x_parent_id"/>
+                    <field name="x_country_id"/>
+                    <field name="x_group_by_customer_status" invisible="1"/>
+                    <field name="x_group_by_customer_group_id" invisible="1"/>
+                    <field name="x_group_by_team_lead_id" invisible="1"/>
+                    <field name="x_group_by_engagement" invisible="1"/>
+                    <field name="x_group_by_company_status" invisible="1"/>
+                    <field name="x_group_by_company_type" invisible="1"/>
+                </field>
+                <xpath expr="/form/sheet/group[2]" position="after">
+                    <group string="Person's Data">
+                        <group>
+                            <field name="x_update_mailing_contact_data" invisible="1"/>
+                            <field name="x_exclude_from_newsletter"/>
+                            <field name="x_customer_status"/>
+                            <field name="x_customer_group_id"/>
+                            <field name="x_team_lead_id"/>
+                            <field name="x_engagement"/>
+                            <field name="x_distributor"/>
+                            <field name="x_customer_ids" widget="many2many_tags" attrs="{'invisible': [('x_distributor', '=', False)]}"/>
+                        </group>
+                        <group>
+                            <field name="x_currency_id" invisible="1"/>
+                            <field name="x_total_invoiced" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+                            <field name="x_interest_ids" widget="many2many_tags"/>
+                            <field name="x_interested_product_ids" widget="many2many_tags"/>
+                            <field name="x_purchased_product_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <group string="Company's Data" attrs="{'invisible':[('company_name', '=', False)]}">
+                        <group>
+                            <field name="x_company_status"/>
+                            <field name="x_company_type"/>
+                            <field name="x_company_revenue" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+                            <field name="x_company_size"/>
+                            <field name="x_distributor_comp"/>
+                        </group>
+                        <group>
+                            <field name="x_total_invoiced_comp" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+                            <field name="x_interest_ids_comp" widget="many2many_tags"/>
+                            <field name="x_interested_product_ids_comp" widget="many2many_tags"/>
+                            <field name="x_purchased_product_ids_comp" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <field name="x_comment" placeholder="Internal notes..."/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="mailing_contact_view_tree_customization" model="ir.ui.view">
+        <field name="name">mailing.contact.view.tree.customization</field>
+        <field name="model">mailing.contact</field>
+        <field name="inherit_id" ref="mass_mailing.view_mail_mass_mailing_contact_tree"/>
+        <field name="priority" eval="99" />
+        <field name="arch" type="xml">
+            <data>
+                <field name="name" position="before">
+                    <field name="title_id" optional="hide"/>
+                </field>
+                <field name="name" position="after">
+                    <field name="tag_ids" widget="many2many_tags" optional="hide"/>
+                    <field name="x_exclude_from_newsletter" optional="hide"/>
+                    <field name="x_company_type" optional="hide"/>
+                    <field name="x_company_status" optional="hide"/>
+                    <field name="x_customer_status" optional="show"/>
+                    <field name="x_customer_group_id" optional="hide"/>
+                    <field name="x_team_lead_id" optional="hide"/>
+                    <field name="x_engagement" optional="hide"/>
+                </field>
+                <field name="email" position="after">
+                    <field name="country_id" optional="hide"/>
+                </field>
+                <xpath expr="//field[@name='message_bounce']" position="after">
+                    <field name="list_ids" widget="many2many_tags" optional="hide"/>
+                    <field name="x_interest_ids" widget="many2many_tags" optional="hide"/>
+                    <field name="x_interested_product_ids" widget="many2many_tags" optional="hide"/>
+                    <field name="x_purchased_product_ids" widget="many2many_tags" optional="hide"/>
+                    <field name="x_interest_ids_comp" widget="many2many_tags" optional="hide"/>
+                    <field name="x_interested_product_ids_comp" widget="many2many_tags" optional="hide"/>
+                    <field name="x_purchased_product_ids_comp" widget="many2many_tags" optional="hide"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="view_mailing_contact_filter_customization" model="ir.ui.view">
+        <field name="name">mailing.contact.select.customization</field>
+        <field name="model">mailing.contact</field>
+        <field name="inherit_id" ref="mass_mailing.view_mail_mass_mailing_contact_search"/>
+        <field name="priority" eval="99" />
+        <field name="arch" type="xml">
+            <data>
+                <field name='list_ids' position="after">
+                    <field name="list_ids" string="Not in Recipient List" filter_domain="[('list_ids', 'not ilike', self)]"/>
+                    <field name="x_interested_product_ids"
+                           filter_domain="['|', ('x_interested_product_ids', 'ilike', self), ('x_interested_product_ids_comp', 'ilike', self)]"/>
+                    <field name="x_purchased_product_ids"
+                           filter_domain="['|', ('x_purchased_product_ids', 'ilike', self), ('x_purchased_product_ids_comp', 'ilike', self)]"/>
+                </field>
+                <filter name='filter_not_optout' position="after">
+                    <separator/>
+                    <filter string="Email not Available" name="email_empty" domain="[('email', '=', False)]"/>
+                    <separator/>
+                    <filter string="Enquirer" name="customer_status_1" domain="[('x_customer_status', '=', 'Enquirer')]"/>
+                    <filter string="Customer" name="customer_status_2" domain="[('x_customer_status', '=', 'Customer')]"/>
+                    <filter string="Targeted" name="customer_status_3" domain="[('x_customer_status', '=', 'Targeted')]"/>
+                    <separator/>
+                    <filter string="Company Enquirer" name="customer_status_1" domain="[('x_company_status', '=', 'Enquirer')]"/>
+                    <filter string="Company Customer" name="customer_status_2" domain="[('x_company_status', '=', 'Customer')]"/>
+                    <filter string="Company Targeted" name="customer_status_3" domain="[('x_company_status', '=', 'Targeted')]"/>
+                    <separator/>
+                    <filter string="Distributor" name="distributor" domain="[('x_distributor', '=', True)]"/>
+                    <separator/>
+                    <filter string="University" name="customer_type_1" domain="[('x_company_type', '=', 'University')]"/>
+                    <filter string="Industry" name="customer_type_2" domain="[('x_company_type', '=', 'Industry')]"/>
+                    <separator/>
+                    <filter string="Excluded from Newsletter" name="excluded_from_newsletter" domain="[('x_exclude_from_newsletter', '=', True)]"/>
+                </filter>
+                <filter name='group_create_date' position="before">
+                    <filter name="customer_status" string="Customer Status" context="{'group_by': 'x_group_by_customer_status'}"/>
+                    <filter name="customer_group" string="Customer Department" context="{'group_by': 'x_group_by_customer_group_id'}"/>
+                    <filter name="team_lead" string="Team Lead" context="{'group_by': 'x_group_by_team_lead_id'}"/>
+                    <filter name="engagement" string="Engagement" context="{'group_by': 'x_group_by_engagement'}"/>
+                    <filter name="group_country" string="Country" context="{'group_by': 'country_id'}"/>
+                    <filter name="group_company" string="Company" context="{'group_by': 'company_name'}"/>
+                    <filter name="company_status" string="Company Status" context="{'group_by': 'x_group_by_company_status'}"/>
+                    <filter name="company_type" string="Company Type" context="{'group_by': 'x_group_by_company_type'}"/>
+                </filter>
+            </data>
+        </field>
+    </record>
+
+    <menuitem id="res_partner_menu_contacts"
+        name="Contacts"
+        action="contacts.action_contacts"
+        parent="mass_mailing.mass_mailing_menu_root"
+        sequence="9"/>
+</odoo>

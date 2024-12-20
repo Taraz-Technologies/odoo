@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<!--    Purchase Order Views-->
+    <record id="view_purchase_order_form_custom_0" model="ir.ui.view">
+        <field name="name">purchase.order.form.custom</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <field name="fiscal_position_id" position="after">
+                    <field name="x_shipping_charges" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="x_shipment_weight"/>
+                </field>
+                <xpath expr="//field[@name='order_line']/tree[1]/field[@name='product_id']" position="before">
+                    <field name="x_purchase_history_id" invisible="1"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+<!--    Purchase History Views-->
+    <record id="view_purchase_history_form" model="ir.ui.view">
+        <field name="name">purchase.history.form</field>
+        <field name="model">purchase.history</field>
+        <field name="arch" type="xml">
+            <form string="Purchase History">
+                <sheet>
+                    <field name="x_tzp_type" invisible="1"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="x_product_id" widget="many2one"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="x_order_date"/>
+                            <field name="x_partner_id" widget="many2one"/>
+                            <field name="x_product_qty"/>
+                            <field name="x_received_qty"/>
+                            <field name="x_unit_fob"/>
+                            <field name="x_unit_cnf"/>
+                            <field name="x_unit_lc"/>
+                            <field name="x_unit_price"/>
+                        </group>
+                        <group>
+                            <field name="x_order_id" widget="many2one"/>
+                            <field name="x_currency_id" widget="many2one" invisible="1"/>
+                            <field name="x_product_uom_id" widget="many2one"/>
+                            <field name="x_lc_factor"/>
+                            <field name="x_lc_percentage" widget="percentage"/>
+                            <field name="x_subtotal_fob" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+                            <field name="x_subtotal_cnf" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+                            <field name="x_subtotal_lc" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+                            <field name="x_subtotal" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+                        </group>
+                    </group>
+                    <separator colspan="4" string="Receipt History"/>
+                    <field name="x_receipt_history_ids">
+                        <tree string="Receipt History">
+                            <field name="x_purchase_history_id" widget="many2one" invisible="1"/>
+                            <field name="x_order_id" widget="many2one" invisible="1"/>
+                            <field name="x_product_id" widget="many2one" invisible="1"/>
+                            <field name="x_receipt_id" widget="many2one"/>
+                            <field name="x_receipt_date"/>
+                            <field name="x_received_qty" sum="Received"/>
+                            <field name="x_product_uom_id" widget="many2one"/>
+                        </tree>
+                        <form string="Receipt History">
+                            <sheet>
+                                <div class="oe_title">
+                                    <h1>
+                                        <field name="x_product_id" widget="many2one"/>
+                                    </h1>
+                                </div>
+                                <group>
+                                    <group>
+                                        <field name="x_order_id"/>
+                                        <field name="x_receipt_id" widget="many2one"/>
+                                        <field name="x_receipt_date"/>
+                                    </group>
+                                    <group>
+                                        <field name="x_purchase_history_id" invisible="1"/>
+                                        <field name="x_received_qty" sum="Received"/>
+                                        <field name="x_product_uom_id" widget="many2one"/>
+                                    </group>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                    <separator colspan="4" string="Landed Cost History"/>
+                    <field name="x_landed_cost_history_ids">
+                        <tree string="Landed Cost History">
+                            <field name="x_purchase_history_id" widget="many2one" invisible="1"/>
+                            <field name="x_adjust_line_id" widget="many2one" invisible="1"/>
+                            <field name="x_product_id" widget="many2one" invisible="1"/>
+                            <field name="x_landed_cost_date"/>
+                            <field name="x_landed_cost_id" widget="many2one"/>
+                            <field name="x_cost_line_id"/>
+                            <field name="x_split_method"/>
+                            <field name="x_product_qty"/>
+                            <field name="x_currency_id" widget="many2one" invisible="1"/>
+                            <field name="x_former_cost" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+                            <field name="x_landed_cost" sum="Total LC"/>
+                            <field name="x_final_cost" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+                        </tree>
+                        <form string="Landed Cost History">
+                            <sheet>
+                                <div class="oe_title">
+                                    <h1>
+                                        <field name="x_product_id" widget="many2one"/>
+                                    </h1>
+                                </div>
+                                <group>
+                                    <group>
+                                        <field name="x_purchase_history_id" invisible="1"/>
+                                        <field name="x_adjust_line_id" invisible="1"/>
+                                        <field name="x_landed_cost_date"/>
+                                        <field name="x_landed_cost_id" widget="many2one"/>
+                                        <field name="x_cost_line_id"/>
+                                        <field name="x_split_method"/>
+                                    </group>
+                                    <group>
+                                        <field name="x_product_qty"/>
+                                        <field name="x_currency_id" widget="many2one" invisible="1"/>
+                                        <field name="x_former_cost" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+                                        <field name="x_landed_cost"/>
+                                        <field name="x_final_cost" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+                                    </group>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_purchase_history_tree" model="ir.ui.view">
+        <field name="name">purchase.history.tree</field>
+        <field name="model">purchase.history</field>
+        <field name="arch" type="xml">
+            <tree string="Purchase History">
+                <field name="x_product_id" widget="many2one" invisible="1"/>
+                <field name="x_currency_id" widget="many2one" invisible="1"/>
+                <field name="x_partner_id" widget="many2one"/>
+                <field name="x_order_id" widget="many2one"/>
+                <field name="x_order_date"/>
+                <field name="x_product_qty" sum="Purchased"/>
+                <field name="x_received_qty" sum="Received"/>
+                <field name="x_product_uom_id" widget="many2one"/>
+                <field name="x_unit_fob" optional="hide"/>
+                <field name="x_subtotal_fob" widget="monetary" options="{'currency_field': 'x_currency_id'}" sum="Subtotal" optional="hide"/>
+                <field name="x_unit_cnf" optional="hide"/>
+                <field name="x_subtotal_cnf" widget="monetary" options="{'currency_field': 'x_currency_id'}" sum="Subtotal" optional="hide"/>
+                <field name="x_unit_lc" optional="hide"/>
+                <field name="x_subtotal_lc" widget="monetary" options="{'currency_field': 'x_currency_id'}" sum="Subtotal" optional="hide"/>
+                <field name="x_unit_price" optional="show"/>
+                <field name="x_subtotal" widget="monetary" options="{'currency_field': 'x_currency_id'}" sum="Subtotal" optional="show"/>
+                <field name="x_lc_percentage" widget="percentage" avg="Average" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_purchase_history_graph" model="ir.ui.view">
+        <field name="name">purchase.history.graph</field>
+        <field name="model">purchase.history</field>
+        <field name="arch" type="xml">
+            <graph string="Purchase History">
+                <field name="x_order_id"/>
+                <field name="x_subtotal" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_purchase_history_search" model="ir.ui.view">
+        <field name="name">purchase.history.search</field>
+        <field name="model">purchase.history</field>
+        <field name="arch" type="xml">
+            <search string="Purchase History">
+                <field name="x_product_id"/>
+                <field name="x_partner_id"/>
+                <field name="x_order_id"/>
+				<group col="4" colspan="4" expand="0" string="Group By">
+                    <filter string="TZP Type" name="tzp_type" context="{'group_by':'x_tzp_type'}"/>
+                    <filter string="Products" name="product_id" context="{'group_by':'x_product_id'}"/>
+                    <filter string="Vendors" name="partner_id" context="{'group_by':'x_partner_id'}"/>
+                    <filter string="Purchase Orders" name="order_id" context="{'group_by':'x_order_id'}"/>
+                    <filter string="Date" name="order_date" context="{'group_by':'x_order_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_purchase_history" model="ir.actions.act_window">
+		<field name="name">Purchase History</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">purchase.history</field>
+		<field name="view_mode">tree,form,graph</field>
+		<field name="context">{'search_default_product_id': 1}</field>
+		<field name="domain">{}</field>
+		<field name="search_view_id" ref="view_purchase_history_search"/>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				No History to Show
+			</p>
+		</field>
+    </record>
+
+    <menuitem id="menu_purchase_history"
+              name="Purchase History"
+              parent="cus_product_360_view.menu_product_360"
+              action="cus_product_360_view.action_purchase_history"
+              sequence="1"/>
+</odoo>

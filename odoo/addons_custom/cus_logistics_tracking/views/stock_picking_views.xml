@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_picking_form_logistics_tracking" model="ir.ui.view">
+        <field name="name">stock.picking.form.logistics_tracking</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="priority" eval="99"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//button[@name='button_validate'][1]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', '|', ('state', 'in', ('waiting','confirmed')), ('show_validate', '=', False), ('picking_type_code', 'in', ('incoming', 'outgoing'))]}</attribute>
+                </xpath>
+                <xpath expr="//button[@name='button_validate'][2]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', '|', ('state', 'not in', ('waiting','confirmed')), ('show_validate', '=', False), ('picking_type_code', 'in', ('incoming', 'outgoing'))]}</attribute>
+                </xpath>
+                <button name="action_assign" position="after">
+                    <button name="button_validate" attrs="{'invisible': ['|', '|', ('state', 'in', ('waiting','confirmed')), ('show_validate', '=', False), ('picking_type_code', 'not in', ('incoming', 'outgoing'))]}" confirm="Are you sure you want to validate using current In/Out date?" string="Validate" type="object" class="oe_highlight" groups="stock.group_stock_user"/>
+                    <button name="button_validate" attrs="{'invisible': ['|', '|', ('state', 'not in', ('waiting', 'confirmed')), ('show_validate', '=', False), ('picking_type_code', 'not in', ('incoming', 'outgoing'))]}" confirm="Are you sure you want to validate using current In/Out date?" string="Validate" type="object" groups="stock.group_stock_user" class="o_btn_validate"/>
+                </button>
+                <header position="inside">
+                    <button string="Create Related/LC Bill" name="action_create_landed_cost_bill" type="object" class="oe_highlight"
+                            attrs="{'invisible':['|', '|', ('state', 'not in', ('done')), ('picking_type_code', 'not in', ('incoming', 'outgoing')), ('is_locked', '=', False)]}"/>
+                    <!--                    <button string="Start Warehousing" name="action_start_warehousing" type="object" class="oe_highlight" attrs="{'invisible':['|', '|', ('picking_type_code', '!=', 'incoming'), ('state', 'not in', ('done')), ('x_tracking_status', 'not in', ('arrived'))]}"/>-->
+                    <button string="Mark as Backorder" name="mark_as_backorder" type="object" class="oe_highlight"
+                            attrs="{'invisible':['|', '|', '|', ('picking_type_code', '!=', 'incoming'), ('x_backorder_products', '!=', False), ('state', 'in', ('done', 'cancel')), ('is_locked', '=', False)]}"/>
+                    <button string="Regular Order" name="mark_as_regular_order" type="object" class="oe_highlight"
+                            attrs="{'invisible':['|', '|', '|', ('picking_type_code', '!=', 'incoming'), ('x_backorder_products', '=', False), ('state', 'in', ('done', 'cancel')), ('is_locked', '=', False)]}"/>
+                </header>
+                <div name="button_box" position="inside">
+                    <button name="action_view_bills" type="object" class="oe_stat_button" icon="fa-calendar"
+                            attrs="{'invisible': [('x_bill_count', '=', 0)]}">
+                        <div class="o_stat_info">
+                            <field name="x_bill_count" class="o_stat_value"/>
+                            <span class="o_stat_text" attrs="{'invisible': [('x_bill_count', '&lt;', 2)]}">Related/LC
+                                Bills
+                            </span>
+                            <span class="o_stat_text" attrs="{'invisible': [('x_bill_count', '&gt;', 1)]}">Related/LC
+                                Bill
+                            </span>
+                        </div>
+                    </button>
+                    <button name="action_view_consolidations" type="object" class="oe_stat_button" icon="fa-calendar"
+                            attrs="{'invisible': [('x_consolidation_count', '=', 0)]}">
+                        <div class="o_stat_info">
+                            <field name="x_consolidation_count" class="o_stat_value"/>
+                            <span class="o_stat_text" attrs="{'invisible': [('x_consolidation_count', '&lt;', 2)]}">
+                                Consolidations
+                            </span>
+                            <span class="o_stat_text" attrs="{'invisible': [('x_consolidation_count', '&gt;', 1)]}">
+                                Consolidation
+                            </span>
+                        </div>
+                    </button>
+                    <field name="x_landed_cost_ids" invisible="1"/>
+                    <button name="action_view_landed_costs" type="object" class="oe_stat_button" icon="fa-calendar"
+                            attrs="{'invisible': [('x_landed_cost_count', '=', 0)]}">
+                        <div class="o_stat_info">
+                            <field name="x_landed_cost_count" class="o_stat_value"/>
+                            <span class="o_stat_text" attrs="{'invisible': [('x_landed_cost_count', '&lt;', 2)]}">Landed
+                                Costs
+                            </span>
+                            <span class="o_stat_text" attrs="{'invisible': [('x_landed_cost_count', '&gt;', 1)]}">Landed
+                                Cost
+                            </span>
+                        </div>
+                    </button>
+                    <button name="action_view_picking_sale_order" type="object" class="oe_stat_button"
+                            icon="fa-exclamation-circle"
+                            attrs="{'invisible': [('x_sale_id', '=', False)]}">
+                        <div class="o_stat_info">
+                            <span class="o_stat_text">Sale Order</span>
+                        </div>
+                    </button>
+                    <button name="action_view_picking_purchase_order" type="object" class="oe_stat_button"
+                            icon="fa-exclamation-circle"
+                            attrs="{'invisible': [('purchase_id', '=', False)]}">
+                        <div class="o_stat_info">
+                            <span class="o_stat_text">Purchase
+                                <br/>
+                                Order
+                            </span>
+                        </div>
+                    </button>
+                </div>
+                <div name="button_box" position="after">
+                    <widget name="web_ribbon" title="Backorder" bg_color="bg-danger"
+                            attrs="{'invisible': [('x_backorder', '=', False)]}"/>
+                </div>
+                <field name="location_dest_id" position="after">
+                    <field name="x_operation_type"/>
+                    <field name="x_bill_ids" widget="many2many_tags" invisible="1"
+                           attrs="{'invisible':[('picking_type_code', 'not in', ('incoming', 'outgoing'))]}"/>
+                </field>
+                <field name="owner_id" position="after">
+                    <field name="x_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                    <field name="x_auto_fill_done_quantity"
+                           attrs="{'invisible':['|', ('state', 'in', ('done', 'cancel')), ('picking_type_code', 'not in', ('incoming'))]}"/>
+                    <field name="x_related_incoming_id"
+                           options="{'no_create_edit': True, 'no_quick_create': True}"
+                           attrs="{'invisible':[('x_related_incoming_id', '=', False)]}"/>
+                    <field name="x_related_warehousing_id"
+                           options="{'no_create_edit': True, 'no_quick_create': True}"
+                           attrs="{'invisible':[('x_related_warehousing_id', '=', False)]}"/>
+                </field>
+            </data>
+        </field>
+    </record>
+
+    <record id="view_picking_out_form_custom" model="ir.ui.view">
+        <field name="name">delivery.stock.picking.form.view.custom</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="delivery.view_picking_withcarrier_out_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <field name="partner_id" position="after">
+                    <field name="x_backorder" invisible="1"/>
+                    <label for="x_tracking_id"
+                           attrs="{'invisible': [('picking_type_code', 'not in', ('incoming','outgoing'))]}"/>
+                    <div class="o_row"
+                         attrs="{'invisible': [('picking_type_code', 'not in', ('incoming','outgoing'))]}">
+                        <field name="x_tracking_id" context="{'default_x_picking_id': id}"/>
+                        <button name="open_url" string="Tracking" type="object" icon="fa-truck" class="btn-warning"
+                                attrs="{'invisible': [('x_tracking_id', '=', False)]}"/>
+                    </div>
+                    <field name="color" invisible="1"/>
+                    <field name="x_consolidation_ids" widget="many2many_tags" invisible="1"/>
+                    <field name="x_forwarder_tracking_id" invisible="1"/>
+                    <field name="x_route_id" invisible="1"/>
+                    <field name="x_sub_route_id" invisible="1"/>
+                    <field name="x_tracking_state" invisible="1"/>
+                    <field name="x_tracking_status" invisible="1"/>
+                </field>
+                <field name="date_done" position="before">
+<!--					<field name="x_form_field_09" string="In/Out Date" attrs="{'invisible': [('picking_type_code', 'not in', ('incoming', 'outgoing'))], 'readonly': [('state', 'in', ('done', 'cancel'))]}"/>-->
+                    <label for="x_form_field_09" string="In/Out Date" attrs="{'invisible': [('picking_type_code', 'not in', ('incoming', 'outgoing'))]}"/>
+                    <div class="o_row" attrs="{'invisible': [('picking_type_code', 'not in', ('incoming', 'outgoing'))]}">
+                        <field name="x_form_field_09"/>
+                        <button name="change_picking_effective_date_to_in_out_date" class="oe_highlight" type="object" string="Update"/>
+                    </div>
+                </field>
+                <group name="carrier_data" position="attributes">
+                    <attribute name="attrs">{'invisible': [('picking_type_code', 'not in', ('incoming','outgoing'))]}</attribute>
+                </group>
+                <group name="other_infos" position="after">
+                    <group name="customs_info" string="Customs Info"
+                           attrs="{'invisible':['|', ('company_id', '!=', 2), ('picking_type_code', 'not in', ('incoming'))]}">
+                        <field name="x_push_data" invisible="1"/>
+                        <field name="x_attachment_name" invisible="1"/>
+                        <field name="x_attachment" filename="x_attachment_name"/>
+                        <field name="x_form_field_01"/>
+                        <field name="x_form_field_11"/>
+                        <field name="x_form_field_02"/>
+                        <field name="x_form_field_03"/>
+                        <field name="x_form_field_04"/>
+                        <field name="x_form_field_05"/>
+                        <field name="x_form_field_06"/>
+                        <field name="x_form_field_09"/>
+                        <label for="x_form_field_10"/>
+                        <div class="o_row">
+                            <field name="x_form_field_10"/>
+                            <span>kg</span>
+                        </div>
+                        <label for="x_form_field_12"/>
+                        <div class="o_row">
+                            <field name="x_form_field_12"/>
+                            <span>KAP</span>
+                        </div>
+                        <field name="x_form_field_13" invisible="1"/>
+                        <field name="x_form_field_07" widget="monetary"
+                               options="{'currency_field': 'x_form_field_13'}"/>
+                        <field name="x_form_field_14" invisible="1"/>
+                        <field name="x_form_field_08" widget="monetary"
+                               options="{'currency_field': 'x_form_field_14'}"/>
+                    </group>
+                </group>
+            </data>
+        </field>
+    </record>
+
+    <record id="view_picking_tree_logistics_tracking" model="ir.ui.view">
+        <field name="name">stock.picking.tree.logistics_tracking</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="priority" eval="99"/>
+        <field name="arch" type="xml">
+            <data>
+                <field name="backorder_id" position="after">
+                    <field name="x_operation_type" optional="hide"/>
+                    <field name="x_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                    <field name="x_backorder" optional="hide"/>
+                </field>
+            </data>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="stock_picking_kanban_logistics_tracking">
+        <field name="name">stock.picking.kanban</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.stock_picking_kanban"/>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" position="attributes">
+                <attribute name="class">oe_background_grey o_kanban_dashboard o_emphasize_colors o_stock_kanban
+                </attribute>
+                <attribute name="default_group_by">x_tracking_status</attribute>
+                <attribute name="create">0</attribute>
+            </kanban>
+            <field name="activity_state" position="after">
+                <field name="color"/>
+                <field name="picking_type_code"/>
+                <field name="purchase_id"/>
+                <field name="backorder_id"/>
+                <field name="scheduled_date"/>
+                <field name="date_done"/>
+                <field name="x_tracking_id"/>
+                <field name="x_consolidation_ids"/>
+                <field name="x_forwarder_tracking_id"/>
+                <field name="x_route_id"/>
+                <field name="x_sub_route_id"/>
+                <field name="x_tracking_state"/>
+                <field name="x_tracking_status"/>
+            </field>
+            <div t-attf-class="oe_kanban_card oe_kanban_global_click" position="attributes">
+                <attribute name="t-attf-class">oe_kanban_card oe_kanban_global_click
+                    #{!selection_mode ? kanban_color(record.color.raw_value) : ''}
+                </attribute>
+            </div>
+            <div class="o_kanban_record_top mb8" position="inside">
+                <strong>
+                    <field name="x_backorder" widget="label_selection"
+                           options="{'classes': {'backorder': 'danger'}}"
+                           attrs="{'invisible': [('picking_type_code', '!=', 'incoming')]}"/>
+                </strong>
+            </div>
+            <div class="o_kanban_record_bottom" position="before">
+                <div class="o_kanban_record_body" attrs="{'invisible': [('picking_type_code', '!=', 'incoming')]}">
+                    <span attrs="{'invisible': [('purchase_id', '=', False)]}">
+                        <strong>PO#:</strong>
+                        <t t-esc="record.purchase_id.value"/>
+                        <br/>
+                    </span>
+                    <span attrs="{'invisible': [('backorder_id', '=', False)]}">
+                        <strong>Backorder of:</strong>
+                        <t t-esc="record.backorder_id.value"/>
+                        <br/>
+                    </span>
+                    <span attrs="{'invisible': [('x_route_id', '=', False)]}">
+                        <strong>Route:</strong>
+                        <t t-esc="record.x_route_id.value"/>
+                        <br/>
+                    </span>
+                    <span attrs="{'invisible': [('x_sub_route_id', '=', False)]}">
+                        <strong>Sub-Route:</strong>
+                        <t t-esc="record.x_sub_route_id.value"/>
+                        <strong>
+                            <field name="x_tracking_state" class="oe_right" widget="label_selection"
+                                   attrs="{'invisible': [('x_tracking_state', '=', False)]}"
+                                   options="{'classes': {'pending': 'danger', 'in_transit': 'warning', 'done': 'success'}}"/>
+                        </strong>
+                        <br/>
+                    </span>
+                    <span attrs="{'invisible': ['|', ('x_forwarder_tracking_id', '!=', False), ('x_tracking_id', '=', False)]}">
+                        <strong>Tracking:</strong>
+                        <t t-esc="record.x_tracking_id.value"/>
+                        <br/>
+                    </span>
+                    <span attrs="{'invisible': [('x_forwarder_tracking_id', '=', False)]}">
+                        <strong>Tracking:</strong>
+                        <t t-esc="record.x_forwarder_tracking_id.value"/>
+                        <br/>
+                    </span>
+                    <field name="x_consolidation_ids" widget="many2many_tags"/>
+                    <field name="x_tag_ids" widget="form.many2many_tags" options="{'color_field': 'color'}"/>
+                </div>
+            </div>
+            <div class="oe_kanban_bottom_right" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </div>
+            <div class="oe_kanban_bottom_right" position="after">
+                <div class="oe_kanban_bottom_right" attrs="{'invisible': [('date_done', '!=', False)]}">
+                    <t t-esc="record.scheduled_date.value and record.scheduled_date.value.split(' ')[0] or False"/>
+                </div>
+                <div class="oe_kanban_bottom_right" attrs="{'invisible': [('date_done', '=', False)]}">
+                    <t t-esc="record.date_done.value and record.date_done.value.split(' ')[0] or False"/>
+                </div>
+            </div>
+        </field>
+    </record>
+
+    <record id="view_picking_internal_search_cus_logistics_tracking" model="ir.ui.view">
+        <field name="name">stock.picking.internal.search.cus_logistics_tracking</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+        <field name="arch" type="xml">
+            <data>
+                <field name="name" position="attributes">
+                    <attribute name="filter_domain">
+                        ['|', '|', '|', '|', '|', '|', '|', '|', '|', '|', '|',
+                        ('name', 'ilike', self),
+                        ('origin', 'ilike', self),
+                        ('x_tracking_id', 'ilike', self),
+                        ('x_consolidation_ids', 'ilike', self),
+                        ('x_forwarder_tracking_id', 'ilike', self),
+                        ('x_route_id', 'ilike', self),
+                        ('x_sub_route_id', 'ilike', self),
+                        ('x_tracking_state', 'ilike', self),
+                        ('x_route_id', 'ilike', self),
+                        ('x_tag_ids', 'ilike', self),
+                        ('x_sale_order_ids', 'ilike', self),
+                        ('partner_id', 'ilike', self),
+                        ]
+                    </attribute>
+                </field>
+                <field name="name" position="after">
+                    <field name="name" string="And Transfer"
+                           filter_domain="
+						   ['|', '|', '|', '|', '|', '|', '|', '|', '|', '|',
+						   ('name', 'ilike', self),
+						   ('origin', 'ilike', self),
+						   ('x_tracking_id', 'ilike', self),
+						   ('x_consolidation_ids', 'ilike', self),
+						   ('x_forwarder_tracking_id', 'ilike', self),
+						   ('x_route_id', 'ilike', self),
+						   ('x_sub_route_id', 'ilike', self),
+						   ('x_tracking_state', 'ilike', self),
+						   ('x_route_id', 'ilike', self),
+						   ('x_tag_ids', 'ilike', self),
+						   ('x_sale_order_ids', 'ilike', self),
+						   ]"
+                    />
+                </field>
+                <field name="picking_type_id" position="after">
+                    <field name="x_tag_ids"/>
+                </field>
+                <filter name="activities_exception" position="after">
+                    <separator/>
+                    <filter name="free" string="FZ Operation" domain="[('x_operation_type', '=', 'free')]"/>
+                    <filter name="otb" string="OTB Operation" domain="[('x_operation_type', '=', 'otb')]"/>
+                </filter>
+                <filter name="picking_type" position="after">
+                    <filter string="Tracking Status" name="tracking_status" context="{'group_by': 'x_tracking_status'}"/>
+                    <separator/>
+                    <filter string="Operation (FZ/OTB)" name="operation_fz_otb" context="{'group_by': 'x_operation_type'}"/>
+                </filter>
+                <filter name="activities_exception" position="after">
+                    <separator/>
+                    <filter string="Tagged" name="tagged" domain="[('x_tag_ids', '!=', False)]"/>
+                </filter>
+                <filter name="expected_date" position="after">
+                    <filter string="In/Out Date" name="in_out_date" context="{'group_by': 'x_form_field_09'}"/>
+                </filter>
+            </data>
+        </field>
+    </record>
+
+    <record id="view_bill_related_pickings_action" model="ir.actions.act_window">
+        <field name="name">Related Pickings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_note_note_form_customization" model="ir.ui.view">
+        <field name="name">note.note.form.customization</field>
+        <field name="model">note.note</field>
+        <field name="inherit_id" ref="note.view_note_note_form"/>
+        <field name="priority" eval="99" />
+        <field name="arch" type="xml">
+            <data>
+	            <field name="memo" position="before">
+		            <group>
+			            <group>
+		                    <field name="x_model_id"/>
+			            </group>
+		            </group>
+	            </field>
+            </data>
+        </field>
+    </record>
+</odoo>

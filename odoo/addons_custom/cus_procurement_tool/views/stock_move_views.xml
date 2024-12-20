@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+	    <record id="view_move_form_cus_production_planner_cus_procurement_tool" model="ir.ui.view">
+	        <field name="name">view_move_form_cus_production_planner_cus_procurement_tool</field>
+	        <field name="model">stock.move</field>
+	        <field name="inherit_id" ref="cus_production_planner.view_move_form_cus_production_planner"/>
+	        <field name="arch" type="xml">
+		        <field name="x_mrp_demand_ids" position="after">
+			        <field name="x_prc_picking_ids" attrs="{'invisible': [('x_prc_picking_ids', '=', [])]}">
+				        <tree create="0" delete="0">
+					        <field name="name"/>
+					        <field name="purchase_id" widget="many2one"/>
+					        <field name="x_expected_date"/>
+					        <field name="state"/>
+				        </tree>
+			        </field>
+		        </field>
+	        </field>
+	    </record>
+
+	    <record id="view_move_tree_cus_production_planner_short_parts_cus_procurement_tool" model="ir.ui.view">
+	        <field name="name">view_move_tree_cus_production_planner_short_parts_cus_procurement_tool</field>
+	        <field name="model">stock.move</field>
+	        <field name="inherit_id" ref="cus_production_planner.view_move_tree_cus_production_planner_short_parts"/>
+	        <field name="arch" type="xml">
+		        <xpath expr="/tree" position="attributes">
+			        <attribute name="decoration-warning">x_alternate_available == True</attribute>
+			        <attribute name="decoration-success">x_available == True</attribute>
+		        </xpath>
+		        <field name="x_demand_batch_id" position="after">
+			        <field name="x_alternate_available" invisible="1"/>
+			        <field name="x_available" invisible="1"/>
+			        <field name="x_prc_cycle_id" widget="many2one" optional="show"/>
+			        <field name="x_prc_line_id" widget="many2one" optional="show"/>
+			        <field name="x_prc_cart_id" widget="many2one" optional="show"/>
+			        <field name="x_prc_product_id" widget="many2one" optional="show"/>
+			        <field name="x_prc_purchase_id" widget="many2one" optional="show"/>
+			        <field name="x_prc_picking_ids" widget="many2many_tags" optional="show"/>
+			        <field name="x_prc_picking_date" optional="show"/>
+			        <field name="x_prc_picking_days" optional="show"/>
+		        </field>
+	        </field>
+	    </record>
+
+	    <record id="view_move_search_cus_production_planner_cus_procurement_tool" model="ir.ui.view">
+	        <field name="name">view_move_search_cus_production_planner_cus_procurement_tool</field>
+	        <field name="model">stock.move</field>
+	        <field name="inherit_id" ref="cus_production_planner.view_move_search_cus_production_planner"/>
+	        <field name="arch" type="xml">
+		        <filter name="raw_material_imported" position="after">
+                    <separator/>
+                    <filter string="Can be Reserved" name="available" domain="[('x_available','!=', False)]"/>
+                    <filter string="Alternate may Available" name="alternate_availability" domain="[('x_alternate_available','!=', False)]"/>
+		        </filter>
+	        </field>
+	    </record>
+    </data>
+</odoo>

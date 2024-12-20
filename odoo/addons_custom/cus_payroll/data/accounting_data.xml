@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ####################### Chart of Accounts ######################## -->
+    <data noupdate="1">
+        <record id="account_salary_expenses_usd" model="account.account">
+            <field name="code">221012</field>
+            <field name="name">Salary Expenses</field>
+            <field name="user_type_id" ref="account.data_account_type_expenses"/>
+            <field name="currency_id" ref="base.USD"/>
+            <field name="reconcile">True</field>
+            <field name="deprecated">False</field>
+            <field name="tag_ids" eval="[(6, 0, [ref('account.account_tag_operating')])]"/>
+        </record>
+    </data>
+    <!-- ####################### Journals ######################## -->
+    <data noupdate="1">
+        <!--    Miscellaneous   -->
+        <record id="journal_salary_usd" model="account.journal">
+            <field name="name">Salary Journal</field>
+            <field name="type">general</field>
+            <field name="code">SLJ</field>
+            <field name="sequence_number_next">1</field>
+            <field name="default_debit_account_id" ref="account_salary_expenses_usd"/>
+            <field name="default_credit_account_id" ref="account_salary_expenses_usd"/>
+            <field name="currency_id" ref="base.USD"/>
+        </record>
+
+        <!-- Payment sequences -->
+        <record id="sequence_payment_employee_invoice" model="ir.sequence">
+            <field name="name">Payments employee invoices sequence</field>
+            <field name="code">account.payment.employee.invoice</field>
+            <field name="prefix">EMPL.OUT/%(range_year)s/</field>
+            <field eval="1" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+            <field eval="True" name="use_date_range"/>
+            <field eval="False" name="company_id"/>
+            <field name="padding">4</field>
+        </record>
+        <record id="sequence_payment_employee_refund" model="ir.sequence">
+            <field name="name">Payments employee credit notes sequence</field>
+            <field name="code">account.payment.employee.refund</field>
+            <field name="prefix">EMPL.IN/%(range_year)s/</field>
+            <field eval="1" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+            <field eval="True" name="use_date_range"/>
+            <field eval="False" name="company_id"/>
+            <field name="padding">4</field>
+        </record>
+    </data>
+</odoo>

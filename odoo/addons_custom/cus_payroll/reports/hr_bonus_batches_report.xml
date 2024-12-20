@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+        <report id="bonus_batches_bank_report"
+            string="Banking Document"
+            model="hr.bonus.batch"
+            report_type="qweb-pdf"
+            file="cus_payroll.bonus_batches_bank_template"
+            name="cus_payroll.bonus_batches_bank_template"
+            print_report_name="'%s' % (object.x_name)"/>
+</odoo>

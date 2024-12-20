@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+<!--	<data>-->
+<!--		<record id="product_template_only_form_view_customization" model="ir.ui.view">-->
+<!--			<field name="name">product.template.common.form.customization</field>-->
+<!--			<field name="model">product.template</field>-->
+<!--			<field name="inherit_id" ref="product.product_template_form_view"/>-->
+<!--			<field name="priority" eval="99" />-->
+<!--			<field name="arch" type="xml">-->
+<!--				<data>-->
+<!--	                <div name="options" position="inside">-->
+<!--	                    <div>-->
+<!--	                        <field name="x_investor_product"/>-->
+<!--	                        <label for="x_investor_product"/>-->
+<!--	                    </div>-->
+<!--	                </div>-->
+<!--					<label for="standard_price" position="before">-->
+<!--						<field name="x_investment_id" attrs="{'invisible':[('x_investor_product','=',False)]}"/>-->
+<!--					</label>-->
+<!--				</data>-->
+<!--			</field>-->
+<!--		</record>-->
+<!--	</data>-->
+</odoo>

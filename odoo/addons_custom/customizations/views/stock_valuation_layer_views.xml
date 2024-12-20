@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="stock_valuation_layer_form_customization_0" model="ir.ui.view">
+        <field name="name">stock.valuation.layer.form.customization</field>
+        <field name="model">stock.valuation.layer</field>
+        <field name="inherit_id" ref="stock_account.stock_valuation_layer_form"/>
+        <field name="priority" eval="99" />
+        <field name="arch" type="xml">
+            <data>
+                <field name="remaining_qty" position="after">
+                    <field name="remaining_value"/>
+                </field>
+            </data>
+        </field>
+    </record>
+
+    <record id="stock_valuation_layer_tree_customization_0" model="ir.ui.view">
+        <field name="name">stock.valuation.layer.tree.customization</field>
+        <field name="model">stock.valuation.layer</field>
+        <field name="inherit_id" ref="stock_account.stock_valuation_layer_tree"/>
+        <field name="priority" eval="99" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='create_date']" position="after">
+                    <field name="x_reference"/>
+                    <field name="x_origin"/>
+                </xpath>
+                <field name="value" position="after">
+                    <field name="remaining_qty" optional="show" sum="Total"/>
+                    <field name="remaining_value" optional="show" sum="Total"/>
+                </field>
+            </data>
+        </field>
+    </record>
+</odoo>

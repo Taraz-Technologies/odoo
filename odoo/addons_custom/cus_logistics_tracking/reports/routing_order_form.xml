@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_routing_order_form">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: Arial; font-size:14px;">
+                        <center><h5><b>Routing Order Form</b></h5></center>
+                        <table style="width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 50%; padding: 5px; border: 1px solid black; border-collapse: collapse;">
+                                        <span>
+                                            <b>FROM:</b>
+                                            <br/>Contact: <span t-field="doc.x_signatory_rof"/>
+                                            <br/>Company: <span t-field="doc.company_id"/>
+                                            <br/>Address:
+                                            <span t-field="doc.company_id.street"/>
+                                            <span t-field="doc.company_id.street2"/>,
+                                            <span t-field="doc.company_id.zip"/>,
+                                            <span t-field="doc.company_id.city"/>,
+                                            <span t-field="doc.company_id.country_id"/>,
+                                            <br/>City State/Province: <span t-field="doc.company_id.city"/>, <span t-field="doc.company_id.state_id"/>
+                                            <br/>Country Postal Code: <span t-field="doc.company_id.zip"/>, <span t-field="doc.company_id.country_id"/>
+                                            <br/>Phone &amp; Email: <span t-field="doc.x_signatory_rof.phone"/>
+                                        </span>
+                                    </td>
+                                    <td style="width: 50%; padding: 5px; border: 1px solid black; border-collapse: collapse;">
+                                        <span>
+                                            <b>TO:</b>
+                                            <br/>Contact: <span t-field="doc.partner_id"/>
+                                            <br/>Company: <span t-field="doc.partner_id.parent_id"/>
+                                            <br/>Address:
+                                            <span t-field="doc.partner_id.street"/>
+                                            <span t-field="doc.partner_id.street2"/>,
+                                            <span t-field="doc.partner_id.zip"/>,
+                                            <span t-field="doc.partner_id.city"/>,
+                                            <span t-field="doc.partner_id.country_id"/>,
+                                            <br/>City State/Province: <span t-field="doc.partner_id.city"/>, <span t-field="doc.partner_id.state_id"/>
+                                            <br/>Country Postal Code: <span t-field="doc.partner_id.zip"/>, <span t-field="doc.partner_id.country_id"/>
+                                            <br/>Phone &amp; Email: <span t-field="doc.partner_id.phone"/>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="p-1"><span t-field="doc.x_body_rof"/></p>
+                        <table style="width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 50%;">
+                                        <span>
+                                            Respectfully,
+                                            <br/>
+                                            <span t-field="doc.x_signatory_rof"/>
+                                        </span>
+                                    </td>
+                                    <td style="width: 50%;">
+                                        <span>
+                                            Company Stamp
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <span><br/>Date: <span t-field="doc.x_date_certificate_rof"/></span>
+                        <style>
+                            ul {
+                                list-style-type: none;
+                                padding: 0;
+                            }
+                            ul li {
+                                position: relative;
+                                padding-left: 30px; /* space for checkbox */
+                                margin-bottom: 5px;
+                            }
+                            ul li::before {
+                                content: "\2610"; /* Unicode character for empty checkbox */
+                                display: inline-block;
+                                position: absolute;
+                                left: 0;
+                            }
+                            ul li.checked::before {
+                                content: "\2611"; /* Unicode character for checked checkbox */
+                            }
+                            .service-mark {
+                                font-size: 0.5em; /* Smaller size */
+                                vertical-align: super; /* Superscript position */
+                            }
+                        </style>
+                        <h5><b>Service Options*</b></h5>
+                        <span>Unless otherwise stated, send all shipments via:</span>
+                        <table style="width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 25%;">
+                                        <ul>
+                                            <li>
+                                                Express Plus
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td style="width: 25%;">
+                                        <ul>
+                                            <li>
+                                                Express Saver <span class="service-mark">SM</span>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td style="width: 25%;">
+                                        <ul>
+                                            <li>
+                                                UPS Worldwide Express
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td style="width: 25%;">
+                                        <ul>
+                                            <li>
+                                                Expedited
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h5><b>Billing Options*</b></h5>
+                        <span>Unless otherwise stated, charges should be billed to:</span>
+                        <table style="width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 50%;">
+                                        <b>Shipping Charges:</b>
+                                        <ul>
+                                            <li>
+                                                Shipper
+                                            </li>
+                                            <li>
+                                                Receiver
+                                                _____<span t-field="doc.x_ups_account_no_rof" style="text-decoration: underline;"/>_____
+                                                _____<span t-field="doc.partner_id.zip" style="text-decoration: underline;"/>_____
+                                                <br/>
+                                                <span style="padding-left: 90px;">UPS Acct. No.</span>
+                                                <span style="padding-left: 40px;">Country Code</span>
+                                            </li>
+                                            <li>
+                                                Third-Party ________________ ________________
+                                                <br/>
+                                                <span style="padding-left: 100px;">UPS Acct. No.</span>
+                                                <span style="padding-left: 40px;">Country Code</span>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td style="width: 50%;">
+                                        <b>Duties and Taxes:</b>
+                                        <ul>
+                                            <li>
+                                                Shipper
+                                            </li>
+                                            <li>
+                                                Receiver
+                                                _____<span t-field="doc.x_ups_account_no_rof" style="text-decoration: underline;"/>_____
+                                                _____<span t-field="doc.partner_id.zip" style="text-decoration: underline;"/>_____
+                                                <br/>
+                                                <span style="padding-left: 90px;">UPS Acct. No.</span>
+                                                <span style="padding-left: 40px;">Country Code</span>
+                                            </li>
+                                            <li>
+                                                Receiver ________________ ________________
+                                                <br/>
+                                                <span style="padding-left: 90px;">UPS Acct. No.</span>
+                                                <span style="padding-left: 40px;">Country Code</span>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <b>Receiver’s UPS Account Number</b>
+                        <ul>
+                            <li>
+                                Provide the Receiver’s UPS Account Number
+                                <b><span t-field="doc.x_ups_account_no_rof" style="text-decoration: underline;"/></b>,
+                                which will be entered in the sender’s automated shipping system or in the appropriate
+                                field of the UPS Waybill.*
+                            </li>
+                        </ul>
+                        <b>Insurance Coverage</b>
+                        <ul>
+                            <li>
+                                Declare value on UPS Waybill/shipping record for insurance purposes.
+                                Specific instructions:
+                            </li>
+                            <li>
+                                Do not declare value on UPS Waybill/shipping record for insurance purposes.
+                            </li>
+                        </ul>
+                        <b>Weight Limit</b>
+                        <table style="width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 35%;">
+                                        <ul>
+                                            <li>
+                                                Not more than __________ KGs. / Lbs
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td style="width: 35%;">
+                                        <ul>
+                                            <li>
+                                                Approx. Weight ____<span t-esc="'%.0f'%(doc.x_weight_rof)" style="text-decoration: underline;"/>____ KGs. / Lbs
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td style="width: 30%;">
+                                        <ul>
+                                            <li>
+                                                No Weight Limit
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>*Billable weight should be charged either dimensional or dense ‘whichever would be higher.</p>
+                        <b>Other Instruction: _________________________________________________________________________________</b>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

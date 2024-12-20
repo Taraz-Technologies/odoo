@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mrp_production_stage_view_form" model="ir.ui.view">
+            <field name="name">mrp_production_stage_view_form</field>
+            <field name="model">mrp.production.stage</field>
+            <field name="arch" type="xml">
+                <form string="Manufacturing Stage">
+	                <sheet>
+	                    <group>
+	                        <group>
+	                            <field name="x_name"/>
+                                <field name="x_manufacturing_state"/>
+	                        </group>
+	                        <group>
+	                            <field name="fold"/>
+	                        </group>
+	                    </group>
+<!--		                <group>-->
+<!--			                <label for="x_manufacturing_state"/>-->
+<!--			                <div class="o_row">-->
+<!--                                <field name="x_manufacturing_state"/>-->
+<!--                                <field name="x_reservation_state"/>-->
+<!--			                </div>-->
+<!--			                <label for="x_picking_state"/>-->
+<!--			                <div class="o_row">-->
+<!--                                <field name="x_picking_state_for"/>-->
+<!--                                <field name="x_picking_state"/>-->
+<!--                                <field name="x_show_check_availability"/>-->
+<!--			                </div>-->
+<!--			                <label for="x_workorder_state"/>-->
+<!--			                <div class="o_row">-->
+<!--                                <field name="x_workorder_state_for"/>-->
+<!--                                <field name="x_workorder_state"/>-->
+<!--			                </div>-->
+<!--		                </group>-->
+	                    <group string="Stage Description">
+	                        <p class="text-muted" colspan="2">
+	                            You can also add a description to help your coworkers understand the meaning and purpose of the stage.
+	                        </p>
+	                        <field name="x_description" placeholder="Add a description..." nolabel="1" colspan="2"/>
+	                    </group>
+	                </sheet>
+	                <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="activity_ids" widget="mail_activity"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	                </div>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

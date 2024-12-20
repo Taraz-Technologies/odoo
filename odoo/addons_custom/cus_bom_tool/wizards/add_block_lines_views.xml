@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_block_addition_wizard_form" model="ir.ui.view">
+        <field name="name">block.addition.wizard.wizard.form</field>
+        <field name="model">block.addition.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add Blocks">
+                <field name="x_bom_tool_id" invisible="1"/>
+                <field name="x_attached_block_ids"/>
+                <footer>
+                    <button name="add_blocks_data" string="Save" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_block_addition"
+                name="Add Blocks"
+                res_model="block.addition.wizard"
+                binding_model="bom.tool"
+                binding_views="from"
+                view_mode="form"
+                target="new"/>
+</odoo>

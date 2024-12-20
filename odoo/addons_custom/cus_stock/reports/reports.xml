@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report id="action_report_shipping_invoice_lines_xlsx"
+                model="stock.picking"
+                string="Product List (XLSX)"
+                report_type="xlsx"
+                name="cus_stock.report_shipping_invoice_lines_xlsx"
+                file="cus_stock.report_shipping_invoice_lines_xlsx"
+                print_report_name="'Product List - %s' % (object.name)"/>
+    </data>
+</odoo>

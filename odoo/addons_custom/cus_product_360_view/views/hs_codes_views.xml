@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--	Country Scenario Rules-->
+	<record id="view_country_scenario_rule_form_view" model="ir.ui.view">
+		<field name="name">country.scenario.rule.form.view</field>
+		<field name="model">country.scenario.rule</field>
+		<field name="arch" type="xml">
+			<form string="Country Scenario Rules">
+				<sheet>
+					<group col="6">
+						<field name="x_label"/>
+						<field name="x_country_id" widget="many2one" options="{'no_create': True, 'no_create_edit':True}"/>
+						<field name="x_currency_id"/>
+						<field name="x_default_scenario"/>
+						<field name="x_landed_cost"/>
+						<field name="x_insurance"/>
+					</group>
+					<h4><strong>Taxes Formula</strong></h4>
+					<p>
+						Assessed Value (AV) = Declared Value + [Declared Value * (Landing Cost(%) + Insurance(%))]<br/>
+						Use AV for 'Assessed Value' and CD, ACD, RD, ST, AST, IT, CESS for taxes in formulas.
+						e.g. 'ST Formula' from 'Pakistan' will be '(AV + CD + ACD + RD) * Rate'
+					</p>
+					<group col="6">
+						<field name="x_cd_formula"/>
+						<field name="x_acd_formula"/>
+						<field name="x_rd_formula"/>
+						<field name="x_st_formula"/>
+						<field name="x_ast_formula"/>
+						<field name="x_it_formula"/>
+						<field name="x_cess_formula"/>
+					</group>
+					<group col="6" string="Country Tax Labels">
+						<field name="x_av_label"/>
+						<field name="x_cd_label"/>
+						<field name="x_acd_label"/>
+						<field name="x_rd_label"/>
+						<field name="x_st_label"/>
+						<field name="x_ast_label"/>
+						<field name="x_it_label"/>
+						<field name="x_cess_label"/>
+					</group>
+					<group col="6" string="Expenses">
+						<field name="x_manager_salary" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+						<field name="x_engineer_salary" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+						<field name="x_technician_salary" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+						<field name="x_per_square_rent" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+						<field name="x_per_kw_rate" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+						<field name="x_miscellaneous" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+					</group>
+					<field name="x_notes" placeholder="Notes"/>
+				</sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                </div>
+			</form>
+		</field>
+	</record>
+
+	<record id="view_country_scenario_rule_list" model="ir.ui.view">
+		<field name="name">country.scenario.rule.list</field>
+		<field name="model">country.scenario.rule</field>
+		<field name="arch" type="xml">
+			<tree string="Country Scenario Rules">
+				<field name="x_label"/>
+				<field name="x_country_id" options="{'no_create': True, 'no_create_edit':True}"/>
+				<field name="x_currency_id"/>
+				<field name="x_landed_cost"/>
+				<field name="x_insurance"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="view_country_scenario_rule_search" model="ir.ui.view">
+		<field name="name">country.scenario.rule.search.view</field>
+		<field name="model">country.scenario.rule</field>
+		<field name="arch" type="xml">
+			<search string="Country Scenario Rules">
+				<field name="x_label"/>
+				<field name="x_country_id"/>
+				<group expand="0" string="Group By">
+					<filter string="Country" name="group_1" context="{'group_by': 'x_country_id'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+
+	<record id="action_country_scenario_rule" model="ir.actions.act_window">
+		<field name="name">Country Scenario Rules</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">country.scenario.rule</field>
+		<field name="view_mode">tree,form</field>
+		<field name="search_view_id" ref="view_country_scenario_rule_search"/>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Create new record
+			</p>
+		</field>
+	</record>
+
+	<menuitem id="menu_country_scenario_rule"
+	          name="Country Scenario Rules"
+	          sequence="9"
+			  parent="stock.menu_product_in_config_stock"
+			  action="action_country_scenario_rule"/>
+<!--	Country Zones-->
+	<record id="view_country_import_zones_form_view" model="ir.ui.view">
+		<field name="name">country.import.zones.form.view</field>
+		<field name="model">country.import.zones</field>
+		<field name="arch" type="xml">
+			<form string="Country Zones">
+				<sheet>
+					<group col="6">
+						<group colspan="2">
+							<field name="x_country_id" widget="many2one"
+								   options="{'no_create': True, 'no_create_edit':True}"/>
+						</group>
+						<group colspan="2">
+							<field name="x_name"/>
+						</group>
+						<group colspan="2">
+							<field name="x_type"/>
+						</group>
+					</group>
+					<group string="Zone Countries">
+						<field name="x_country_ids" widget="many2many_tags" nolabel="1"/>
+					</group>
+				</sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                </div>
+			</form>
+		</field>
+	</record>
+
+	<record id="view_country_import_zones_list_view" model="ir.ui.view">
+		<field name="name">country.import.zones.list</field>
+		<field name="model">country.import.zones</field>
+		<field name="arch" type="xml">
+			<tree string="Country Zones">
+				<field name="x_country_id" options="{'no_create': True, 'no_create_edit':True}"/>
+				<field name="x_name"/>
+				<field name="x_type"/>
+				<field name="x_country_ids" widget="many2many_tags" optional="hide"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="view_country_import_zones_search" model="ir.ui.view">
+		<field name="name">country.import.zones.search.view</field>
+		<field name="model">country.import.zones</field>
+		<field name="arch" type="xml">
+			<search string="Country Zones">
+				<field name="x_name"/>
+				<field name="x_country_id"/>
+				<field name="x_type"/>
+				<field name="x_country_ids"/>
+				<separator/>
+				<filter string="Import" name="import" domain="[('x_type', '=', 'import')]"/>
+				<filter string="Export" name="export" domain="[('x_type', '=', 'export')]"/>
+				<separator/>
+				<group expand="0" string="Group By">
+					<filter string="Country" name="group_0" context="{'group_by': 'x_country_id'}"/>
+					<filter string="Type" name="group_1" context="{'group_by': 'x_type'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+
+	<record id="action_country_import_zones" model="ir.actions.act_window">
+		<field name="name">Country Zones</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">country.import.zones</field>
+		<field name="view_mode">tree,form</field>
+		<field name="search_view_id" ref="view_country_import_zones_search"/>
+		<field name="context">
+			{
+			'search_default_group_0': 1,
+			}
+		</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Create new record
+			</p>
+		</field>
+	</record>
+
+	<menuitem id="menu_country_import_zones"
+	          name="Country Zones"
+	          sequence="9"
+			  parent="stock.menu_product_in_config_stock"
+			  action="action_country_import_zones"/>
+<!--	HTSUS Code Database-->
+	<record id="view_hs_codes_form_view" model="ir.ui.view">
+		<field name="name">hs.codes.form.view</field>
+		<field name="model">hs.codes</field>
+		<field name="arch" type="xml">
+			<form string="HTSUS Code Database">
+				<sheet>
+					<group col="4">
+						<field name="x_htsus_code_id"/>
+						<field name="x_uom_id" widget="many2one"/>
+						<field name="x_exclude"/>
+						<field name="x_mark_red"/>
+						<field name="x_alternate_htsus" attrs="{'invisible': [('x_htsus_code_id', '!=', False)]}"/>
+						<field name="x_tag_ids" widget="many2many_tags"/>
+					</group>
+					<group>
+						<field name="x_htsus_code_group" invisible="1"/>
+						<field name="x_htsus_code_simple" invisible="1"/>
+						<field name="x_chapter_description"/>
+						<field name="x_heading_description"/>
+						<field name="x_level_1_description"/>
+						<field name="x_level_2_description"/>
+						<field name="x_level_3_description"/>
+						<field name="x_level_4_description"/>
+						<field name="x_level_5_description"/>
+						<field name="x_level_6_description"/>
+						<field name="x_hs_code_description"/>
+					</group>
+					<group string="HS Code by Country">
+						<field name="x_hs_code_ids" nolabel="1"
+							   context="{
+							   'search_default_group_0': 1,
+							   'search_default_x_hs_code': x_htsus_code_group,
+							   }">
+							<tree>
+								<field name="x_country_id" widget="many2one"
+									   options="{'no_create': True, 'no_create_edit':True}"/>
+								<field name="x_hs_code"/>
+								<field name="x_hs_code_description"/>
+							</tree>
+						</field>
+					</group>
+					<group string="Products">
+						<field name="x_product_ids" nolabel="1" readonly="0">
+							<tree editable="bottom" create="0" delete="0" default_order="dk_sub_category">
+								<field name="x_htsus_assigning"/>
+								<field name="name"/>
+								<field name="dk_hs_code" widget="many2one" optional="show"/>
+								<field name="x_hs_code_tr_id" widget="many2one" optional="show"/>
+								<field name="dk_sub_category" widget="many2one" string="Sub-Type" optional="show"/>
+								<field name="description" optional="show"/>
+								<button name="remove_dk_htsus_code" type="object" icon="fa-times" string="Remove"
+										class="oe_edit_only"/>
+							</tree>
+						</field>
+					</group>
+					<separator colspan="4" string="Unassigned"/>
+					<group col="4">
+						<field name="x_search_unassigned"/>
+						<field name="x_unassigned_categ_id" widget="selection"/>
+					</group>
+					<button name="select_all" type="object" string="Select All"/>
+					<span> - </span>
+					<button name="unselect_all" type="object" string="Unselect All"/>
+					<span> - </span>
+					<button name="update_assigned" type="object" string="Add to Assigned List"
+							confirm="Are you sure you want to update record list?"/>
+					<group>
+						<field name="x_unassigned_product_ids" nolabel="1">
+							<tree editable="bottom" create="0">
+								<field name="x_htsus_select" string="&#9745;"/>
+								<field name="name"/>
+								<field name="dk_hs_code" widget="many2one" optional="show"/>
+								<field name="x_hs_code_tr_id" widget="many2one" optional="show"/>
+								<field name="dk_sub_category" widget="many2one" string="Sub-Type" optional="show"/>
+								<field name="description" optional="show"/>
+							</tree>
+						</field>
+					</group>
+				</sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                </div>
+			</form>
+		</field>
+	</record>
+
+	<record id="view_hs_codes_tree_view" model="ir.ui.view">
+		<field name="name">hs.codes.tree.view</field>
+		<field name="model">hs.codes</field>
+		<field name="arch" type="xml">
+			<tree string="HTSUS Code Database" multi_edit="1" decoration-danger="x_mark_red">
+				<field name="x_mark_red" invisible="1"/>
+				<field name="x_htsus_code_id"/>
+				<field name="x_uom_id"/>
+				<field name="x_chapter_description"/>
+				<field name="x_heading_description"/>
+				<field name="x_level_1_description" optional="hide"/>
+				<field name="x_level_2_description" optional="hide"/>
+				<field name="x_level_3_description" optional="hide"/>
+				<field name="x_level_4_description" optional="hide"/>
+				<field name="x_level_5_description" optional="hide"/>
+				<field name="x_level_6_description" optional="hide"/>
+				<field name="x_hs_code_description"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="view_hs_codes_search" model="ir.ui.view">
+		<field name="name">hs.codes.search.view</field>
+		<field name="model">hs.codes</field>
+		<field name="arch" type="xml">
+			<search string="HTSUS Code Database">
+				<field name="x_htsus_code_id"
+					   filter_domain="['|', ('x_htsus_code_id', 'ilike', self), ('x_htsus_code_simple', 'ilike', self)]"/>
+				<field name="x_heading_description" string="All Descriptions"
+					   filter_domain="['|', '|', '|', '|', '|', '|', '|', '|',
+					   ('x_chapter_description', 'ilike', self),
+					   ('x_heading_description', 'ilike', self),
+					   ('x_level_1_description', 'ilike', self),
+					   ('x_level_2_description', 'ilike', self),
+					   ('x_level_3_description', 'ilike', self),
+					   ('x_level_4_description', 'ilike', self),
+					   ('x_level_5_description', 'ilike', self),
+					   ('x_level_6_description', 'ilike', self),
+					   ('x_hs_code_description', 'ilike', self),
+					   ]"/>
+				<field name="x_tag_ids"/>
+				<field name="x_product_ids"/>
+				<field name="x_product_ids" string="Product Descriptions"
+					   filter_domain="[('x_product_ids.description', 'ilike', self)]"/>
+				<field name="x_product_ids" string="Product Sub-Category"
+					   filter_domain="[('x_product_ids.dk_sub_category', 'ilike', self)]"/>
+				<separator/>
+				<filter string="Taraz HS Codes" name="taraz_hs_codes"
+						domain="[('x_product_ids', '!=', False), ('x_exclude', '=', False)]"/>
+				<separator/>
+				<filter string="Not Relevant" name="not_relevant" domain="[('x_exclude', '!=', False)]"/>
+				<separator/>
+				<filter string="Marked Red" name="marked_red" domain="[('x_mark_red', '!=', False)]"/>
+				<separator/>
+				<group expand="0" string="Group By">
+					<filter string="Heading" name="group_1" context="{'group_by': 'x_heading_description'}"/>
+					<filter string="Sub Heading 1" name="group_2" context="{'group_by': 'x_level_1_description'}"/>
+					<filter string="Sub Heading 2" name="group_3" context="{'group_by': 'x_level_2_description'}"/>
+					<filter string="Sub Heading 3" name="group_4" context="{'group_by': 'x_level_3_description'}"/>
+					<filter string="Sub Heading 4" name="group_5" context="{'group_by': 'x_level_4_description'}"/>
+					<filter string="Sub Heading 5" name="group_6" context="{'group_by': 'x_level_5_description'}"/>
+					<filter string="Sub Heading 6" name="group_7" context="{'group_by': 'x_level_6_description'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+
+	<record id="action_hs_codes" model="ir.actions.act_window">
+		<field name="name">HTSUS Code Database</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">hs.codes</field>
+		<field name="view_mode">tree,form</field>
+		<field name="search_view_id" ref="view_hs_codes_search"/>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Create new HS Codes
+			</p>
+		</field>
+	</record>
+
+	<menuitem id="menu_hs_codes"
+	          name="HTSUS Code Database"
+	          sequence="9"
+			  parent="stock.menu_product_in_config_stock"
+			  action="action_hs_codes"/>
+<!--	HS Code Database-->
+	<record id="view_hs_code_database_form_view" model="ir.ui.view">
+		<field name="name">hs.code.database.form.view</field>
+		<field name="model">hs.code.database</field>
+		<field name="arch" type="xml">
+			<form string="HS Code Database">
+				<sheet>
+					<group col="4">
+						<field name="x_country_id" options="{'no_create': True, 'no_create_edit':True}"/>
+						<field name="x_hs_code"/>
+						<field name="x_uom_id"/>
+						<field name="x_hs_code_format"/>
+						<field name="x_hs_code_group"/>
+						<field name="x_hs_code_head"/>
+						<field name="x_exclude"/>
+						<field name="x_mark_red"/>
+						<field name="x_tag_ids" widget="many2many_tags"/>
+					</group>
+					<group>
+						<field name="x_hs_code_simple" invisible="1"/>
+						<field name="x_chapter_description"/>
+						<field name="x_heading_description"/>
+						<field name="x_level_1_description"/>
+						<field name="x_level_2_description"/>
+						<field name="x_level_3_description"/>
+						<field name="x_level_4_description"/>
+						<field name="x_level_5_description"/>
+						<field name="x_level_6_description"/>
+						<field name="x_hs_code_description"/>
+					</group>
+					<group string="Tariff Rates">
+						<field name="x_country_tariff_ids" nolabel="1">
+							<tree editable="bottom" delete="0"
+								  decoration-muted="x_state == 'inactive'"
+								  decoration-success="x_state == 'active'"
+							>
+								<field name="x_hs_code_id" invisible="1"/>
+								<field name="x_scenario_id" widget="many2one"/>
+								<field name="x_import_zone_id" widget="many2one"/>
+								<field name="x_assessed_value"/>
+								<field name="x_custom_duty"/>
+								<field name="x_additional_custom_duty"/>
+								<field name="x_regulatory_duty"/>
+								<field name="x_flat_cd"/>
+								<field name="x_sale_tax"/>
+								<field name="x_additional_sale_tax"/>
+								<field name="x_income_tax"/>
+								<field name="x_cess"/>
+								<field name="x_reduced_sale_tax"/>
+								<field name="x_state" invisible="1"/>
+								<button name="change_state_active" string="Change state to Active" type="object"
+										icon="fa-check" attrs="{'invisible': [('x_state', '=', 'active')]}"/>
+								<button name="change_state_inactive" string="Change state to Inactive" type="object"
+										icon="fa-ban" attrs="{'invisible': [('x_state', '=', 'inactive')]}"/>
+							</tree>
+							<form>
+								<sheet>
+									<group col="6">
+										<field name="x_scenario_id"/>
+										<field name="x_import_zone_id"/>
+										<field name="x_assessed_value"/>
+										<field name="x_custom_duty"/>
+										<field name="x_additional_custom_duty"/>
+										<field name="x_regulatory_duty"/>
+										<field name="x_flat_cd"/>
+										<field name="x_sale_tax"/>
+										<field name="x_additional_sale_tax"/>
+										<field name="x_income_tax"/>
+										<field name="x_cess"/>
+										<field name="x_reduced_sale_tax"/>
+									</group>
+								</sheet>
+							</form>
+						</field>
+					</group>
+					<group string="Financial Changes">
+						<field name="x_financial_changes_ids" nolabel="1">
+							<tree editable="bottom">
+								<field name="x_hs_code_id" invisible="1"/>
+								<field name="x_country_id" options="{'no_create': True, 'no_create_edit':True}"/>
+								<field name="x_change_in"/>
+								<field name="x_change"/>
+								<field name="x_start_date"/>
+								<field name="x_end_date"/>
+							</tree>
+							<form>
+								<sheet>
+									<group col="6">
+										<field name="x_country_id" options="{'no_create': True, 'no_create_edit':True}"/>
+										<field name="x_change_in"/>
+										<field name="x_change"/>
+										<field name="x_start_date"/>
+										<field name="x_end_date"/>
+									</group>
+								</sheet>
+							</form>
+						</field>
+					</group>
+					<group string="Products">
+						<field name="x_product_ids" readonly="1" nolabel="1">
+							<tree>
+								<field name="name"/>
+								<field name="dk_htsus_code" widget="many2one"/>
+								<field name="dk_category" widget="many2one" string="Type"/>
+								<field name="dk_sub_category" widget="many2one" string="Sub-Type"/>
+							</tree>
+						</field>
+					</group>
+				</sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                </div>
+			</form>
+		</field>
+	</record>
+
+	<record id="view_hs_code_database_tree_view" model="ir.ui.view">
+		<field name="name">hs.code.database.tree.view</field>
+		<field name="model">hs.code.database</field>
+		<field name="arch" type="xml">
+			<tree string="HS Code Database" multi_edit="1" decoration-danger="x_mark_red">
+				<field name="x_mark_red" invisible="1"/>
+				<field name="x_country_id" options="{'no_create': True, 'no_create_edit':True}" optional="hide"/>
+				<field name="x_hs_code_format"/>
+				<field name="x_hs_code_group" optional="hide"/>
+				<field name="x_hs_code_head" optional="hide"/>
+				<field name="x_country_tariff_ids" widget="many2many_tags" string="Zones" optional="hide"/>
+				<field name="x_chapter_description" optional="hide"/>
+				<field name="x_heading_description" optional="hide"/>
+				<field name="x_level_1_description" optional="hide"/>
+				<field name="x_level_2_description" optional="hide"/>
+				<field name="x_level_3_description" optional="hide"/>
+				<field name="x_level_4_description" optional="hide"/>
+				<field name="x_level_5_description" optional="hide"/>
+				<field name="x_level_6_description" optional="hide"/>
+				<field name="x_hs_code_description" optional="hide"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="view_hs_code_database_search" model="ir.ui.view">
+		<field name="name">hs.code.database.search.view</field>
+		<field name="model">hs.code.database</field>
+		<field name="arch" type="xml">
+			<search string="HS Code Database">
+				<field name="x_hs_code"
+					   filter_domain="['|', '|',
+					   ('x_hs_code', 'ilike', self),
+					   ('x_hs_code_format', 'ilike', self),
+					   ('x_hs_code_simple', 'ilike', self),
+					   ]"/>
+				<field name="x_heading_description" string="All Descriptions"
+					   filter_domain="['|', '|', '|','|', '|', '|', '|', '|',
+					   ('x_chapter_description', 'ilike', self),
+					   ('x_heading_description', 'ilike', self),
+					   ('x_level_1_description', 'ilike', self),
+					   ('x_level_2_description', 'ilike', self),
+					   ('x_level_3_description', 'ilike', self),
+					   ('x_level_4_description', 'ilike', self),
+					   ('x_level_5_description', 'ilike', self),
+					   ('x_level_6_description', 'ilike', self),
+					   ('x_hs_code_description', 'ilike', self),
+					   ]"/>
+				<field name="x_tag_ids"/>
+				<field name="x_product_ids"/>
+				<field name="x_product_ids" string="Product Descriptions"
+					   filter_domain="[('x_product_ids.description', 'ilike', self)]"/>
+				<field name="x_product_ids" string="Product Sub-Category"
+					   filter_domain="[('x_product_ids.dk_sub_category', 'ilike', self)]"/>
+				<separator/>
+				<filter string="Taraz HS Codes" name="hs_codes"
+						domain="[('x_product_ids', '!=', False), ('x_exclude', '=', False)]"/>
+				<separator/>
+				<filter string="Not Relevant" name="not_relevant" domain="[('x_exclude', '!=', False)]"/>
+				<separator/>
+				<filter string="Marked Red" name="marked_red" domain="[('x_mark_red', '!=', False)]"/>
+				<separator/>
+				<group expand="0" string="Group By">
+					<filter string="Country" name="group_0" context="{'group_by': 'x_country_id'}"/>
+					<filter string="HS Code Group" name="hs_code_group" context="{'group_by': 'x_hs_code_group'}"/>
+					<filter string="HS Code Head" name="hs_code_head" context="{'group_by': 'x_hs_code_head'}"/>
+					<filter string="Chapter Desc." name="group_1" context="{'group_by': 'x_chapter_description'}"/>
+					<filter string="Heading" name="group_2" context="{'group_by': 'x_heading_description'}"/>
+					<filter string="Sub Heading 1" name="group_3" context="{'group_by': 'x_level_1_description'}"/>
+					<filter string="Sub Heading 2" name="group_4" context="{'group_by': 'x_level_2_description'}"/>
+					<filter string="Sub Heading 3" name="group_5" context="{'group_by': 'x_level_3_description'}"/>
+					<filter string="Sub Heading 4" name="group_6" context="{'group_by': 'x_level_4_description'}"/>
+					<filter string="Sub Heading 5" name="group_7" context="{'group_by': 'x_level_5_description'}"/>
+					<filter string="Sub Heading 6" name="group_8" context="{'group_by': 'x_level_6_description'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+
+	<record id="action_hs_code_database" model="ir.actions.act_window">
+		<field name="name">HS Code Database</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">hs.code.database</field>
+		<field name="view_mode">tree,form</field>
+		<field name="context">
+			{
+			'search_default_group_0': 1,
+			}
+		</field>
+		<field name="search_view_id" ref="view_hs_code_database_search"/>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Create new HS Codes
+			</p>
+		</field>
+	</record>
+
+	<menuitem id="menu_hs_code_database"
+	          name="HS Code Database"
+	          sequence="9"
+			  parent="stock.menu_product_in_config_stock"
+			  action="action_hs_code_database"/>
+</odoo>

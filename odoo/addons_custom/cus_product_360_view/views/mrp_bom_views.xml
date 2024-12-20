@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<data>
+        <record id="mrp_bom_form_view" model="ir.ui.view">
+            <field name="name">mrp.bom.form</field>
+            <field name="model">mrp.bom</field>
+			<field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+            <field name="arch" type="xml">
+				<data>
+					<xpath expr="/form/sheet/notebook/page[3]" position="after">
+						<page string="Reports">
+							<group col="4">
+								<field name="x_scenario_ids" widget="many2many_tags"/>
+								<field name="x_show_cost"/>
+								<field name="x_desc_compare_scenario_ids" widget="many2many_tags"/>
+								<field name="x_show_part"/>
+								<field name="x_hidden_country_ids" widget="many2many_tags"/>
+								<field name="x_show_hidden_countries"/>
+								<field name="x_end_date"/>
+								<field name="x_show_coo_bom_lines"/>
+								<field name="x_letter_head_report"/>
+								<field name="x_show_ecommerce_values"/>
+							</group>
+							<group string="Report Settings" col="4">
+								<field name="x_title"/>
+								<field name="x_revision"/>
+							</group>
+							<group>
+								<field name="x_revision_details"/>
+								<field name="x_about_taraz"/>
+								<field name="x_disclaimer"/>
+								<field name="x_heading_0"/>
+								<field name="x_comment_0"/>
+							</group>
+							<group string="Table 1 Settings">
+								<field name="x_disable_1"/>
+								<field name="x_heading_1"/>
+								<field name="x_comment_1_top"/>
+								<field name="x_comment_1_bot"/>
+							</group>
+							<group string="Table 2 Settings">
+								<field name="x_disable_2"/>
+								<field name="x_heading_2"/>
+								<field name="x_comment_2_top"/>
+								<field name="x_comment_2_bot"/>
+							</group>
+							<group string="Table 3 Settings">
+								<field name="x_disable_3"/>
+								<field name="x_heading_3"/>
+								<field name="x_comment_3_top"/>
+								<field name="x_comment_3_bot"/>
+							</group>
+							<group string="Table 4 Settings">
+								<field name="x_disable_4"/>
+								<field name="x_heading_4"/>
+								<field name="x_comment_4_top"/>
+								<field name="x_comment_4_bot"/>
+							</group>
+							<group string="Table 5 Settings">
+								<field name="x_disable_5"/>
+								<field name="x_heading_5"/>
+								<field name="x_comment_5_top"/>
+								<field name="x_comment_5_bot"/>
+							</group>
+							<group string="Table 6 Settings">
+								<field name="x_disable_6"/>
+								<field name="x_heading_6"/>
+								<field name="x_comment_6_top"/>
+								<field name="x_comment_6_bot"/>
+							</group>
+							<group string="Table 7 Settings">
+								<field name="x_disable_7"/>
+								<field name="x_heading_7"/>
+								<field name="x_comment_7_top"/>
+								<field name="x_comment_7_bot"/>
+							</group>
+							<group string="Table 8 Settings">
+								<field name="x_disable_8"/>
+								<field name="x_heading_8"/>
+								<field name="x_comment_8_top"/>
+								<field name="x_comment_8_bot"/>
+							</group>
+							<group string="Table 9 Settings">
+								<field name="x_disable_9"/>
+								<field name="x_heading_9"/>
+								<field name="x_comment_9_top"/>
+								<field name="x_comment_9_bot"/>
+							</group>
+							<group string="Table 10 Settings">
+								<field name="x_disable_10"/>
+								<field name="x_heading_10"/>
+								<field name="x_comment_10_top"/>
+								<field name="x_comment_10_bot"/>
+							</group>
+							<group string="Table 11 Settings">
+								<field name="x_disable_11"/>
+								<field name="x_heading_11"/>
+								<field name="x_comment_11_top"/>
+								<field name="x_comment_11_bot"/>
+							</group>
+							<group string="Table 12 Settings">
+								<field name="x_disable_12"/>
+								<field name="x_heading_12"/>
+								<field name="x_comment_12_top"/>
+								<field name="x_comment_12_bot"/>
+							</group>
+							<group string="Table 13 Settings">
+								<field name="x_disable_13"/>
+								<field name="x_heading_13"/>
+								<field name="x_comment_13_top"/>
+								<field name="x_comment_13_bot"/>
+							</group>
+						</page>
+					</xpath>
+				</data>
+			</field>
+		</record>
+	</data>
+</odoo>

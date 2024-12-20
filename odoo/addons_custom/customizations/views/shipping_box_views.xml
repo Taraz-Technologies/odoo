@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_shipping_box_form" model="ir.ui.view">
+        <field name="name">shipping.box.form</field>
+        <field name="model">shipping.box</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="x_name" placeholder="Box Name"/>
+                        </h1>
+                        <field name="x_description" placeholder="Description"/>
+                    </div>
+                    <group col="4">
+                        <field name="x_length"/>
+                        <field name="x_box_weight"/>
+                        <field name="x_width"/>
+                        <field name="x_allowed_weight"/>
+                        <field name="x_height"/>
+                        <field name="x_volumetric_weight"/>
+                        <field name="x_dimension"/>
+                        <field name="x_quantity_on_hand"/>
+                    </group>
+                    <field name="x_note" placeholder="Notes"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_shipping_box_tree" model="ir.ui.view">
+        <field name="name">shipping.box.tree</field>
+        <field name="model">shipping.box</field>
+        <field name="arch" type="xml">
+            <tree string="Shipping Boxes">
+                <field name="x_name"/>
+                <field name="x_description"/>
+                <field name="x_box_weight"/>
+                <field name="x_allowed_weight"/>
+                <field name="x_quantity_on_hand"/>
+                <field name="x_dimension"/>
+                <field name="x_note"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_shipping_box" model="ir.actions.act_window">
+        <field name="name">Shipping Boxes</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">shipping.box</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="domain">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create new Shipping Box
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_shipping_box"
+              name="Shipping Boxes"
+              parent="sale.menu_sales_config"
+              action="action_shipping_box"
+              sequence="111"/>
+
+</odoo>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_stock_landed_cost_form_cus_stock" model="ir.ui.view">
+        <field name="name">view_stock_landed_cost_form_cus_stock</field>
+        <field name="model">stock.landed.cost</field>
+        <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form"/>
+        <field name="arch" type="xml">
+            <field name="vendor_bill_id" position="after">
+                <field name="x_bill_currency_id" invisible="1"/>
+                <field name="x_bill_amount" widget="monetary" options="{'currency_field': 'x_bill_currency_id'}"/>
+            </field>
+            <field name="picking_ids" position="attributes">
+                <attribute name="domain">[]</attribute>
+            </field>
+            <field name="picking_ids" position="after">
+                <field name="x_partner_id"/>
+                <field name="x_custom_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_stock_landed_cost_tree_cus_stock" model="ir.ui.view">
+        <field name="name">view_stock_landed_cost_tree_cus_stock</field>
+        <field name="model">stock.landed.cost</field>
+        <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_tree"/>
+        <field name="arch" type="xml">
+            <field name="company_id" position="before">
+                <field name="x_bill_currency_id" invisible="1"/>
+                <field name="x_bill_amount" widget="monetary" options="{'currency_field': 'x_bill_currency_id'}" optional="show"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="amount_total" string="LC Amount" widget="monetary" options="{'currency_field': 'currency_id'}" optional="show"/>
+                <field name="x_custom_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_stock_landed_cost_tree2_cus_stock" model="ir.ui.view">
+        <field name="name">view_stock_landed_cost_tree2_cus_stock</field>
+        <field name="model">stock.landed.cost</field>
+        <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_tree2"/>
+        <field name="arch" type="xml">
+            <field name="amount_total" position="attributes">
+                <attribute name="sum">Total</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_stock_landed_cost_tree_customization_cus_stock" model="ir.ui.view">
+        <field name="name">view_stock_landed_cost_tree_customization_cus_stock</field>
+        <field name="model">stock.landed.cost</field>
+        <field name="inherit_id" ref="customizations.view_stock_landed_cost_tree_customization_0"/>
+        <field name="arch" type="xml">
+            <field name="vendor_bill_id" position="before">
+                <field name="x_partner_id"/>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_stock_landed_cost_search_cus_stock">
+                <field name="name">stock.landed.cost.search.cus.stock</field>
+                <field name="model">stock.landed.cost</field>
+                <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_search"/>
+                <field name="priority" eval="99" />
+                <field name="arch" type="xml">
+                    <field name="name" position="attributes">
+                        <attribute name="filter_domain">
+                            ['|', '|',
+                           ('name', 'ilike', self),
+							('x_partner_id', 'ilike', self),
+                            ('x_custom_tag_ids', 'ilike', self)]
+                        </attribute>
+                    </field>
+                    <filter name="date" position="after">
+                        <filter name="tagged" string="Tagged" domain="[('x_custom_tag_ids', '!=', False)]"/>
+                    </filter>
+                    <filter name="group_by_month" position="after">
+                        <filter string="Vendor" name="group_by_vendor" domain="[]" context="{'group_by': 'x_partner_id'}"/>
+                        <filter string="Company" name="group_by_company" context="{'group_by': 'company_id'}"/>
+                    </filter>
+                </field>
+    </record>
+</odoo>

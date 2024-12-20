@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<menuitem id="menu_bom_manager"
+              name="BoM Manager"
+              parent="stock.menu_stock_root"
+			  groups="stock.group_stock_manager"
+              sequence="6"/>
+
+	<menuitem id="menu_bom_tools"
+              name="Tools"
+			  action="action_view_bom_tool"
+              parent="cus_bom_tool.menu_bom_manager"
+			  groups="stock.group_stock_manager"
+              sequence="1"/>
+
+	<menuitem id="menu_bom_lines"
+              name="BoM Lines"
+			  action="action_view_base_bom_lines"
+              parent="cus_bom_tool.menu_bom_manager"
+			  groups="stock.group_stock_manager"
+              sequence="2"/>
+
+	<menuitem id="menu_bom_blocks"
+              name="Blocks"
+			  action="action_view_bom_blocks"
+              parent="cus_bom_tool.menu_bom_manager"
+			  groups="stock.group_stock_manager"
+              sequence="3"/>
+
+	<menuitem id="menu_bom_records"
+              name="Input BoMs"
+			  action="action_view_base_bom"
+              parent="cus_bom_tool.menu_bom_manager"
+			  groups="stock.group_stock_manager"
+              sequence="4"/>
+</odoo>

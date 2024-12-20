@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--    Conditions      -->
+    <record id="view_conditions_form" model="ir.ui.view">
+        <field name="name">conditions.form</field>
+        <field name="model">conditions</field>
+        <field name="arch" type="xml">
+            <form string="Conditions">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="x_name"/>
+                        </h1>
+                    </div>
+                    <group col="4">
+                        <field name="x_model"/>
+                        <field name="x_field_id"/>
+                        <field name="x_relation"/>
+                        <field name="x_value"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_conditions_tree" model="ir.ui.view">
+        <field name="name">conditions.tree</field>
+        <field name="model">conditions</field>
+        <field name="arch" type="xml">
+            <tree string="Conditions">
+                <field name="x_name"/>
+                <field name="x_model"/>
+                <field name="x_field_id"/>
+                <field name="x_relation"/>
+                <field name="x_value"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_conditions" model="ir.actions.act_window">
+        <field name="name">Conditions</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">conditions</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="domain">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create new Condition
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_conditions_sale"
+              name="Conditions"
+              parent="sale.menu_sales_config"
+              action="action_conditions"
+              sequence="110"/>
+
+    <menuitem id="menu_conditions_mrp"
+              name="Conditions"
+              parent="mrp.menu_mrp_configuration"
+              action="action_conditions"
+              sequence="110"/>
+
+    <!--    Checklist Items      -->
+    <record id="view_checklist_items_form" model="ir.ui.view">
+        <field name="name">checklist.items.form</field>
+        <field name="model">checklist.items</field>
+        <field name="arch" type="xml">
+            <form string="Checklist Items">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="x_name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="x_checklist_group"/>
+                            <field name="x_status"/>
+                        </group>
+                        <group>
+                            <field name="x_responsible_person" widget="many2many_tags"/>
+                            <field name="x_responsible_users" widget="many2many_tags"/>
+                            <field name="x_default_checklist" attrs="{'required': [['x_status','=','Variant']], 'invisible': [['x_status','=','Default']]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Conditions">
+                            <group>
+                                <group>
+                                    <field name="x_condition" required="1"/>
+                                </group>
+                                <group/></group>
+                            <field name="x_checklist_conditions"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record id="view_checklist_items_tree" model="ir.ui.view">
+        <field name="name">checklist.items.tree</field>
+        <field name="model">checklist.items</field>
+        <field name="arch" type="xml">
+            <tree string="Checklist Items">
+                <field name="x_sequence" widget="handle"/>
+                <field name="id" attrs="{}" invisible="1"/>
+                <field name="x_checklist_group"/>
+                <field name="x_status"/>
+                <field name="x_name" string="Description" modifiers="{}"/>
+                <field name="x_responsible_users" widget="many2many_tags"/>
+                <field name="x_condition"/>
+                <field name="x_checklist_conditions" widget="many2many_tags"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_checklist_items" model="ir.actions.act_window">
+        <field name="name">Checklist Items</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">checklist.items</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="domain">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create new Checklist Item
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_checklist_items_sale"
+              name="Checklist Items"
+              parent="sale.menu_sales_config"
+              action="action_checklist_items"
+              sequence="109"/>
+
+    <menuitem id="menu_checklist_items_mrp"
+              name="Checklist Items"
+              parent="mrp.menu_mrp_configuration"
+              action="action_checklist_items"
+              sequence="109"/>
+
+    <!--    Checklists      -->
+    <record id="view_checklists_form" model="ir.ui.view">
+        <field name="name">checklists.form</field>
+        <field name="model">checklists</field>
+        <field name="arch" type="xml">
+            <form string="Checklists">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="x_name" placeholder="e.g. WeBoc"/>
+                        </h1>
+                    </div>
+                    <notebook>
+                        <page string="Default Checklists">
+                            <field name="x_default_checklists"/>
+                        </page>
+                        <page string="Variant Checklists">
+                            <field name="x_variant_checklists"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_checklists_tree" model="ir.ui.view">
+        <field name="name">checklists.tree</field>
+        <field name="model">checklists</field>
+        <field name="arch" type="xml">
+            <tree string="Checklists">
+                <field name="x_name"/>
+                <field name="x_default_checklists" widget="many2many_tags"/>
+                <field name="x_variant_checklists" widget="many2many_tags"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_checklists" model="ir.actions.act_window">
+        <field name="name">Checklists</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">checklists</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="domain">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create new Checklist
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_checklists_sale"
+              name="Checklists"
+              parent="sale.menu_sales_config"
+              action="action_checklists"
+              sequence="108"/>
+
+    <menuitem id="menu_checklists_mrp"
+              name="Checklists"
+              parent="mrp.menu_mrp_configuration"
+              action="action_checklists"
+              sequence="108"/>
+
+    <!--    Tasks      -->
+    <record id="view_tasks_form" model="ir.ui.view">
+        <field name="name">tasks.form</field>
+        <field name="model">tasks</field>
+        <field name="arch" type="xml">
+            <form string="Tasks">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="x_name" required="1" modifiers="{}"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="x_task_name" invisible="1"/>
+                            <field name="x_description"/>
+                            <field name="x_responsible_person" required="1"/>
+                            <field name="x_user_responsible" required="1"/>
+                            <field name="x_start_task_on"/>
+                            <field name="x_has_deadline"/>
+                            <field name="x_deadline"/>
+                            <field name="x_participants" widget="many2many_tags"/>
+                            <field name="x_observers" widget="many2many_tags"/>
+                            <field name="x_user_participants" widget="many2many_tags"/>
+                            <field name="x_user_observers" widget="many2many_tags"/>
+                            <field name="x_task_has_time_constraints"/>
+                        </group>
+                        <group>
+                            <field name="x_project"/>
+                            <field name="x_project_id"/>
+                            <field name="x_project_stage_id"/>
+                            <field name="x_checklists" widget="many2many_tags"/>
+                            <field name="x_checklist_items_text" invisible="1"/>
+                            <field name="x_hours"/>
+                            <field name="x_per_unit_time"/>
+                            <field name="x_quantity_multiplying_factor"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Conditions">
+                            <group>
+                                <group>
+                                    <field name="x_check"/>
+                                </group>
+                            </group>
+                            <field name="x_conditions"/>
+                        </page>
+                        <page string="Checklist Items">
+                            <field name="x_checklist_items"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tasks_tree" model="ir.ui.view">
+        <field name="name">tasks.tree</field>
+        <field name="model">tasks</field>
+        <field name="arch" type="xml">
+            <tree string="Tasks">
+                <field name="x_sequence" string="Sequence" widget="handle"/>
+                <field name="x_name" modifiers="{}"/>
+                <field name="x_description"/>
+                <field name="x_user_responsible"/>
+                <field name="x_user_participants" widget="many2many_tags"/>
+                <field name="x_user_observers" widget="many2many_tags"/>
+                <field name="x_project_id"/>
+                <field name="x_project_stage_id"/>
+                <field name="x_checklists" widget="many2many_tags"/>
+                <field name="x_check"/>
+                <field name="x_conditions" widget="many2many_tags"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_tasks" model="ir.actions.act_window">
+        <field name="name">Tasks</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">tasks</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="domain">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create new Tasks
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_tasks_sale"
+              name="Tasks"
+              parent="sale.menu_sales_config"
+              action="action_tasks"
+              sequence="107"/>
+
+    <menuitem id="menu_tasks_mrp"
+              name="Tasks"
+              parent="mrp.menu_mrp_configuration"
+              action="action_tasks"
+              sequence="107"/>
+
+    <!--    Process      -->
+    <record id="view_processes_form" model="ir.ui.view">
+        <field name="name">processes.form</field>
+        <field name="model">processes</field>
+        <field name="arch" type="xml">
+            <form string="Processes">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="x_name" modifiers="{}"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="x_models" widget="many2many_tags"/>
+                        </group>
+                        <group></group>
+                    </group>
+                    <field name="x_tasks"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_processes_tree" model="ir.ui.view">
+        <field name="name">processes.tree</field>
+        <field name="model">processes</field>
+        <field name="arch" type="xml">
+            <tree string="Processes">
+                <field name="x_name" modifiers="{}"/>
+                <field name="x_models" widget="many2many_tags"/>
+                <field name="x_tasks" widget="many2many_tags"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_processes" model="ir.actions.act_window">
+        <field name="name">Processes</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">processes</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="domain">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create new Processes
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_processes_sale"
+              name="Processes"
+              parent="sale.menu_sales_config"
+              action="action_processes"
+              sequence="106"/>
+
+    <menuitem id="menu_processes_mrp"
+              name="Processes"
+              parent="mrp.menu_mrp_configuration"
+              action="action_processes"
+              sequence="106"/>
+</odoo>

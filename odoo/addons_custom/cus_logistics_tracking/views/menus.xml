@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+<!--	Inventory App Menus-->
+    <menuitem id="main_menu_logistics_tracking" name="Logistics"
+              groups="stock.group_stock_manager"
+              parent="stock.menu_stock_root" sequence="3"/>
+
+    <menuitem id="menu_logistics_tracking" name="Logistics Tracking" sequence="10"
+              groups="stock.group_stock_manager"
+              parent="main_menu_logistics_tracking" action="action_logistics_tracking"/>
+
+    <menuitem id="menu_logistics_route" name="Logistics Routes" sequence="20"
+              groups="stock.group_stock_manager"
+              parent="main_menu_logistics_tracking" action="action_logistics_route"/>
+
+    <menuitem id="menu_consolidation_tracking" name="Consolidations" sequence="30"
+              groups="stock.group_stock_manager"
+              parent="main_menu_logistics_tracking" action="action_consolidation_tracking"/>
+
+    <menuitem id="menu_free_zone_operations" name="Free Zone Operations" sequence="31"
+              groups="stock.group_stock_manager"
+              parent="main_menu_logistics_tracking" action="free_zone_operations_action"/>
+
+	<menuitem id="menu_backorder_stock_move_inventory" name="Backorder Parts" sequence="40"
+              groups="stock.group_stock_manager"
+			  parent="main_menu_logistics_tracking" action="backorder_purchase_stock_move_action"/>
+
+    <menuitem id="menu_forwarder_contacts" name="Forwarders" sequence="50"
+              groups="stock.group_stock_manager"
+              parent="main_menu_logistics_tracking" action="action_forwarder_contacts"/>
+
+    <menuitem id="menu_country_of_origin_rules" name="Country Of Origin Rules" sequence="60"
+              groups="stock.group_stock_manager"
+              parent="main_menu_logistics_tracking" action="action_country_of_origin_rules"/>
+<!--	Sale App Menus-->
+	<menuitem id="main_menu_logistics_tracking_sale" name="Logistics"
+              groups="sales_team.group_sale_manager"
+			  parent="sale.sale_menu_root" sequence="3"/>
+
+	<menuitem id="menu_logistics_tracking_sale" name="Logistics Tracking" sequence="10"
+              groups="sales_team.group_sale_manager"
+			  parent="main_menu_logistics_tracking_sale" action="action_logistics_tracking_sale"/>
+
+    <menuitem id="menu_logistics_route_sale" name="Logistics Routes" sequence="20"
+              groups="sales_team.group_sale_manager"
+              parent="main_menu_logistics_tracking_sale" action="action_logistics_route"/>
+
+    <menuitem id="menu_free_zone_operations_sale" name="Free Zone Operations" sequence="30"
+              groups="sales_team.group_sale_manager"
+              parent="main_menu_logistics_tracking_sale" action="free_zone_operations_action"/>
+<!--	Purchase App Menus-->
+	<menuitem id="main_menu_logistics_tracking_purchase" name="Logistics"
+              groups="purchase.group_purchase_manager"
+			  parent="purchase.menu_purchase_root" sequence="99"/>
+
+	<menuitem id="menu_logistics_tracking_purchase" name="Logistics Tracking" sequence="10"
+              groups="purchase.group_purchase_manager"
+			  parent="main_menu_logistics_tracking_purchase" action="action_logistics_tracking_purchase"/>
+
+    <menuitem id="menu_logistics_route_purchase" name="Logistics Routes" sequence="20"
+              groups="purchase.group_purchase_manager"
+              parent="main_menu_logistics_tracking_purchase" action="action_logistics_route"/>
+
+    <menuitem id="menu_consolidation_tracking_purchase" name="Consolidations" sequence="30"
+              groups="purchase.group_purchase_manager"
+              parent="main_menu_logistics_tracking_purchase" action="action_consolidation_tracking"/>
+
+    <menuitem id="menu_free_zone_operations_purchase" name="Free Zone Operations" sequence="31"
+              groups="purchase.group_purchase_manager"
+              parent="main_menu_logistics_tracking_purchase" action="free_zone_operations_action"/>
+
+	<menuitem id="menu_backorder_stock_move_purchase" name="Backorder Parts" sequence="40"
+              groups="purchase.group_purchase_manager"
+			  parent="main_menu_logistics_tracking_purchase" action="backorder_purchase_stock_move_action"/>
+
+    <menuitem id="menu_forwarder_contacts_purchase" name="Forwarders" sequence="50"
+              groups="purchase.group_purchase_manager"
+              parent="main_menu_logistics_tracking_purchase" action="action_forwarder_contacts"/>
+
+    <menuitem id="menu_country_of_origin_rules_purchase" name="Country Of Origin Rules" sequence="60"
+              groups="purchase.group_purchase_manager"
+              parent="main_menu_logistics_tracking_purchase" action="action_country_of_origin_rules"/>
+</odoo>

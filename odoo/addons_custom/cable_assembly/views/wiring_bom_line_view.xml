@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--        Wiring BOM Lines Views-->
+    <record id="view_cable_assembly_bom_line_form" model="ir.ui.view">
+        <field name="name">cable.assembly.bom.line.form</field>
+        <field name="model">cable.assembly.bom.line</field>
+        <field name="arch" type="xml">
+            <form string="Wiring BOM Line">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="x_start_product"/>
+                            <field name="x_start_product_code_ids" widget="many2many_tags" invisible="1"/>
+                            <field name="x_start_product_point_ids" widget="many2many_tags" invisible="1"/>
+                            <field name="x_start_product_id"/>
+                            <field name="x_start_point_id"/>
+                            <field name="x_start_point_pin_ids" widget="many2many_tags" invisible="1"/>
+                            <field name="x_start_pin_id"/>
+                            <field name="x_start_connector"/>
+                            <field name="x_start_heat_shrink_label"/>
+                        </group>
+                        <group>
+                            <field name="x_end_product"/>
+                            <field name="x_end_product_code_ids" widget="many2many_tags" invisible="1"/>
+                            <field name="x_end_product_point_ids" widget="many2many_tags" invisible="1"/>
+                            <field name="x_end_product_id"/>
+                            <field name="x_end_point_id"/>
+                            <field name="x_end_point_pin_ids" widget="many2many_tags" invisible="1"/>
+                            <field name="x_end_pin_id"/>
+                            <field name="x_end_connector"/>
+                            <field name="x_end_heat_shrink_label"/>
+                        </group>
+                        <group>
+                            <field name="x_name" force_save="1"/>
+                            <field name="x_ref_des"/>
+                            <field name="x_wire"/>
+                            <field name="x_wire_color"/>
+                            <field name="x_unit_length"/>
+                            <field name="x_finished_length"/>
+                            <field name="x_uom_id"/>
+                            <field name="x_cable_assembly_bom_id"/>
+                        </group>
+                        <group>
+                            <field name="x_harness"/>
+                            <field name="x_wire_core"/>
+                            <field name="x_start_label"/>
+                            <field name="x_end_label"/>
+                            <field name="x_wire_label"/>
+                            <field name="x_harness_label"/>
+                            <field name="x_core_label"/>
+                            <field name="x_notes"/>
+                        </group>
+                    </group>
+                    <separator string="Capture Images" colspan="4"/>
+                    <field name="x_image_ids" mode="kanban"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_cable_assembly_bom_line_tree" model="ir.ui.view">
+        <field name="name">cable.assembly.bom.line.tree</field>
+        <field name="model">cable.assembly.bom.line</field>
+        <field name="arch" type="xml">
+            <tree string="Wiring BOM Line"
+                  decoration-warning="x_wire_color == 'yellow'"
+                  decoration-danger="x_wire_color == 'red'"
+                  decoration-success="x_wire_color == 'green'"
+                  decoration-info="x_wire_color == 'blue'"
+                  decoration-bf="x_wire_color in ('grey', 'black')"
+                  decoration-muted="x_wire_color == 'grey'"
+            >
+
+<!--                  decoration-bf="x_wire_color == 'black'"-->
+                <field name="x_name"/>
+                <field name="x_ref_des"/>
+                <field name="x_wire"/>
+                <field name="x_wire_color" invisible="1"/>
+                <field name="x_unit_length"/>
+                <field name="x_finished_length"/>
+                <field name="x_uom_id"/>
+                <field name="x_harness" optional="hide"/>
+                <field name="x_wire_core" optional="hide"/>
+                <field name="x_start_label"/>
+                <field name="x_end_label"/>
+                <field name="x_wire_label"/>
+                <field name="x_harness_label"/>
+                <field name="x_core_label"/>
+                <field name="x_cable_assembly_bom_id"/>
+                <field name="x_notes"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_cable_assembly_bom_line_filter" model="ir.ui.view">
+        <field name="name">cable.assembly.bom.line.select</field>
+        <field name="model">cable.assembly.bom.line</field>
+        <field name="arch" type="xml">
+            <search string="Wiring BOM Line">
+                <field name="x_ref_des" string="Wiring BOM Line"
+                       filter_domain="['|', '|', '|', '|',
+                                    ('x_ref_des','ilike',self),
+                                    ('x_name', 'ilike', self),
+                                    ('x_wire', 'ilike', self),
+                                    ('x_cable_assembly_bom_id', 'ilike', self),
+                                    ('x_notes', 'ilike', self),
+                                    ]"/>
+                <field name="x_name"/>
+                <field name="x_ref_des"/>
+                <field name="x_wire"/>
+                <field name="x_cable_assembly_bom_id"/>
+                <field name="x_notes"/>
+                <filter name="used_in_bom" string="Used In BoM" domain="[('x_cable_assembly_bom_id', '!=', False)]"/>
+                <filter name="not_used_in_bom" string="Not Used In BoM" domain="[('x_cable_assembly_bom_id', '=', False)]"/>
+                <group expand="0" string="Group By">
+                        <filter name="wiring_bom" string="Wiring BoM" context="{'group_by': 'x_cable_assembly_bom_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_cable_assembly_bom_line" model="ir.actions.act_window">
+        <field name="name">Wiring BOM Line</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">cable.assembly.bom.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_cable_assembly_bom_line_filter"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create new Record
+            </p>
+        </field>
+    </record>
+</odoo>

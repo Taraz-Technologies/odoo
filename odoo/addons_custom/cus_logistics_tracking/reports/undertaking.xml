@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_undertaking">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: Arial; font-size:16px">
+                        <div class="row">
+                            <div class="col">
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <center>
+                                    <b>
+                                        <h1>Undertaking</h1>
+                                    </b>
+                                </center>
+                            </div>
+                        </div>
+                        <div class="row" style="text-align:justify;">
+                            <div class="col">
+                                <br/>
+                                <span t-field="doc.x_body_undertaking"/>
+                            </div>
+                        </div>
+                        <table class="table table-borderless" style="margin-top:50px;">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 500px;">
+                                        <span t-field="doc.x_signatory_certificate"/>
+                                    </td>
+                                    <td style="width: 500px; text-align: right;">
+                                        <span t-field="doc.x_date_certificate" t-options='{"widget": "date","format": "MMMM dd, yyyy"}'/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

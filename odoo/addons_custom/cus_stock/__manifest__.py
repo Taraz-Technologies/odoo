@@ -1,0 +1,31 @@
+# Copyright 2015 ACSONE SA/NV (<http://acsone.eu>)
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
+{
+    'name': 'Stock Customizations',
+    'version': '13.0.1.0.0',
+    'summary': 'Odoo Custom Model',
+    'sequence': '85',
+    'category': 'Customization',
+    'author': 'Taraz Technologies Pvt. Ltd.',
+    'maintainer': 'Taraz Technologies Pvt. Ltd.',
+    'company': 'Taraz Technologies Pvt. Ltd.',
+    'website': 'https://www.taraztechnologies.com/',
+    'depends': ['cus_sale', 'cus_purchase'],
+    'data': [
+        'security/ir.model.access.csv',
+        'reports/reports.xml',
+        'views/stock_landed_cost_views.xml',
+        'views/stock_location_views.xml',
+        'views/stock_move_views.xml',
+        'views/stock_picking_views.xml',
+        'views/menus.xml',
+        'views/stock_inventory_views.xml',
+        'wizards/add_bulk_tagging.xml',
+        'wizards/add_picking_operations_bulk_tagging.xml',
+        'wizards/add_stock_picking_bulk_tagging.xml',
+    ],
+    'license': 'AGPL-3',
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}

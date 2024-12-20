@@ -1,0 +1,15 @@
+{
+    'name': 'MRP Testing',
+    'version': '13.0.1.0.0',
+    'summary': 'Run test cases for MRP modules',
+    'sequence': '1000',
+    'category': 'Testing',
+    'author': 'Taraz Technologies Pvt. Ltd.',
+    'maintainer': 'Taraz Technologies Pvt. Ltd.',
+    'company': 'Taraz Technologies Pvt. Ltd.',
+    'website': 'https://www.taraztechnologies.com/',
+    'depends': ['cus_mrp_kanban'],
+    'data': [],
+    'license': 'AGPL-3',
+    'installable': True,
+}

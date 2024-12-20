@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="purchase_order_form_cus_logistics_tracking" model="ir.ui.view">
+            <field name="name">purchase_order_form_cus_logistics_tracking</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="/form/sheet/notebook/page/field/tree/field[@name='name']" position="after">
+                        <field name="x_form_field_03" optional="hide"
+                               attrs="{'column_invisible': [('parent.company_id', '!=', 2)]}"/>
+                    </xpath>
+                    <field name="partner_ref" position="after">
+                        <field name="x_operation_type"/>
+                        <field name="x_free_zone_operation_id"
+                               attrs="{'invisible': [('x_operation_type', '!=', 'free')]}"/>
+                        <field name="x_consolidation_id"/>
+                        <field name="x_consolidation_ref" attrs="{'invisible':[('x_consolidation_ref','=',False)]}"/>
+                        <field name="x_shipping_invoice_name" invisible="1"/>
+                        <field name="x_shipping_invoice" filename="x_shipping_invoice_name"
+                               attrs="{'invisible':[('x_shipping_invoice','=',False)]}"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <record id="purchase_order_tree_cus_logistics_tracking" model="ir.ui.view">
+            <field name="name">view_purchase_order_filter_cus_logistics_tracking</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="invoice_status" position="after">
+                        <field name="x_operation_type" optional="hide"/>
+                        <field name="x_free_zone_operation_id" optional="hide"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <record id="purchase_order_view_tree_cus_logistics_tracking" model="ir.ui.view">
+            <field name="name">purchase_order_view_tree_cus_logistics_tracking</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_view_tree"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="invoice_status" position="after">
+                        <field name="x_operation_type" optional="hide"/>
+                        <field name="x_free_zone_operation_id" optional="hide"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <record id="view_purchase_order_filter_cus_logistics_tracking" model="ir.ui.view">
+            <field name="name">view_purchase_order_filter_cus_logistics_tracking</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="product_id" position="after">
+                        <field name="x_free_zone_operation_id"/>
+                    </field>
+                    <filter name="order_date" position="after">
+                        <separator/>
+                        <filter name="free" string="FZ Operation" domain="[('x_operation_type', '=', 'free')]"/>
+                        <filter name="otb" string="OTB Operation" domain="[('x_operation_type', '=', 'otb')]"/>
+                    </filter>
+                    <filter name="order_date" position="after">
+                        <filter string="Operation (FZ/OTB)" name="operation_fz_otb" context="{'group_by': 'x_operation_type'}"/>
+                    </filter>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>

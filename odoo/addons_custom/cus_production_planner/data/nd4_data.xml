@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!--ND4 Feeders-->
+        <record id="ND4_FEEDER44" model="nd4.feeders">
+            <field name="x_group">0</field>
+            <field name="x_name">FEEDER44</field>
+            <field name="x_x_mm">21.77</field>
+            <field name="x_y_mm">390.52</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER43" model="nd4.feeders">
+            <field name="x_group">6</field>
+            <field name="x_name">FEEDER43</field>
+            <field name="x_x_mm">23.56</field>
+            <field name="x_y_mm">383.95</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER42" model="nd4.feeders">
+            <field name="x_group">6</field>
+            <field name="x_name">FEEDER42</field>
+            <field name="x_x_mm">19.93</field>
+            <field name="x_y_mm">358.95</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER41" model="nd4.feeders">
+            <field name="x_group">6</field>
+            <field name="x_name">FEEDER41</field>
+            <field name="x_x_mm">19.6</field>
+            <field name="x_y_mm">337.99</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER40" model="nd4.feeders">
+            <field name="x_group">6</field>
+            <field name="x_name">FEEDER40</field>
+            <field name="x_x_mm">19.53</field>
+            <field name="x_y_mm">316.65</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER39" model="nd4.feeders">
+            <field name="x_group">6</field>
+            <field name="x_name">FEEDER39</field>
+            <field name="x_x_mm">20.22</field>
+            <field name="x_y_mm">295.02</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER38" model="nd4.feeders">
+            <field name="x_group">5</field>
+            <field name="x_name">FEEDER38</field>
+            <field name="x_x_mm">23.82</field>
+            <field name="x_y_mm">275.68</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER37" model="nd4.feeders">
+            <field name="x_group">5</field>
+            <field name="x_name">FEEDER37</field>
+            <field name="x_x_mm">24.03</field>
+            <field name="x_y_mm">258.65</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER36" model="nd4.feeders">
+            <field name="x_group">5</field>
+            <field name="x_name">FEEDER36</field>
+            <field name="x_x_mm">23.54</field>
+            <field name="x_y_mm">241.46</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER35" model="nd4.feeders">
+            <field name="x_group">4</field>
+            <field name="x_name">FEEDER35</field>
+            <field name="x_x_mm">24.21</field>
+            <field name="x_y_mm">226.2</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER34" model="nd4.feeders">
+            <field name="x_group">4</field>
+            <field name="x_name">FEEDER34</field>
+            <field name="x_x_mm">24.18</field>
+            <field name="x_y_mm">212.14</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER33" model="nd4.feeders">
+            <field name="x_group">4</field>
+            <field name="x_name">FEEDER33</field>
+            <field name="x_x_mm">24.12</field>
+            <field name="x_y_mm">198.77</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER32" model="nd4.feeders">
+            <field name="x_group">4</field>
+            <field name="x_name">FEEDER32</field>
+            <field name="x_x_mm">23.81</field>
+            <field name="x_y_mm">185.17</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER31" model="nd4.feeders">
+            <field name="x_group">4</field>
+            <field name="x_name">FEEDER31</field>
+            <field name="x_x_mm">23.89</field>
+            <field name="x_y_mm">171.45</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER30" model="nd4.feeders">
+            <field name="x_group">4</field>
+            <field name="x_name">FEEDER30</field>
+            <field name="x_x_mm">23.63</field>
+            <field name="x_y_mm">157.86</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER29" model="nd4.feeders">
+            <field name="x_group">4</field>
+            <field name="x_name">FEEDER29</field>
+            <field name="x_x_mm">23.55</field>
+            <field name="x_y_mm">144.49</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER28" model="nd4.feeders">
+            <field name="x_group">4</field>
+            <field name="x_name">FEEDER28</field>
+            <field name="x_x_mm">23.58</field>
+            <field name="x_y_mm">131.11</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER27" model="nd4.feeders">
+            <field name="x_group">4</field>
+            <field name="x_name">FEEDER27</field>
+            <field name="x_x_mm">24</field>
+            <field name="x_y_mm">117.23</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER26" model="nd4.feeders">
+            <field name="x_group">4</field>
+            <field name="x_name">FEEDER26</field>
+            <field name="x_x_mm">24.45</field>
+            <field name="x_y_mm">103.91</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER25" model="nd4.feeders">
+            <field name="x_group">4</field>
+            <field name="x_name">FEEDER25</field>
+            <field name="x_x_mm">23.96</field>
+            <field name="x_y_mm">89.94</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER24" model="nd4.feeders">
+            <field name="x_group">4</field>
+            <field name="x_name">FEEDER24</field>
+            <field name="x_x_mm">23.68</field>
+            <field name="x_y_mm">76.66</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER23" model="nd4.feeders">
+            <field name="x_group">4</field>
+            <field name="x_name">FEEDER23</field>
+            <field name="x_x_mm">23.57</field>
+            <field name="x_y_mm">63.43</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER22" model="nd4.feeders">
+            <field name="x_group">4</field>
+            <field name="x_name">FEEDER22</field>
+            <field name="x_x_mm">24.07</field>
+            <field name="x_y_mm">50.03</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER21" model="nd4.feeders">
+            <field name="x_group">4</field>
+            <field name="x_name">FEEDER21</field>
+            <field name="x_x_mm">23.95</field>
+            <field name="x_y_mm">36.28</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER20" model="nd4.feeders">
+            <field name="x_group">4</field>
+            <field name="x_name">FEEDER20</field>
+            <field name="x_x_mm">23.82</field>
+            <field name="x_y_mm">22.62</field>
+            <field name="x_pick_angle">-90</field>
+        </record>
+        <record id="ND4_FEEDER19" model="nd4.feeders">
+            <field name="x_group">0</field>
+            <field name="x_name">FEEDER19</field>
+            <field name="x_x_mm">0</field>
+            <field name="x_y_mm">0</field>
+            <field name="x_pick_angle">0</field>
+        </record>
+        <record id="ND4_FEEDER18" model="nd4.feeders">
+            <field name="x_group">3</field>
+            <field name="x_name">FEEDER18</field>
+            <field name="x_x_mm">0</field>
+            <field name="x_y_mm">0</field>
+            <field name="x_pick_angle">0</field>
+        </record>
+        <record id="ND4_FEEDER17" model="nd4.feeders">
+            <field name="x_group">3</field>
+            <field name="x_name">FEEDER17</field>
+            <field name="x_x_mm">411.85</field>
+            <field name="x_y_mm">363.7</field>
+            <field name="x_pick_angle">90</field>
+        </record>
+        <record id="ND4_FEEDER16" model="nd4.feeders">
+            <field name="x_group">2</field>
+            <field name="x_name">FEEDER16</field>
+            <field name="x_x_mm">410.79</field>
+            <field name="x_y_mm">362.64</field>
+            <field name="x_pick_angle">90</field>
+        </record>
+        <record id="ND4_FEEDER15" model="nd4.feeders">
+            <field name="x_group">2</field>
+            <field name="x_name">FEEDER15</field>
+            <field name="x_x_mm">410.82</field>
+            <field name="x_y_mm">344.84</field>
+            <field name="x_pick_angle">90</field>
+        </record>
+        <record id="ND4_FEEDER14" model="nd4.feeders">
+            <field name="x_group">2</field>
+            <field name="x_name">FEEDER14</field>
+            <field name="x_x_mm">409.93</field>
+            <field name="x_y_mm">329.46</field>
+            <field name="x_pick_angle">90</field>
+        </record>
+        <record id="ND4_FEEDER13" model="nd4.feeders">
+            <field name="x_group">2</field>
+            <field name="x_name">FEEDER13</field>
+            <field name="x_x_mm">410.73</field>
+            <field name="x_y_mm">315.86</field>
+            <field name="x_pick_angle">90</field>
+        </record>
+        <record id="ND4_FEEDER12" model="nd4.feeders">
+            <field name="x_group">2</field>
+            <field name="x_name">FEEDER12</field>
+            <field name="x_x_mm">411.34</field>
+            <field name="x_y_mm">302.79</field>
+            <field name="x_pick_angle">90</field>
+        </record>
+        <record id="ND4_FEEDER11" model="nd4.feeders">
+            <field name="x_group">2</field>
+            <field name="x_name">FEEDER11</field>
+            <field name="x_x_mm">411.13</field>
+            <field name="x_y_mm">289.19</field>
+            <field name="x_pick_angle">90</field>
+        </record>
+        <record id="ND4_FEEDER10" model="nd4.feeders">
+            <field name="x_group">2</field>
+            <field name="x_name">FEEDER10</field>
+            <field name="x_x_mm">410.91</field>
+            <field name="x_y_mm">275.57</field>
+            <field name="x_pick_angle">90</field>
+        </record>
+        <record id="ND4_FEEDER09" model="nd4.feeders">
+            <field name="x_group">2</field>
+            <field name="x_name">FEEDER09</field>
+            <field name="x_x_mm">411.22</field>
+            <field name="x_y_mm">261.95</field>
+            <field name="x_pick_angle">90</field>
+        </record>
+        <record id="ND4_FEEDER08" model="nd4.feeders">
+            <field name="x_group">2</field>
+            <field name="x_name">FEEDER08</field>
+            <field name="x_x_mm">410.82</field>
+            <field name="x_y_mm">248.39</field>
+            <field name="x_pick_angle">90</field>
+        </record>
+        <record id="ND4_FEEDER07" model="nd4.feeders">
+            <field name="x_group">1</field>
+            <field name="x_name">FEEDER07</field>
+            <field name="x_x_mm">411.16</field>
+            <field name="x_y_mm">169.77</field>
+            <field name="x_pick_angle">90</field>
+        </record>
+        <record id="ND4_FEEDER06" model="nd4.feeders">
+            <field name="x_group">1</field>
+            <field name="x_name">FEEDER06</field>
+            <field name="x_x_mm">411.08</field>
+            <field name="x_y_mm">156.28</field>
+            <field name="x_pick_angle">90</field>
+        </record>
+        <record id="ND4_FEEDER05" model="nd4.feeders">
+            <field name="x_group">1</field>
+            <field name="x_name">FEEDER05</field>
+            <field name="x_x_mm">411.09</field>
+            <field name="x_y_mm">142.67</field>
+            <field name="x_pick_angle">90</field>
+        </record>
+        <record id="ND4_FEEDER04" model="nd4.feeders">
+            <field name="x_group">1</field>
+            <field name="x_name">FEEDER04</field>
+            <field name="x_x_mm">410.99</field>
+            <field name="x_y_mm">129.14</field>
+            <field name="x_pick_angle">90</field>
+        </record>
+        <record id="ND4_FEEDER03" model="nd4.feeders">
+            <field name="x_group">1</field>
+            <field name="x_name">FEEDER03</field>
+            <field name="x_x_mm">410.96</field>
+            <field name="x_y_mm">115.7</field>
+            <field name="x_pick_angle">90</field>
+        </record>
+        <record id="ND4_FEEDER02" model="nd4.feeders">
+            <field name="x_group">1</field>
+            <field name="x_name">FEEDER02</field>
+            <field name="x_x_mm">410.7</field>
+            <field name="x_y_mm">102.1</field>
+            <field name="x_pick_angle">90</field>
+        </record>
+        <record id="ND4_FEEDER01" model="nd4.feeders">
+            <field name="x_group">1</field>
+            <field name="x_name">FEEDER01</field>
+            <field name="x_x_mm">410.89</field>
+            <field name="x_y_mm">88.43</field>
+            <field name="x_pick_angle">90</field>
+        </record>
+    </data>
+</odoo>

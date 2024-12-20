@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_bank_statement_form_cus_accounts_1" model="ir.ui.view">
+            <field name="name">view_bank_statement_form_cus_accounts_1</field>
+            <field name="model">account.bank.statement</field>
+            <field name="inherit_id" ref="account.view_bank_statement_form"/>
+            <field name="arch" type="xml">
+                <button name="button_reopen" position="after">
+                    <button name="download_statement_lines" string="Export St. Lines" class="oe_highlight" type="object"/>
+                </button>
+                <field name="journal_id" position="attributes">
+                    <attribute name="widget"></attribute>
+                </field>
+                <field name="company_id" position="after">
+                    <field name="x_statement_type" widget="radio" options="{'horizontal': true}"/>
+                </field>
+                <field name="name" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+                <xpath expr="//field[@name='currency_id']" position="after">
+                    <label for="x_attachment_id"/>
+                    <div class="o_row">
+                        <field name="x_attachment_id"/>
+                        <button name="get_statement_lines" string="Get Statement Lines" type="object" class="oe_highlight"/>
+                    </div>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/tree[1]/field[@name='sequence']" position="after">
+                    <field name="x_line_code" optional="hide"/>
+                </xpath>
+                <xpath expr="//notebook/page/field/tree/field[@name='note']" position="after">
+                    <field name="x_custom_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                    <field name="x_document" widget="download_link" filename="x_document_name"/>
+                </xpath>
+                <field name="date" position="attributes">
+                    <attribute name="string">Start Date</attribute>
+                </field>
+            </field>
+        </record>
+
+
+        <record id="view_bank_statement_line_form_cus_accounts_1" model="ir.ui.view">
+            <field name="name">view_bank_statement_line_form_cus_accounts_1</field>
+            <field name="model">account.bank.statement.line</field>
+            <field name="inherit_id" ref="account.view_bank_statement_line_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group" position="before">
+                    <field name="x_all_lines_reconciled" invisible="1"/>
+                    <field name="x_line_ids" invisible="1"/>
+                    <field name="x_state" invisible="1"/>
+                    <header>
+                        <button name="action_bank_reconcile_bank_statement"
+                                string="Reconcile"
+                                type="object"
+                                class="oe_highlight"
+                                attrs="{'invisible':['|','|',('x_all_lines_reconciled','=',True),('x_line_ids','=',[]),('x_state', '!=', 'open')]}"
+                                groups="account.group_account_manager"
+                        />
+                    </header>
+                </xpath>
+                <field name="note" position="after">
+                    <field name="x_custom_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                    <field name="x_document_name" invisible="1"/>
+                    <field name="x_document" widget="download_link" filename="x_document_name"/>
+                </field>
+                <xpath expr="//group" position="after">
+                    <separator colspan="4" string="Invoices / Bills"/>
+                    <field name="x_invoice_ids" force_save="1"/>
+
+                    <separator colspan="4" string="Journal Entries"/>
+                    <field name="x_journal_entries" force_save="1"/>
+
+                    <separator colspan="4" string="Journal Items"/>
+                    <field name="journal_entry_ids" force_save="1" nolabel="1">
+                        <tree>
+                            <button name="open_view" string="Edit" type="object" icon="fa-edit"/>
+                            <field name="date"/>
+                            <field name="company_id"/>
+                            <field name="move_id"/>
+                            <field name="account_id"/>
+                            <field name="x_account_type"/>
+                            <field name="x_main_account_id"/>
+                            <field name="x_main_account_type"/>
+                            <field name="partner_id"/>
+                            <field name="name"/>
+                            <field name="full_reconcile_id"/>
+                            <field name="amount_currency" sum="Total"/>
+                            <field name="debit" sum="Total"/>
+                            <field name="credit" sum="Total"/>
+                        </tree>
+                    </field>
+
+                    <separator colspan="4" string="Payments / Internal Transfers"/>
+                    <field name="x_payment_ids" force_save="1" nolabel="1">
+                        <tree>
+                            <button name="open_record" string="Edit" type="object" icon="fa-edit"/>
+                            <field name="payment_date"/>
+                            <field name="name" optional="hide"/>
+                            <field name="journal_id" optional="hide"/>
+                            <field name="destination_journal_id" optional="hide"/>
+                            <field name="communication"/>
+                            <field name="partner_id" optional="hide"/>
+                            <field name="amount" sum="Total"/>
+                            <field name="state" invisible="1"/>
+                        </tree>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_bank_statement_line_tree_cus_accounts_1" model="ir.ui.view">
+            <field name="name">view_bank_statement_line_tree_cus_accounts_1</field>
+            <field name="model">account.bank.statement.line</field>
+            <field name="inherit_id" ref="account.view_bank_statement_line_tree"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="x_custom_tag_ids" string="Tags" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                    <field name="x_document_name" invisible="1"/>
+                    <field name="x_document" widget="download_link" filename="x_document_name"/>
+                    <field name="journal_id"/>
+                    <field name="x_journal_entries" optional="hide"/>
+                </field>
+                <xpath expr="//tree" position="attributes">
+                        <attribute name="decoration-muted">x_journal_entries</attribute>
+                </xpath>
+                <field name="note" position="after">
+                    <field name="state" invisible="1"/>
+                    <field name="journal_entry_ids" invisible="1"/>
+                    <button name="button_cancel_reconciliation"
+                            attrs="{'invisible': ['|',('journal_entry_ids', '=', []), ('state', '=', 'confirm')]}"
+                            string="Revert reconciliation" type="object"
+                            icon="fa-undo" groups="account.group_account_manager"/>
+                </field>
+                <field name="amount" position="after">
+                    <field name="x_currency_id" invisible="1"/>
+                    <field name="x_amount_in_usd" sum="Total"/>
+                </field>
+                <field name="amount" position="attributes">
+                    <attribute name="sum">Total</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_bank_statement_line_search_cus_accounts_1" model="ir.ui.view">
+            <field name="name">view_bank_statement_line_search_cus_accounts_1</field>
+            <field name="model">account.bank.statement.line</field>
+            <field name="inherit_id" ref="account.view_bank_statement_line_search"/>
+            <field name="arch" type="xml">
+                <field name="name" position="replace">
+                    <field name="name" string="Label1" filter_domain="['|', '|', '|', ('name','ilike',self), ('x_custom_tag_ids','ilike',self), ('note','ilike',self), ('amount', 'ilike', self)]"/>
+                    <field name="name" string="Label2" filter_domain="['|', '|', '|', ('name','ilike',self), ('x_custom_tag_ids','ilike',self), ('note','ilike',self), ('amount', 'ilike', self)]"/>
+                    <field name="name" string="Label3" filter_domain="['|', '|', '|', ('name','ilike',self), ('x_custom_tag_ids','ilike',self), ('note','ilike',self), ('amount', 'ilike', self)]"/>
+                    <field name="name" string="Label4" filter_domain="['|', '|', '|', ('name','ilike',self), ('x_custom_tag_ids','ilike',self), ('note','ilike',self), ('amount', 'ilike', self)]"/>
+                    <field name="amount"/>
+                </field>
+                <field name="transaction_type" position="after">
+                    <separator/>
+                    <filter string="Active" name="active" domain="[('active', '!=', False)]"/>
+                    <filter string="Archived" name="archived" domain="[('active', '=', False)]"/>
+                    <separator/>
+                    <filter string="Tagged" name="tagged"  domain="[('x_custom_tag_ids', '!=', False)]"/>
+                    <separator/>
+                    <filter string="Reconciled" name="reconciled" domain="[('x_journal_entries', '!=', False)]"/>
+                    <filter string="Unreconciled" name="unreconciled" domain="[('x_journal_entries', '=', False)]"/>
+                    <filter string="Direct Entries" name="direct_entries" domain="['&amp;', ('x_journal_entries', '!=', False), ('x_invoice_ids', '=', False)]"/>
+                    <filter string="Linked Entries" name="linked_entries" domain="['&amp;', ('x_journal_entries', '!=', False), ('x_invoice_ids', '!=', False)]"/>
+                    <filter string="Inflow" name="inflow" domain="[('amount', '&gt;=', 0)]"/>
+                    <filter string="Outflow" name="outflow" domain="[('amount', '&lt;', 0)]"/>
+                    <group>
+                        <filter string="Journal" name="journal" context="{'group_by': 'journal_id'}"/>
+                        <filter string="Date" name="date" context="{'group_by': 'date'}"/>
+                        <filter string="Partner" name="partner" context="{'group_by': 'partner_id'}"/>
+                    </group>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_bank_statement_form_cus_accounts_2" model="ir.ui.view">
+            <field name="name">view_bank_statement_form_cus_accounts_2</field>
+            <field name="model">account.bank.statement</field>
+            <field name="inherit_id" ref="customizations.view_bank_statement_form_customization_0"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='statement_id']" position="after">
+                    <field name="x_line_code"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

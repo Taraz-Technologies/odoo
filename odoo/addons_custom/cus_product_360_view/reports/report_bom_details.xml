@@ -1,0 +1,1133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_bom_details_by_hs_code_document">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="row" style="width:100%;padding:170px 0;">
+                        <div class="col">
+                            <h2 style="margin-bottom:0px;">
+                                <strong><span t-field="o.x_title"/></strong>
+                            </h2>
+                            <h6 style="margin-top:0px;">
+                                <span t-field="o.x_revision"/>
+                            </h6>
+                        </div>
+                    </div>
+                    <div class="row" style="width:100%;position:fixed;top:450px;">
+                        <div class="col">
+                            <span t-field="o.x_revision_details"/>
+                        </div>
+                    </div>
+                    <div class="row" style="width:100%;position:fixed;top:650px;background-color:LightGray;">
+                        <div class="p-4">
+                            <h5>ABOUT TARAZ TECHNOLOGIES</h5>
+                            <span t-field="o.x_about_taraz"/>
+                            <h5>DISCLAIMER</h5>
+                            <span t-field="o.x_disclaimer"/>
+                        </div>
+                    </div>
+
+                    <t t-set="report_data" t-value="o.get_components_hs_code()"/>
+                    <t t-set="default_total_cost" t-value="0"/>
+                    <t t-set="cnf_value" t-value="report_data['total']['cnf_value']"/>
+                    <t t-foreach="report_data['country_data']" t-as="country">
+                        <t t-if="country['label'] == report_data['default_scenario_id'].x_label">
+                            <t t-set="default_total_cost" t-value="country['total_cost']"/>
+                        </t>
+                    </t>
+
+                    <div class="row" name="product_info" style="page-break-before:always;">
+                        <div class="col-8 text-left">
+                            <h3>
+                                <span t-field="o.product_tmpl_id"/><br/>
+                            </h3>
+                            <h6>
+                                <strong>Product Description: </strong><br/>
+                                <span t-field="o.product_tmpl_id.description_sale"/><br/>
+                            </h6>
+                        </div>
+                        <div class="col-4 text-right">
+                            <image t-field="o.product_tmpl_id.image_1920" t-options='{"widget": "image"}'/>
+                        </div>
+                    </div>
+                    <div class="row" name="product_stats">
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong>HS Code: </strong><br/>
+                                <span t-field="o.product_tmpl_id.hs_code"/><br/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong>COO: </strong><br/>
+                                <span t-field="o.product_tmpl_id.x_country_id"/><br/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong>BoM Lines: </strong><br/>
+                                <span t-esc="report_data['total']['line_count']"/><br/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong>Part Count: </strong><br/>
+                                <span t-esc="'{0:,.0f}'.format(report_data['total']['part_count'])"/><br/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;" t-if="o.x_show_cost">
+                            <div class="p-2">
+                                <strong>RM CNF: </strong><br/>
+                                $ <span t-esc="'{0:,.0f}'.format(cnf_value)"/><br/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong>RM Imported: </strong><br/>
+                                <span t-esc="'{0:,.2f}'.format(report_data['total']['imported_parts'])"/> %<br/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong>RM Local: </strong><br/>
+                                <span t-esc="'{0:,.2f}'.format(report_data['total']['local_parts'])"/> %<br/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;" t-if="o.x_show_cost">
+                            <div class="p-2">
+                                <strong>Landed Cost (PK): </strong><br/>
+                                $ <span t-esc="'{0:,.0f}'.format(default_total_cost)"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" name="report_heading" style="margin-top:25px;">
+                        <div class="col">
+                            <h4 t-if="o.x_heading_0" style="text-align:center;margin-top:25px;">
+                                <strong><span t-field="o.x_heading_0"/></strong>
+                            </h4>
+                            <span t-field="o.x_comment_0" style="margin-top:25px;"/>
+                        </div>
+                    </div>
+
+                    <div name="currency_effect" style="margin-top:25px;" t-if="not o.x_disable_1">
+                        <h4 t-if="o.x_heading_1" style="margin-top:25px;">
+                            <strong><span t-field="o.x_heading_1"/>:</strong>
+                        </h4>
+                        <span t-field="o.x_comment_1_top"/>
+                        <table style="width:100%;margin-top:20px;margin-bottom:20px;">
+                            <thead>
+                                <tr style="border-bottom: 0.25px solid black; page-break-inside: avoid;">
+                                    <th class="text-left" style="width:9%;">Months</th>
+                                    <t t-foreach="report_data['loss_by_month']" t-as="line">
+                                        <th class="text-left"><span t-esc="line[2]"/></th>
+                                    </t>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="o.x_show_cost">
+                                    <t t-set="imported_parts" t-value="report_data['total']['imported_parts']"/>
+                                    <tr style="border-bottom: 0.25px solid black; page-break-inside: avoid;">
+                                        <td class="text-left">Reserved</td>
+                                        <t t-foreach="report_data['loss_by_month']" t-as="line">
+                                            <td class="text-left">
+                                                $ <span t-esc="'{0:,.0f}'.format(cnf_value * imported_parts / 100)"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                                <tr style="border-bottom: 0.25px solid black; page-break-inside: avoid;">
+                                    <td class="text-left">$ Rate</td>
+                                    <t t-foreach="report_data['loss_by_month']" t-as="line">
+                                        <td class="text-left">
+                                            <span t-esc="'{0:,.2f}'.format(line[0])"/>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <t t-if="o.x_show_cost">
+                                    <tr style="border-bottom: 0.25px solid black; page-break-inside: avoid;">
+                                        <td class="text-left">Available</td>
+                                        <t t-foreach="report_data['loss_by_month']" t-as="line">
+                                            <td class="text-left">
+                                                $ <span t-esc="'{0:,.0f}'.format(line[3])"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                    <tr style="border-bottom: 0.25px solid black; page-break-inside: avoid;">
+                                        <td class="text-left">Loss</td>
+                                        <t t-foreach="report_data['loss_by_month']" t-as="line">
+                                            <td class="text-left">
+                                                $ <span t-esc="'{0:,.0f}'.format(line[4])"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                                <tr style="border-bottom: 0.25px solid black; page-break-inside: avoid;">
+                                    <td class="text-left">Loss (%)</td>
+                                    <t t-foreach="report_data['loss_by_month']" t-as="line">
+                                        <td class="text-left">
+                                            <span t-esc="'{0:,.2f}'.format(line[1])"/> %
+                                        </td>
+                                    </t>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <span t-field="o.x_comment_1_bot"/>
+                    </div>
+
+                    <div name="raw_material_sourcing" t-if="not o.x_disable_2">
+                        <h4 t-if="o.x_heading_2">
+                            <strong><span t-field="o.x_heading_2"/>:</strong>
+                        </h4>
+                        <span t-field="o.x_comment_2_top"/>
+                        <table style="width:100%;margin-top:20px;margin-bottom:20px;">
+                            <thead>
+                                <tr style="border-bottom: 0.25px solid black; page-break-inside: avoid;">
+                                    <th class="text-left" style="width:20%;">Sourcing Country</th>
+                                    <th class="text-right" style="width:20%;">Supplier Count</th>
+                                    <th class="text-right" style="width:20%;">Online Suppliers</th>
+                                    <th class="text-right" style="width:20%;">CNF Value</th>
+                                    <th class="text-right" style="width:20%;" t-if="o.x_show_ecommerce_values">
+                                        Ecommerce Value
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="total_sourcing" t-value="0"/>
+                                <t t-set="ecommerce_sourcing" t-value="0"/>
+                                <t t-set="ecommerce_stores" t-value="0"/>
+                                <t t-foreach="report_data['sourcing_data']" t-as="line">
+                                    <tr style="border-bottom: 0.25px solid black; page-break-inside: avoid;">
+                                        <td class="text-left"><span t-esc="line['country']"/></td>
+                                        <td class="text-right"><span t-esc="line['vendors']"/></td>
+                                        <td class="text-right"><span t-esc="line['ecommerce_stores']"/></td>
+                                        <td class="text-right">
+                                            <span t-esc="'{0:,.2f}'.format(line['value'] / cnf_value * 100)"/> %
+                                            <t t-if="o.x_show_cost">
+                                                ($ <span t-esc="'{0:,.0f}'.format(line['value'])"/>)
+                                            </t>
+                                        </td>
+                                        <td class="text-right" t-if="o.x_show_ecommerce_values">
+                                            <span t-esc="'{0:,.2f}'.format(line['ecommerce_value'] / cnf_value * 100)"/> %
+                                            <t t-if="o.x_show_cost">
+                                                ($ <span t-esc="'{0:,.0f}'.format(line['ecommerce_value'])"/>)
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <t t-set="total_sourcing" t-value="total_sourcing + line['value']"/>
+                                    <t t-set="ecommerce_sourcing" t-value="ecommerce_sourcing + line['ecommerce_value']"/>
+                                    <t t-set="ecommerce_stores" t-value="ecommerce_stores + line['ecommerce_stores']"/>
+                                </t>
+                                <tr style="border-bottom: 0.25px solid black;" t-if="o.x_show_cost">
+                                    <th class="text-left">Total</th>
+                                    <th class="text-right"><span t-esc="report_data['total_vendors']"/></th>
+                                    <th class="text-right"><span t-esc="ecommerce_stores"/></th>
+                                    <th class="text-right">
+                                        100%
+                                        <t t-if="o.x_show_cost">
+                                            ($ <span t-esc="'{0:,.0f}'.format(total_sourcing)"/>)
+                                        </t>
+                                    </th>
+                                    <th class="text-right" t-if="o.x_show_ecommerce_values">
+                                        <span t-esc="'{0:,.2f}'.format(ecommerce_sourcing / cnf_value * 100)"/> %
+                                        <t t-if="o.x_show_cost">
+                                            ($ <span t-esc="'{0:,.0f}'.format(ecommerce_sourcing)"/>)
+                                        </t>
+                                    </th>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <span t-field="o.x_comment_2_bot"/>
+                    </div>
+
+                    <div name="tax_breakdown" t-if="not o.x_disable_3">
+                        <h4 t-if="o.x_heading_3">
+                            <strong><span t-field="o.x_heading_3"/>:</strong>
+                        </h4>
+                        <span t-field="o.x_comment_3_top"/>
+<!--                        <table style="width:100%;margin-top:20px;" name="assessed_values">-->
+<!--                            <tbody>-->
+<!--                                <tr style="width:100%; border-bottom: 0.25px solid black;">-->
+<!--                                    <td class="text-left">Assessed Value</td>-->
+<!--                                    <t t-foreach="report_data['country_data']" t-as="country">-->
+<!--                                        <t t-set="column_width" t-value="100 / len(report_data['country_data']) + 1"/>-->
+<!--                                        <td class="text-right" style="width:20%;">-->
+<!--                                            <span t-esc="'{0:,.2f}'.format(country['assessed_value'] / country['total_cost'] * 100)"/> %-->
+<!--                                            <t t-if="o.x_show_cost">-->
+<!--                                                ($ <span t-esc="'{0:,.0f}'.format(country['assessed_value'])"/>)-->
+<!--                                            </t>-->
+<!--                                        </td>-->
+<!--                                    </t>-->
+<!--                                </tr>-->
+<!--                            </tbody>-->
+<!--                        </table>-->
+                        <table style="width:100%;margin-bottom:20px;" name="tax_by_countries">
+                            <thead>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <th class="text-left">Tax Type</th>
+                                    <t t-foreach="report_data['country_data']" t-as="country">
+                                        <th class="text-right" style="width:20%;">
+                                            <span t-esc="country['label']"/>
+                                        </th>
+                                    </t>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <td class="text-left">Custom Duty</td>
+                                    <t t-foreach="report_data['country_data']" t-as="country">
+                                        <td class="text-right">
+                                            <span t-esc="'{0:,.2f}'.format(country['cd_total'] / country['total_cost'] * 100)"/> %
+                                            <t t-if="o.x_show_cost">
+                                                ($ <span t-esc="'{0:,.0f}'.format(country['cd_total'])"/>)
+                                            </t>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <td class="text-left">Additional CD</td>
+                                    <t t-foreach="report_data['country_data']" t-as="country">
+                                        <td class="text-right">
+                                            <span t-esc="'{0:,.2f}'.format(country['acd_total'] / country['total_cost'] * 100)"/> %
+                                            <t t-if="o.x_show_cost">
+                                                ($ <span t-esc="'{0:,.0f}'.format(country['acd_total'])"/>)
+                                            </t>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <td class="text-left">Regulatory Duty</td>
+                                    <t t-foreach="report_data['country_data']" t-as="country">
+                                        <td class="text-right">
+                                            <span t-esc="'{0:,.2f}'.format(country['rd_total'] / country['total_cost'] * 100)"/> %
+                                            <t t-if="o.x_show_cost">
+                                                ($ <span t-esc="'{0:,.0f}'.format(country['rd_total'])"/>)
+                                            </t>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <td class="text-left">Sales Tax</td>
+                                    <t t-foreach="report_data['country_data']" t-as="country">
+                                        <td class="text-right">
+                                            <span t-esc="'{0:,.2f}'.format(country['st_total'] / country['total_cost'] * 100)"/> %
+                                            <t t-if="o.x_show_cost">
+                                                ($ <span t-esc="'{0:,.0f}'.format(country['st_total'])"/>)
+                                            </t>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <td class="text-left">Additional ST</td>
+                                    <t t-foreach="report_data['country_data']" t-as="country">
+                                        <td class="text-right">
+                                            <span t-esc="'{0:,.2f}'.format(country['ast_total'] / country['total_cost'] * 100)"/> %
+                                            <t t-if="o.x_show_cost">
+                                                ($ <span t-esc="'{0:,.0f}'.format(country['ast_total'])"/>)
+                                            </t>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <td class="text-left">Income Tax</td>
+                                    <t t-foreach="report_data['country_data']" t-as="country">
+                                        <td class="text-right">
+                                            <span t-esc="'{0:,.2f}'.format(country['it_total'] / country['total_cost'] * 100)"/> %
+                                            <t t-if="o.x_show_cost">
+                                                ($ <span t-esc="'{0:,.0f}'.format(country['it_total'])"/>)
+                                            </t>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <td class="text-left">CESS</td>
+                                    <t t-foreach="report_data['country_data']" t-as="country">
+                                        <td class="text-right">
+                                            <span t-esc="'{0:,.2f}'.format(country['cess_total'] / country['total_cost'] * 100)"/> %
+                                            <t t-if="o.x_show_cost">
+                                                ($ <span t-esc="'{0:,.0f}'.format(country['cess_total'])"/>)
+                                            </t>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <th class="text-left">Total Taxes</th>
+                                    <t t-foreach="report_data['country_data']" t-as="country">
+                                        <th class="text-right">
+                                            <span t-esc="'{0:,.2f}'.format(country['tax_total'] / country['total_cost'] * 100)"/> %
+                                            <t t-if="o.x_show_cost">
+                                                ($ <span t-esc="'{0:,.0f}'.format(country['tax_total'])"/>)
+                                            </t>
+                                        </th>
+                                    </t>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <span t-field="o.x_comment_3_bot"/>
+                    </div>
+
+                    <div name="rm_cost_breakdown" t-if="not o.x_disable_4">
+                        <h4 t-if="o.x_heading_4">
+                            <strong><span t-field="o.x_heading_4"/>:</strong>
+                        </h4>
+                        <span t-field="o.x_comment_4_top"/>
+                        <table style="width:100%;margin-top:20px;margin-bottom:20px;">
+                            <thead>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <th class="text-left">Cost Type</th>
+                                    <t t-foreach="report_data['country_data']" t-as="country">
+                                        <th class="text-right" style="width:20%;">
+                                            <span t-esc="country['label']"/>
+                                        </th>
+                                    </t>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <td class="text-left">CNF Value</td>
+                                    <t t-foreach="report_data['country_data']" t-as="country">
+                                        <td class="text-right">
+                                            <span t-esc="'{0:,.2f}'.format(cnf_value / country['total_cost'] * 100)"/> %
+                                            <t t-if="o.x_show_cost">
+                                                ($ <span t-esc="'{0:,.0f}'.format(cnf_value)"/>)
+                                            </t>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <td class="text-left">Custom Duties (CD + ACD + RD + CESS)</td>
+                                    <t t-foreach="report_data['country_data']" t-as="country">
+                                        <td class="text-right">
+                                            <span t-esc="'{0:,.2f}'.format(country['duties_cost'] / country['total_cost'] * 100)"/> %
+                                            <t t-if="o.x_show_cost">
+                                                ($ <span t-esc="'{0:,.0f}'.format(country['duties_cost'])"/>)
+                                            </t>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <td class="text-left">VAT Sales Tax (ST + AST)</td>
+                                    <t t-foreach="report_data['country_data']" t-as="country">
+                                        <td class="text-right">
+                                            <span t-esc="'{0:,.2f}'.format(country['vat_cost'] / country['total_cost'] * 100)"/> %
+                                            <t t-if="o.x_show_cost">
+                                                ($ <span t-esc="'{0:,.0f}'.format(country['vat_cost'])"/>)
+                                            </t>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <td class="text-left">WHT Income Tax (IT)</td>
+                                    <t t-foreach="report_data['country_data']" t-as="country">
+                                        <td class="text-right">
+                                            <span t-esc="'{0:,.2f}'.format(country['it_cost'] / country['total_cost'] * 100)"/> %
+                                            <t t-if="o.x_show_cost">
+                                                ($ <span t-esc="'{0:,.0f}'.format(country['it_cost'])"/>)
+                                            </t>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <th class="text-left">Total Landed Cost</th>
+                                    <t t-foreach="report_data['country_data']" t-as="country">
+                                        <th class="text-right">
+                                            <span t-esc="'{0:,.0f}'.format(country['total_cost'] / country['total_cost'] * 100)"/> %
+                                            <t t-if="o.x_show_cost">
+                                                ($ <span t-esc="'{0:,.0f}'.format(country['total_cost'])"/>)
+                                            </t>
+                                        </th>
+                                    </t>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <span t-field="o.x_comment_4_bot"/>
+                    </div>
+
+                    <div name="cash_flow_burden" t-if="not o.x_disable_5">
+                        <h5 t-if="o.x_heading_5">
+                            <strong><span t-field="o.x_heading_5"/>:</strong>
+                        </h5>
+                        <span t-field="o.x_comment_5_top"/>
+                        <table style="width:100%;margin-top:20px;margin-bottom:20px;" name="cash_flow_burden">
+                            <thead>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <th class="text-left">Tax Type</th>
+                                    <t t-foreach="report_data['country_data']" t-as="country">
+                                        <th class="text-right" style="width:20%;">
+                                            <span t-esc="country['label']"/>
+                                        </th>
+                                    </t>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <td class="text-left">VAT+WHT (ST+AST+IT)</td>
+                                    <t t-foreach="report_data['country_data']" t-as="country">
+                                        <td class="text-right">
+                                            <span t-esc="'{0:,.2f}'.format((country['st_total'] + country['ast_total'] + country['it_total']) / country['total_cost'] * 100)"/> %
+                                            <t t-if="o.x_show_cost">
+                                                ($ <span t-esc="'{0:,.0f}'.format(country['st_total'] + country['ast_total'] + country['it_total'])"/>)
+                                            </t>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <span t-field="o.x_comment_5_bot"/>
+                        <table style="width:100%;margin-top:20px;" name="ecia_vendors">
+                            <thead>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <th class="text-left">ECIA Suppliers</th>
+                                    <th class="text-left">Supplier Country</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="report_data['ecia_vendors']" t-as="line">
+                                    <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                        <td class="text-left"><span t-esc="line['name']"/></td>
+                                        <td class="text-left"><span t-esc="line['country']"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div name="tax_breakdown_by_hs_codes" t-if="not o.x_disable_7">
+                        <h4 t-if="o.x_heading_7">
+                            <strong><span t-field="o.x_heading_7"/>:</strong>
+                        </h4>
+                        <div name="coo_details" style="margin-top:25px;" t-if="not o.x_disable_6">
+                            <h5 t-if="o.x_heading_6">
+                                <strong><span t-field="o.x_heading_6"/>:</strong>
+                            </h5>
+                            <span t-field="o.x_comment_6_top"/>
+                            <table style="width:100%;margin-top:20px;margin-bottom:20px;">
+                                <thead>
+                                    <tr style="border-bottom: 0.25px solid black; page-break-inside: avoid;">
+                                        <th class="text-left" style="width:18%">Country of Origin</th>
+                                        <th class="text-left">Part Types</th>
+                                        <th class="text-right" style="width:10%" t-if="o.x_show_coo_bom_lines">
+                                            BoM Lines
+                                        </th>
+                                        <th class="text-right" style="width:17%">CNF Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="total_sourcing" t-value="0"/>
+                                    <t t-foreach="report_data['coo_data']" t-as="line">
+                                        <tr style="border-bottom: 0.25px solid black; page-break-inside: avoid;">
+                                            <td class="text-left"><span t-esc="line['country']"/></td>
+                                            <td class="text-left">
+                                                <t t-foreach="line['product_type']" t-as="item">
+                                                    <span t-esc="item"/>,
+                                                </t>
+                                            </td>
+                                            <td class="text-right" t-if="o.x_show_coo_bom_lines">
+                                                <span t-esc="line['line_count']"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-esc="'{0:,.2f}'.format(line['value'] / cnf_value * 100)"/> %
+                                                <t t-if="o.x_show_cost">
+                                                    ($ <span t-esc="'{0:,.0f}'.format(line['value'])"/>)
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        <t t-set="total_sourcing" t-value="total_sourcing + line['value']"/>
+                                    </t>
+                                    <tr style="border-bottom: 0.25px solid black;" t-if="o.x_show_cost">
+                                        <th class="text-left" colspan="2">Total</th>
+                                        <th class="text-right" t-if="o.x_show_coo_bom_lines">
+                                            <span t-esc="report_data['total']['line_count']"/>
+                                        </th>
+                                        <th class="text-right">
+                                            100%
+                                            <t t-if="o.x_show_cost">
+                                                ($ <span t-esc="'{0:,.0f}'.format(total_sourcing)"/>)
+                                            </t>
+                                        </th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <span t-field="o.x_comment_6_bot"/>
+                        </div>
+                        <span t-field="o.x_comment_7_top"/>
+                        <table style="width:100%;margin-top:20px;margin-bottom:20px;border-bottom: 0.25px solid black;">
+                            <thead>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <th class="text-left" style="color:#009999;">COO</th>
+                                    <th class="text-left" style="color:#009999;">HS Code</th>
+                                    <th class="text-right" style="color:#009999;">CD %</th>
+                                    <th class="text-right" style="color:#009999;">ACD %</th>
+                                    <th class="text-right" style="color:#009999;">RD %</th>
+                                    <th class="text-right" style="color:#009999;">ST %</th>
+                                    <th class="text-right" style="color:#009999;">AST %</th>
+                                    <th class="text-right" style="color:#009999;">IT %</th>
+                                    <th class="text-right" style="color:#009999;">CESS %</th>
+                                    <th class="text-right" style="color:#009999;">Total Tax</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="report_data['hs_codes_data']" t-as="line">
+                                    <t t-set="total_tax" t-value="0"/>
+                                    <t t-foreach="line['country_data']" t-as="item">
+                                        <t t-set="total_cost" t-value="0"/>
+                                        <t t-foreach="report_data['country_data']" t-as="country">
+                                            <t t-if="country['label'] == item['label']">
+                                                <t t-set="total_cost" t-value="country['total_cost']"/>
+                                            </t>
+                                        </t>
+                                        <t t-if="total_tax == 0">
+                                            <t t-set="total_tax" t-value="item['total_tax']"/>
+                                        </t>
+                                        <t t-if="total_tax != 0">
+                                            <tr style="page-break-inside: avoid;font-size:14px;">
+                                                <td class="text-left">
+                                                    <span t-if="item['country'] in ['India', 'Pakistan']">Any</span>
+                                                    <span t-else="" t-esc="item['coos']"/>
+                                                </td>
+                                                <td class="text-left">
+                                                    <span t-esc="item['country_code']"/>
+                                                    <span t-esc="item['hs_code']"/>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-esc="'{0:,.1f}'.format(item['custom_duty'])"/> %
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-esc="'{0:,.1f}'.format(item['additional_custom_duty'])"/> %
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-esc="'{0:,.1f}'.format(item['regulatory_duty'])"/> %
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-esc="'{0:,.1f}'.format(item['sale_tax'])"/> %
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-esc="'{0:,.1f}'.format(item['additional_sale_tax'])"/> %
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-esc="'{0:,.1f}'.format(item['income_tax'])"/> %
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-esc="'{0:,.1f}'.format(item['cess'])"/> %
+                                                </td>
+                                                <td class="text-right">
+                                                    <t t-if="total_cost != 0">
+                                                        <span t-esc="'{0:,.2f}'.format(item['total_tax'] / total_cost * 100)"/> %
+                                                        <t t-if="o.x_show_cost">
+                                                            ($ <span t-esc="'{0:,.2f}'.format(item['total_tax'])"/>)
+                                                        </t>
+                                                    </t>
+                                                    <t t-else="">
+                                                        0.00 % <t t-if="o.x_show_cost">($ 0.00)</t>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                    <t t-if="total_tax != 0">
+                                        <tr style="border-bottom: 0.25px solid black; page-break-inside: avoid;">
+                                            <td colspan="99" style="color: Gray;font-size:12px;">
+                                                Labels:
+                                                <t t-foreach="line['category_list']" t-as="item">
+                                                    <span t-esc="item"/>,
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                <t t-foreach="report_data['country_data']" t-as="country">
+                                    <tr style="page-break-inside: avoid;font-size:14px;">
+                                        <th class="text-left" colspan="8">
+                                            <span t-esc="country['country']"/> Total Tax
+                                        </th>
+                                        <th class="text-right" colspan="2">
+                                            <span t-esc="'{0:,.2f}'.format(country['tax_total'] / country['total_cost'] * 100)"/> %
+                                            <t t-if="o.x_show_cost">
+                                                ($ <span t-esc="'{0:,.2f}'.format(country['tax_total'])"/>)
+                                            </t>
+                                        </th>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <span t-field="o.x_comment_7_bot"/>
+                    </div>
+
+                    <div name="country_cost_comparison" t-if="not o.x_disable_8">
+                        <h4 t-if="o.x_heading_8">
+                            <strong><span t-field="o.x_heading_8"/>:</strong>
+                        </h4>
+                        <span t-field="o.x_comment_8_top"/>
+                        <table style="width:100%;margin-top:20px;margin-bottom:20px;">
+                            <thead>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <th class="text-left">Country</th>
+                                    <t t-foreach="report_data['country_data']" t-as="country">
+                                        <th class="text-right" style="width:20%;">
+                                            than <span t-esc="country['label']"/>
+                                        </th>
+                                    </t>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="report_data['country_data']" t-as="line">
+                                    <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                        <td class="text-left"><span t-esc="line['label']"/></td>
+                                        <t t-foreach="report_data['country_data']" t-as="item">
+                                            <td class="text-right">
+                                                <t t-if="line['total_cost'] &gt; item['total_cost']">
+                                                    <t t-set="cost" t-value="item['total_cost'] / line['total_cost'] * 100"/>
+                                                    <t t-set="comp" t-value="100 - cost"/>
+                                                    <span t-esc="'{0:,.2f}'.format(comp)"/> % (Expensive)
+                                                </t>
+                                                <t t-elif="item['total_cost'] &gt; line['total_cost']">
+                                                    <t t-set="cost" t-value="line['total_cost'] / item['total_cost'] * 100"/>
+                                                    <t t-set="comp" t-value="100 - cost"/>
+                                                    <span t-esc="'{0:,.2f}'.format(comp)"/> % (Cheaper)
+                                                </t>
+                                                <t t-else="">
+                                                    <span>-</span>
+                                                </t>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <span t-field="o.x_comment_8_bot"/>
+                    </div>
+
+                    <div name="conclusion" t-if="not o.x_disable_9">
+                        <h4 t-if="o.x_heading_9">
+                            <strong><span t-field="o.x_heading_9"/>:</strong>
+                        </h4>
+                        <span t-field="o.x_comment_9_top"/>
+                        <span t-field="o.x_comment_9_bot"/>
+                    </div>
+
+                    <div name="references" t-if="not o.x_disable_10">
+                        <h4 t-if="o.x_heading_10">
+                            <strong><span t-field="o.x_heading_10"/>:</strong>
+                        </h4>
+                        <span t-field="o.x_comment_10_top"/>
+                        <span t-field="o.x_comment_10_bot"/>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_bom_details">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="cus_product_360_view.report_bom_details_by_hs_code_document"/>
+                </t>
+            </t>
+        </template>
+
+        <template id="report_part_details_by_hs_code_document_a">
+            <t t-call="web.external_layout_clean_background">
+                <div class="page">
+                    <t t-set="report_data" t-value="o.get_components_hs_code()"/>
+                    <t t-set="default_total_cost" t-value="0"/>
+                    <t t-foreach="report_data['country_data']" t-as="country">
+                        <t t-if="country['label'] == report_data['default_scenario_id'].x_label">
+                            <t t-set="default_total_cost" t-value="country['total_cost']"/>
+                        </t>
+                    </t>
+
+                    <div class="row" name="product_info" style="page-break-before:always;">
+                        <div class="col-8 text-left">
+                            <h3>
+                                <span t-field="o.product_tmpl_id"/><br/>
+                            </h3>
+                            <h6>
+                                <strong style="color:#009999;">Product Description: </strong><br/>
+                                <span t-field="o.product_tmpl_id.description_sale"/><br/>
+                            </h6>
+                        </div>
+                        <div class="col-4 text-right">
+                            <image t-field="o.product_tmpl_id.image_1920" t-options='{"widget": "image"}'/>
+                        </div>
+                    </div>
+                    <div class="row" name="product_stats">
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong style="color:#009999;">HS Code: </strong><br/>
+                                <span t-field="o.product_tmpl_id.hs_code"/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong style="color:#009999;">COO: </strong><br/>
+                                <span t-field="o.product_tmpl_id.x_country_id"/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong style="color:#009999;">BoM Lines: </strong><br/>
+                                <span t-esc="report_data['total']['line_count']"/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong style="color:#009999;">Part Count: </strong><br/>
+                                <span t-esc="'{0:,.0f}'.format(report_data['total']['part_count'])"/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;" t-if="o.x_show_cost">
+                            <div class="p-2">
+                                <strong style="color:#009999;">RM CNF: </strong><br/>
+                                $ <span t-esc="'{0:,.0f}'.format(report_data['total']['cnf_value'])"/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong style="color:#009999;">RM Imported: </strong><br/>
+                                <span t-esc="'{0:,.2f}'.format(report_data['total']['imported_parts'])"/> %
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong style="color:#009999;">RM Local: </strong><br/>
+                                <span t-esc="'{0:,.2f}'.format(report_data['total']['local_parts'])"/> %
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong style="color:#009999;"># of US Codes: </strong><br/>
+                                <span t-esc="report_data['total']['us_codes']"/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong style="color:#009999;"># of PK Codes: </strong><br/>
+                                <span t-esc="report_data['total']['pk_codes']"/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong style="color:#009999;"># of TR Codes: </strong><br/>
+                                <span t-esc="report_data['total']['tr_codes']"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" name="annexure_a" style="margin-top:20px;" >
+                        <div class="col">
+                            <h4 style="color:#009999;text-align: right;">
+                                <span>Annexure-A</span>
+                            </h4>
+                        </div>
+                    </div>
+
+                    <div name="hs_code_mapping" t-if="not o.x_disable_11">
+                        <h4 t-if="o.x_heading_11">
+                            <strong style="color:#009999;"><span t-field="o.x_heading_11"/>:</strong>
+                        </h4>
+                        <span t-field="o.x_comment_11_top"/>
+                        <table style="width:100%;margin-top:20px;margin-bottom:20px;">
+                            <thead>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <th class="text-left" style="width:25%;color:#009999;">United States HS Code</th>
+                                    <th class="text-left" style="width:25%;color:#009999;">Pakistan HS Code</th>
+                                    <th class="text-left" style="width:25%;color:#009999;">Indian HS Code</th>
+                                    <th class="text-left" style="width:25%;color:#009999;">Turkey HS Code</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="report_data['hs_code_mapping']" t-as="line">
+                                    <tr style="border-bottom: 0.25px solid black; page-break-inside: avoid;">
+                                        <td class="text-left"><span t-esc="line['us_hs_code']"/></td>
+                                        <td class="text-left"><span t-esc="line['pk_hs_code']"/></td>
+                                        <td class="text-left"><span t-esc="line['in_hs_code']"/></td>
+                                        <td class="text-left"><span t-esc="line['tr_hs_code']"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <span t-field="o.x_comment_11_bot"/>
+                    </div>
+
+                    <div name="parts_detail" style="page-break-before:always;" t-if="not o.x_disable_12">
+                        <h4 t-if="o.x_heading_12">
+                            <strong style="color:#009999;"><span t-field="o.x_heading_12"/>:</strong>
+                        </h4>
+                        <span t-field="o.x_comment_12_top"/>
+                        <table style="width:100%;">
+                            <thead>
+                                <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                    <th class="text-left" style="width:3%;color:#009999;">#</th>
+                                    <th class="text-left" style="width:4%;color:#009999;">COO</th>
+                                    <th class="text-left" style="width:9%;color:#009999;">US HS Code</th>
+                                    <th class="text-left" style="color:#009999;" t-if="o.x_show_part">Part #</th>
+                                    <th class="text-left" style="color:#009999;" t-else="">Category</th>
+                                    <th class="text-left" style="width:25%;color:#009999;">Sub-Category</th>
+                                    <th class="text-left" style="width:25%;color:#009999;">Description</th>
+                                    <th class="text-right" style="width:4%;color:#009999;">QTY</th>
+                                    <th class="text-right" style="width:12%;color:#009999;">CNF</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="report_data['parts_by_hs_code']" t-as="line">
+                                    <t t-foreach="line['parts']" t-as="item">
+                                        <tr style="page-break-inside: avoid;font-size:14px;">
+                                            <td class="text-left"><span t-esc="item['sr_no']"/></td>
+                                            <td class="text-left"><span t-esc="item['coo']"/></td>
+                                            <td class="text-left"><span t-esc="line['htsus_code']"/></td>
+                                            <td class="text-left" t-if="o.x_show_part"><span t-esc="item['name']"/></td>
+                                            <td class="text-left" t-else=""><span t-esc="item['category']"/></td>
+                                            <td class="text-left"><span t-esc="item['sub_category']"/></td>
+                                            <td class="text-left"><span t-esc="item['desc']"/></td>
+                                            <td class="text-right"><span t-esc="'{0:,.0f}'.format(item['qty'])"/></td>
+                                            <td class="text-right">
+                                                <span t-esc="'{0:,.2f}'.format(item['cnf'] / default_total_cost * 100)"/> %
+                                                <t t-if="o.x_show_cost">
+                                                    ($ <span t-esc="'{0:,.2f}'.format(item['cnf'])"/>)
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </tbody>
+                        </table>
+                        <span t-field="o.x_comment_12_bot"/>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_part_details_a">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="cus_product_360_view.report_part_details_by_hs_code_document_a"/>
+                </t>
+            </t>
+        </template>
+
+        <template id="report_part_details_by_hs_code_document_b">
+            <t t-call="web.external_layout_clean_background">
+                <div class="page">
+                    <t t-set="report_data" t-value="o.get_components_hs_code()"/>
+                    <t t-set="default_total_cost" t-value="0"/>
+                    <t t-foreach="report_data['country_data']" t-as="country">
+                        <t t-if="country['label'] == report_data['default_scenario_id'].x_label">
+                            <t t-set="default_total_cost" t-value="country['total_cost']"/>
+                        </t>
+                    </t>
+
+                    <div class="row" name="product_info" style="page-break-before:always;">
+                        <div class="col-8 text-left">
+                            <h3>
+                                <span t-field="o.product_tmpl_id"/><br/>
+                            </h3>
+                            <h6>
+                                <strong style="color:#009999;">Product Description: </strong><br/>
+                                <span t-field="o.product_tmpl_id.description_sale"/><br/>
+                            </h6>
+                        </div>
+                        <div class="col-4 text-right">
+                            <image t-field="o.product_tmpl_id.image_1920" t-options='{"widget": "image"}'/>
+                        </div>
+                    </div>
+                    <div class="row" name="product_stats">
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong style="color:#009999;">HS Code: </strong><br/>
+                                <span t-field="o.product_tmpl_id.hs_code"/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong style="color:#009999;">COO: </strong><br/>
+                                <span t-field="o.product_tmpl_id.x_country_id"/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong style="color:#009999;">BoM Lines: </strong><br/>
+                                <span t-esc="report_data['total']['line_count']"/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong style="color:#009999;">Part Count: </strong><br/>
+                                <span t-esc="'{0:,.0f}'.format(report_data['total']['part_count'])"/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;" t-if="o.x_show_cost">
+                            <div class="p-2">
+                                <strong style="color:#009999;">RM CNF: </strong><br/>
+                                $ <span t-esc="'{0:,.0f}'.format(report_data['total']['cnf_value'])"/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong style="color:#009999;">RM Imported: </strong><br/>
+                                <span t-esc="'{0:,.2f}'.format(report_data['total']['imported_parts'])"/> %
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong style="color:#009999;">RM Local: </strong><br/>
+                                <span t-esc="'{0:,.2f}'.format(report_data['total']['local_parts'])"/> %
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong style="color:#009999;"># of US Codes: </strong><br/>
+                                <span t-esc="report_data['total']['us_codes']"/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong style="color:#009999;"># of PK Codes: </strong><br/>
+                                <span t-esc="report_data['total']['pk_codes']"/>
+                            </div>
+                        </div>
+                        <div class="d-inline-flex" style="white-space: nowrap;">
+                            <div class="p-2">
+                                <strong style="color:#009999;"># of TR Codes: </strong><br/>
+                                <span t-esc="report_data['total']['tr_codes']"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" name="annexure_b" style="margin-top:20px;" t-if="not o.x_disable_13">
+                        <div class="col">
+                            <h4 style="color:#009999;text-align: right;">
+                                <span>Annexure-B</span>
+                            </h4>
+                        </div>
+                    </div>
+
+                    <div name="parts_detail_by_hs_code" t-if="not o.x_disable_13">
+                        <h4 t-if="o.x_heading_13">
+                            <strong style="color:#009999;"><span t-field="o.x_heading_13"/>:</strong>
+                        </h4>
+                        <span t-field="o.x_comment_13_top"/>
+                        <t t-foreach="report_data['parts_by_hs_code']" t-as="line">
+                            <table style="width:100%;page-break-after:always;">
+                                <tbody>
+                                    <tr style="width:100%; border-bottom: 0.25px solid black;">
+                                        <th class="text-left" style="width:3%;color:#009999;">#</th>
+                                        <th class="text-left" style="width:4%;color:#009999;">COO</th>
+                                        <th class="text-left" style="color:#009999;" t-if="o.x_show_part">Part #</th>
+                                        <th class="text-left" style="color:#009999;" t-else="">Category</th>
+                                        <th class="text-left" style="width:30%;color:#009999;">Sub-Category</th>
+                                        <th class="text-left" style="width:20%;color:#009999;">Description</th>
+                                        <th class="text-right" style="width:4%;color:#009999;">QTY</th>
+                                        <th class="text-right" style="width:12%;color:#009999;">CNF</th>
+                                    </tr>
+                                </tbody>
+                                <tbody>
+                                    <t t-foreach="line['parts']" t-as="item">
+                                        <tr style="page-break-inside: avoid;">
+                                            <td class="text-left"><span t-esc="item['sr_no']"/></td>
+                                            <td class="text-left"><span t-esc="item['coo']"/></td>
+                                            <td class="text-left" t-if="o.x_show_part"><span t-esc="item['name']"/></td>
+                                            <td class="text-left" t-else=""><span t-esc="item['category']"/></td>
+                                            <td class="text-left"><span t-esc="item['sub_category']"/></td>
+                                            <td class="text-left"><span t-esc="item['desc']"/></td>
+                                            <td class="text-right"><span t-esc="'{0:,.0f}'.format(item['qty'])"/></td>
+                                            <td class="text-right">
+                                                <span t-esc="'{0:,.2f}'.format(item['cnf'] / default_total_cost * 100)"/> %
+                                                <t t-if="o.x_show_cost">
+                                                    ($ <span t-esc="'{0:,.2f}'.format(item['cnf'])"/>)
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <tr style="page-break-inside: avoid;
+                                        border-bottom: 0.25px solid;
+                                        background-color: rgba(255, 255, 255, 0.1);">
+                                        <td class="text-left p-1" colspan="3">
+                                            <strong style="color:#009999;">
+                                                US <span t-esc="line['us_hs_code']['code']"/>
+                                            </strong><br/>
+                                            <div style="font-size: 14px; color:gray">
+                                                <span t-esc="line['us_hs_code']['desc_0']"/>
+                                                <br t-if="line['us_hs_code']['desc_0']"/>
+                                                <span t-esc="line['us_hs_code']['desc_1']"/>
+                                                <br t-if="line['us_hs_code']['desc_1']"/>
+                                                <span t-esc="line['us_hs_code']['desc_2']"/>
+                                                <br t-if="line['us_hs_code']['desc_2']"/>
+                                                <span t-esc="line['us_hs_code']['desc_3']"/>
+                                                <br t-if="line['us_hs_code']['desc_3']"/>
+                                                <span t-esc="line['us_hs_code']['desc_4']"/>
+                                                <br t-if="line['us_hs_code']['desc_4']"/>
+                                                <span t-esc="line['us_hs_code']['desc_5']"/>
+                                                <br t-if="line['us_hs_code']['desc_5']"/>
+                                                <span t-esc="line['us_hs_code']['desc_6']"/>
+                                                <br t-if="line['us_hs_code']['desc_6']"/>
+                                                <span t-esc="line['us_hs_code']['desc_7']"/>
+                                                <br t-if="line['us_hs_code']['desc_7']"/>
+                                                <span t-esc="line['us_hs_code']['desc_8']" style="color:#009999;"/>
+                                            </div>
+                                        </td>
+                                        <td class="text-left p-1">
+                                            <strong style="color:#009999;">
+                                                PK <span t-esc="line['pk_hs_code']['code']"/>
+                                            </strong><br/>
+                                            <div style="font-size: 14px; color:gray">
+                                                <span t-esc="line['pk_hs_code']['desc_0']"/>
+                                                <br t-if="line['pk_hs_code']['desc_0']"/>
+                                                <span t-esc="line['pk_hs_code']['desc_1']"/>
+                                                <br t-if="line['pk_hs_code']['desc_1']"/>
+                                                <span t-esc="line['pk_hs_code']['desc_2']"/>
+                                                <br t-if="line['pk_hs_code']['desc_2']"/>
+                                                <span t-esc="line['pk_hs_code']['desc_3']"/>
+                                                <br t-if="line['pk_hs_code']['desc_3']"/>
+                                                <span t-esc="line['pk_hs_code']['desc_4']"/>
+                                                <br t-if="line['pk_hs_code']['desc_4']"/>
+                                                <span t-esc="line['pk_hs_code']['desc_5']"/>
+                                                <br t-if="line['pk_hs_code']['desc_5']"/>
+                                                <span t-esc="line['pk_hs_code']['desc_6']"/>
+                                                <br t-if="line['pk_hs_code']['desc_6']"/>
+                                                <span t-esc="line['pk_hs_code']['desc_7']"/>
+                                                <br t-if="line['pk_hs_code']['desc_7']"/>
+                                                <span t-esc="line['pk_hs_code']['desc_8']" style="color:#009999;"/>
+                                            </div>
+                                        </td>
+                                        <td class="text-left p-1" colspan="3">
+                                            <strong style="color:#009999;">
+                                                TR <span t-esc="line['tr_hs_code']['code']"/>
+                                            </strong><br/>
+                                            <div style="font-size: 14px; color:gray">
+                                                <span t-esc="line['tr_hs_code']['desc_0']"/>
+                                                <br t-if="line['tr_hs_code']['desc_0']"/>
+                                                <span t-esc="line['tr_hs_code']['desc_1']"/>
+                                                <br t-if="line['tr_hs_code']['desc_1']"/>
+                                                <span t-esc="line['tr_hs_code']['desc_2']"/>
+                                                <br t-if="line['tr_hs_code']['desc_2']"/>
+                                                <span t-esc="line['tr_hs_code']['desc_3']"/>
+                                                <br t-if="line['tr_hs_code']['desc_3']"/>
+                                                <span t-esc="line['tr_hs_code']['desc_4']"/>
+                                                <br t-if="line['tr_hs_code']['desc_4']"/>
+                                                <span t-esc="line['tr_hs_code']['desc_5']"/>
+                                                <br t-if="line['tr_hs_code']['desc_5']"/>
+                                                <span t-esc="line['tr_hs_code']['desc_6']"/>
+                                                <br t-if="line['tr_hs_code']['desc_6']"/>
+                                                <span t-esc="line['tr_hs_code']['desc_7']"/>
+                                                <br t-if="line['tr_hs_code']['desc_7']"/>
+                                                <span t-esc="line['tr_hs_code']['desc_8']" style="color:#009999;"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                        <span t-field="o.x_comment_13_bot"/>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_part_details_b">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="cus_product_360_view.report_part_details_by_hs_code_document_b"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

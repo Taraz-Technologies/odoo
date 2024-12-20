@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="external_layout_letter_head">
+        <div class="header">
+            <div class="o_background_header">
+              <div class="float-right">
+                  <h3 class="mt0 text-right" t-field="company.report_header" style="color:#009999;"/>
+              </div>
+              <div class="float-left" style="color:#ffffff;">
+                <span>__________________________________________</span>
+              </div>
+              <div class="float-left company_address">
+                  <div>
+                      <strong t-field="company.partner_id.name"/>
+                  </div>
+                  <span t-field="company.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;], &quot;no_marker&quot;: true}"/>
+              </div>
+              <div class="clearfix mb8"/>
+            </div>
+        </div>
+        <!--o_report_layout_clean-->
+        <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-call="web.address_layout"/>
+            <t t-raw="0"/>
+        </div>
+
+        <div class="footer o_background_footer">
+            <div class="text-center">
+                <div t-if="report_type == 'pdf'" class="text-muted">
+                    Page:
+                    <span class="page"/>
+                    of
+                    <span class="topage"/>
+                </div>
+            </div>
+        </div>
+    </template>
+</odoo>

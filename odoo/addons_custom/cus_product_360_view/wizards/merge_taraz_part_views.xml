@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_merge_taraz_parts_wizard_form" model="ir.ui.view">
+        <field name="name">merge.taraz.parts.wizard.form.view</field>
+        <field name="model">merge.taraz.parts.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Merge Taraz Parts">
+                <group col="4">
+                    <field name="x_taraz_part_id"/>
+                </group>
+                <span class="text-danger">
+                    Merge operation in non-reversible therefore make sure Taraz Part that are being merged are perfect
+                    alternates of each other.
+                </span>
+				<separator col="4" string="Taraz Parts (Children)"/>
+				<field name="x_taraz_part_ids">
+                    <tree>
+                        <field name="x_name"/>
+                        <field name="x_description"/>
+                        <field name="x_alternate_ids" widget="many2many_tags"/>
+                        <field name="x_compromised_ids" widget="many2many_tags"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button name="merge_taraz_parts" string="Merge" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_merge_taraz_parts"
+                name="Merge Taraz Parts"
+                res_model="merge.taraz.parts.wizard"
+                binding_model="taraz.part.number"
+                binding_views="from"
+                view_mode="form"
+                target="new"/>
+</odoo>

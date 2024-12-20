@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mrp_production_child,access.mrp.production.child user,model_mrp_production_child,mrp.group_mrp_user,1,1,1,1
+access_mrp_production_child_stock_worker,access.mrp.production.child stock_worker,model_mrp_production_child,stock.group_stock_user,1,0,0,0
+access_mrp_production_child_manager,mrp.production.child manager,model_mrp_production_child,mrp.group_mrp_manager,1,0,0,0
+
+

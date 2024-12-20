@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <template id="payslips_batches_bank_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page h5" style="font-size:16px;">
+                            <t t-if="o.state != 'done'">
+                                <span>Payslip batch in not done.</span>
+                            </t>
+                            <t t-elif="not o.x_bank_id">
+                                <span>Bank is not selected.</span>
+                            </t>
+                            <t t-elif="not o.x_cheque_number">
+                                <span>Cheque # is not entered.</span>
+                            </t>
+                            <t t-elif="not o.x_amount_in_words">
+                                <span>Amount in Words is not entered.</span>
+                            </t>
+                            <t t-else="">
+                                <div class="row">
+                                    <div class="col" style="text-align:right;">
+                                        <span t-esc="o.x_payment_date.strftime('%B %d, %Y')"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <strong>The Manager,</strong>
+                                        <br/>
+                                        <span t-field="o.x_bank_id.name"/>
+                                        <br/>
+                                        <span t-field="o.x_bank_id.street"/>,
+                                        <span t-field="o.x_bank_id.city"/>
+                                        <br/>
+                                        <br/>
+                                        <strong>
+                                            Subject: Transfer of Salaries F.M.O
+                                            <span t-esc="o.date_end.strftime('%B %Y')"/>
+                                        </strong>
+                                        <br/>
+                                        <br/>
+                                        <span>
+                                            Dear Sir,
+                                            <br/>
+                                            <br/>
+                                            Please transfer salary in accordance with the following details by debiting
+                                            Cheque #
+                                            <span t-field="o.x_cheque_number"/>
+                                            as attached.
+                                        </span>
+                                        <br/>
+                                        <br/>
+                                    </div>
+                                </div>
+                                <t t-set="total_amount" t-value="0"/>
+                                <table class="table table-sm" name="payroll_details">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-left" style="color:#009999;">
+                                                <span>Sr. #</span>
+                                            </th>
+                                            <th class="text-left" style="color:#009999;">
+                                                <span>Name</span>
+                                            </th>
+                                            <th class="text-left" style="color:#009999;">
+                                                <span>Designation</span>
+                                            </th>
+                                            <th class="text-left" style="color:#009999;">
+                                                <span>Account #</span>
+                                            </th>
+                                            <th class="text-right" style="color:#009999;">
+                                                <span>Amount</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-set="sr_number" t-value="1"/>
+                                        <t t-foreach="o.slip_ids.filtered(lambda l: l.employee_id.bank_account_id)"
+                                           t-as="line">
+                                            <t t-if="'Bank Alfalah' in line.employee_id.bank_account_id.bank_id.name and (not line.x_hide_in_banking_document and line.x_amount_residual != 0)">
+                                                <tr>
+                                                    <td class="text-left">
+                                                        <span t-esc="sr_number"/>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <span t-esc="line.employee_id.bank_account_id.acc_holder_name"/>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <span t-esc="line.employee_id.x_job_title_id.x_name"/>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <span t-esc="line.employee_id.bank_account_id.acc_number"/>
+                                                    </td>
+                                                    <td class="text-right o_price_total">
+                                                        <span t-field="o.journal_id.currency_id.symbol"/>
+                                                        <span t-esc="'{0:,.0f}'.format(line.x_amount_residual)"/>
+                                                    </td>
+                                                    <t t-set="total_amount"
+                                                       t-value="total_amount + line.x_amount_residual"/>
+                                                    <t t-set="sr_number" t-value="sr_number + 1"/>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                    </tbody>
+                                </table>
+                                <div class="clearfix">
+                                    <div id="total" class="row">
+                                        <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
+                                            <table class="table table-sm">
+                                                <tr class="o_total">
+                                                    <td>
+                                                        <span>Total</span>
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <span t-field="o.journal_id.currency_id.symbol"/>
+                                                        <span t-esc="'{0:,.0f}'.format(total_amount)"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <br/>
+                                        <strong t-field="o.x_amount_in_words"/>
+                                        <br/>
+                                        <br/>
+                                        <span>We shall be very grateful for your co-operation.</span>
+                                        <br/>
+                                        <br/>
+                                        <span>For
+                                            <strong t-field="o.journal_id.company_id.name"/>
+                                        </span>
+                                        <br/>
+                                        <span t-field="o.journal_id.company_id.partner_id.bank_ids.filtered(lambda l: '-' in l.acc_number)[0].acc_number"/>
+                                    </div>
+                                </div>
+                                <div class="row" style="page-break-before:always;">
+                                    <div class="col">
+                                        <h3>
+                                            Cash Payments
+                                        </h3>
+                                    </div>
+                                </div>
+                                <t t-set="total_amount" t-value="0"/>
+                                <table class="table table-sm" name="payroll_details">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-left" style="color:#009999;">
+                                                <span>Sr. #</span>
+                                            </th>
+                                            <th class="text-left" style="color:#009999;">
+                                                <span>Name</span>
+                                            </th>
+                                            <th class="text-left" style="color:#009999;">
+                                                <span>Designation</span>
+                                            </th>
+                                            <th class="text-left" style="color:#009999;">
+                                                <span>Account #</span>
+                                            </th>
+                                            <th class="text-right" style="color:#009999;">
+                                                <span>Amount</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-set="sr_number" t-value="1"/>
+                                        <t t-foreach="o.slip_ids.filtered(lambda l: l.employee_id.bank_account_id)"
+                                           t-as="line">
+                                            <t t-if="'Bank Alfalah' not in line.employee_id.bank_account_id.bank_id.name and (not line.x_hide_in_banking_document and line.x_amount_residual != 0)">
+                                                <tr>
+                                                    <td class="text-left">
+                                                        <span t-esc="sr_number"/>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <span t-esc="line.employee_id.bank_account_id.acc_holder_name"/>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <span t-esc="line.employee_id.job_id.name"/>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <span t-esc="line.employee_id.bank_account_id.acc_number"/>
+                                                    </td>
+                                                    <td class="text-right o_price_total">
+                                                        <span t-field="o.journal_id.currency_id.symbol"/>
+                                                        <span t-esc="'{0:,.0f}'.format(line.x_amount_residual)"/>
+                                                    </td>
+                                                    <t t-set="total_amount"
+                                                       t-value="total_amount + line.x_amount_residual"/>
+                                                    <t t-set="sr_number" t-value="sr_number + 1"/>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                        <t t-foreach="o.slip_ids.filtered(lambda l: not l.employee_id.bank_account_id)"
+                                           t-as="line">
+                                            <t t-if="line.x_amount_residual != 0">
+                                                <tr>
+                                                    <td class="text-left">
+                                                        <span t-esc="sr_number"/>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <span t-esc="line.employee_id.name"/>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <span t-esc="line.employee_id.job_id.name"/>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <span t-esc="line.employee_id.bank_account_id.acc_number"/>
+                                                    </td>
+                                                    <td class="text-right o_price_total">
+                                                        <span t-field="o.journal_id.currency_id.symbol"/>
+                                                        <span t-esc="'{0:,.0f}'.format(line.x_amount_residual)"/>
+                                                    </td>
+                                                    <t t-set="total_amount"
+                                                       t-value="total_amount + line.x_amount_residual"/>
+                                                    <t t-set="sr_number" t-value="sr_number + 1"/>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                    </tbody>
+                                </table>
+                                <div class="clearfix">
+                                    <div id="total" class="row">
+                                        <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
+                                            <table class="table table-sm">
+                                                <tr class="o_total" style="color:#009999;">
+                                                    <td>
+                                                        <span>Total</span>
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <span t-field="o.journal_id.currency_id.symbol"/>
+                                                        <span t-esc="'{0:,.0f}'.format(total_amount)"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

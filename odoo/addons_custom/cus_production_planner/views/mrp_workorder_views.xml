@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="mrp_production_workorder_form_view_inherit_cus_production_planner">
+            <field name="name">mrp.production.work.order.form.cus_production_planner</field>
+            <field name="model">mrp.workorder</field>
+            <field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+            <field name="priority">1000</field>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="product_id" position="after">
+                        <field name="x_bom_tool_id"/>
+                    </field>
+                    <field name="product_tracking" position="after">
+                        <field name="x_machine"/>
+                        <label for="x_pnp_file" attrs="{'invisible': [('x_machine', '=', False)]}"/>
+                        <div class="o_row" attrs="{'invisible': [('x_machine', '=', False)]}">
+                            <field name="x_pnp_file"/>
+                            <span>RefDes | X (mm) | Y (mm) | Side | Rotate</span>
+                        </div>
+                    </field>
+<!--                    <field name="raw_workorder_line_ids" position="before">-->
+<!--                        <div class="o_row">-->
+<!--                            <button name="arrange_ref_des" class="oe_highlight" string="Arrange RefDes" type="object"/>-->
+<!--                        </div>-->
+<!--                    </field>-->
+                    <xpath expr="//field[@name='raw_workorder_line_ids']/tree[1]/field[@name='product_id']" position="before">
+                        <field name="x_ref_des"/>
+                    </xpath>
+                    <xpath expr="//field[@name='raw_workorder_line_ids']/tree[1]/field[@name='product_id']" position="after">
+                        <field name="x_package_id"/>
+                        <field name="x_nozzle_ids" widget="many2many_tags"/>
+                    </xpath>
+                    <xpath expr="//notebook/page[2]" position="after">
+                        <page string="Pick and Place Data" attrs="{'invisible': [('x_machine', '=', False)]}">
+                            <div class="o_row">
+                                <button name="compute_pnp_lines" class="oe_highlight" string="Refresh" type="object" icon="fa-refresh"/>
+                            </div>
+                            <field name="x_pnp_line_ids">
+                                <tree editable="bottom">
+                                    <field name="x_work_order_id" invisible="1"/>
+                                    <field name="x_ref_des"/>
+                                    <field name="x_product_id"/>
+                                    <field name="x_package_id"/>
+                                    <field name="x_side"/>
+                                    <field name="x_x_axis"/>
+                                    <field name="x_y_axis"/>
+                                    <field name="x_angle"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="ND2 Machine Config." attrs="{'invisible': [('x_machine', '!=', 'ND2')]}">
+
+                        </page>
+                        <page string="ND4 Machine Config." attrs="{'invisible': [('x_machine', '!=', 'ND4')]}">
+                            <group>
+                                <group>
+                                    <field name="x_nozzle_config_ids">
+                                        <tree editable="bottom">
+                                            <field name="x_nozzle_id"/>
+                                            <field name="x_number"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                                <group>
+                                    <field name="x_nd4_settings_name" invisible="1"/>
+                                    <field name="x_nd4_settings" filename="x_nd4_settings_name"/>
+                                    <field name="x_pcb_thickness"/>
+                                    <label for="x_pcb_mounting"/>
+                                    <div class="o_row">
+                                        <span>Mounting</span>
+                                        <field name="x_pcb_mounting"/>
+                                        <span>Side</span>
+                                        <field name="x_pcb_side" attrs="{'required': [('x_machine', '=', 'ND4')]}"/>
+                                    </div>
+                                    <field name="x_first_component"/>
+                                    <label for="x_x_translation" string="First Component"/>
+                                    <div class="o_row">
+                                        <span>X Axis</span>
+                                        <field name="x_x_translation"/>
+                                        <span>Y Axis</span>
+                                        <field name="x_y_translation"/>
+                                    </div>
+                                    <label for="x_x_shift" string="Axis Shift"/>
+                                    <div class="o_row">
+                                        <span>X Axis</span>
+                                        <field name="x_x_shift"/>
+                                        <span>Y Axis</span>
+                                        <field name="x_y_shift"/>
+                                    </div>
+                                    <label for="x_pcb_length" string="PCB Dimensions"/>
+                                    <div class="o_row">
+                                        <span>Width</span>
+                                        <field name="x_pcb_length"/>
+                                        <span>Height</span>
+                                        <field name="x_pcb_width"/>
+                                    </div>
+                                    <label for="x_rotation" string="PCB Settings"/>
+                                    <div class="o_row">
+                                        <span>Mirror</span>
+                                        <field name="x_mirror"/>
+                                        <span>Rotate</span>
+                                        <field name="x_rotation"/>
+                                    </div>
+                                </group>
+                            </group>
+                            <div class="o_row">
+                                <button name="export_machine_file" string="Export Machine File"
+                                        type="object" class="oe_highlight" icon="fa-download"/>
+                            </div>
+                            <field name="x_nd4_feeder_ids"/>
+                        </page>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>

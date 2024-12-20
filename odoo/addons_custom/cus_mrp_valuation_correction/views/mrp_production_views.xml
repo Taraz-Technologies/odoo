@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+        <record id="mrp_production_form_view_cus_mrp_valuation_correction" model="ir.ui.view">
+            <field name="name">mrp_production_form_view_cus_mrp_valuation_correction</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="priority" eval="99"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//header" position="inside">
+                        <button name="correct_error_in_stock_consumption" type="object" string="Cons. Error" states="done" groups="base.group_system"/>
+                        <button name="correct_error_in_stock_production" type="object" string="Prod. Error" states="done" groups="base.group_system"/>
+                        <button name="correct_error_in_valuation" type="object" string="Valu. Error" states="done" groups="base.group_system"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+</odoo>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="bom_tool_line_view_form" model="ir.ui.view">
+        <field name="name">bom_tool_line_view_form</field>
+        <field name="model">bom.tool.lines</field>
+        <field name="arch" type="xml">
+            <form string="bom_tool_line_form">
+                <sheet>
+                    <field name="x_bom_id" invisible="1"/>
+                    <group>
+                        <field name="x_line_id"/>
+                        <field name="x_base_line_id"/>
+                        <field name="x_ref_des"/>
+                        <field name="x_product_tmpl_id"/>
+                        <field name="x_product_id"/>
+                        <field name="x_quantity"/>
+                        <field name="x_uom_id"/>
+                        <field name="x_description"/>
+                        <field name="x_notes"/>
+                        <field name="x_replacement_rule_line_id"/>
+                        <field name="x_master_line"/>
+                        <field name="x_replacement_rule_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

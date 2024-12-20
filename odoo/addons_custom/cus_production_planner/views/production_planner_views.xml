@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+<!--	<record id="production_planner_view_form" model="ir.ui.view">-->
+<!--		<field name="name">production.planner.view.form</field>-->
+<!--		<field name="model">production.planner</field>-->
+<!--		<field name="arch" type="xml">-->
+<!--			<form string="Production Planner" create="0" delete="0">-->
+<!--				<header>-->
+<!--					<button type="object" name="enable_stock_build" string="Enable Stock Build"-->
+<!--							class="btn-success" attrs="{'invisible': [('x_enable_stock_build', '!=', False)]}"/>-->
+<!--					<button type="object" name="disable_stock_build" string="Disable Stock Build"-->
+<!--							class="btn-warning" attrs="{'invisible': [('x_enable_stock_build', '=', False)]}"/>-->
+<!--				</header>-->
+<!--				<sheet>-->
+<!--					<field name="name" invisible="1"/>-->
+<!--					<field name="x_enable_stock_build" invisible="1"/>-->
+<!--					<group col="4">-->
+<!--					</group>-->
+<!--					<notebook>-->
+<!--						<page string="Sale Order (SO) Products">-->
+<!--							<field name="sale_order_demand_line_ids">-->
+<!--								<tree create="0" delete="0">-->
+<!--									<field name="x_planner_id" invisible="1"/>-->
+<!--									<field name="x_order_line" invisible="1"/>-->
+<!--									<field name="x_product_id"/>-->
+<!--									<field name="x_quantity"/>-->
+<!--									<field name="x_uom_id"/>-->
+<!--									<field name="x_date_order" optional="show"/>-->
+<!--									<field name="x_deadline"/>-->
+<!--									<field name="x_order_id" widget="many2one"/>-->
+<!--									<field name="x_partner_id"/>-->
+<!--								</tree>-->
+<!--								<form>-->
+<!--									<sheet>-->
+<!--										<group col="4">-->
+<!--											<field name="x_product_id"/>-->
+<!--											<field name="x_quantity"/>-->
+<!--											<field name="x_uom_id"/>-->
+<!--											<field name="x_date_order"/>-->
+<!--											<field name="x_order_id" widget="many2one"/>-->
+<!--											<field name="x_partner_id"/>-->
+<!--										</group>-->
+<!--									</sheet>-->
+<!--								</form>-->
+<!--							</field>-->
+<!--						</page>-->
+<!--						<page string="Stock Build (SB) Products" attrs="{'invisible': [('x_enable_stock_build', '=', False)]}">-->
+<!--							<field name="stock_build_demand_line_ids">-->
+<!--								<tree editable="bottom" create="0" delete="0">-->
+<!--									<field name="x_planner_id" invisible="1"/>-->
+<!--									<field name="x_rule_id" invisible="1"/>-->
+<!--									<field name="x_sequence" widget="handle"/>-->
+<!--									<field name="x_enabled"/>-->
+<!--									<field name="x_product_id"/>-->
+<!--									<field name="x_max_stock_qty"/>-->
+<!--									<field name="x_reorder_stock_qty"/>-->
+<!--									<field name="x_virtual_available"/>-->
+<!--									<field name="x_quantity"/>-->
+<!--									<field name="x_uom_id"/>-->
+<!--								</tree>-->
+<!--								<form>-->
+<!--									<sheet>-->
+<!--										<group col="4">-->
+<!--											<field name="x_enabled"/>-->
+<!--											<field name="x_product_id"/>-->
+<!--											<field name="x_max_stock_qty"/>-->
+<!--											<field name="x_reorder_stock_qty"/>-->
+<!--											<field name="x_virtual_available"/>-->
+<!--											<field name="x_quantity"/>-->
+<!--											<field name="x_uom_id"/>-->
+<!--										</group>-->
+<!--									</sheet>-->
+<!--								</form>-->
+<!--							</field>-->
+<!--						</page>-->
+<!--						<page string="Production Planner">-->
+<!--							<field name="x_compute_production_planner_lines" invisible="1"/>-->
+<!--							<separator string="Finished Goods" col="4"/>-->
+<!--							<field name="production_planner_line_ids">-->
+<!--								<tree editable="bottom" create="0" decoration-success="x_to_be_manufactured == 0" decoration-info="x_can_be_manufactured != 0">-->
+<!--									<field name="x_planner_id" invisible="1"/>-->
+<!--									<field name="x_product_id"/>-->
+<!--									<field name="x_sale_order_demand_line_ids" widget="many2many_tags" optional="show"/>-->
+<!--									<field name="x_quantity_so" optional="show"/>-->
+<!--									<field name="x_quantity_sb" optional="show"/>-->
+<!--									<field name="x_quantity_mn" optional="show"/>-->
+<!--									<field name="x_available_qty" optional="show"/>-->
+<!--									<field name="x_to_be_manufactured" optional="show"/>-->
+<!--									<field name="x_bom_id" optional="show"/>-->
+<!--									<field name="x_can_be_manufactured" optional="show"/>-->
+<!--									<button name="create_can_be_manufactured_mo" icon="fa-play"-->
+<!--											string="Create In Stock MO" type="object" class="oe_edit_only"-->
+<!--											confirm="Are you sure you want to create MO for can be manufacture quantity?"/>-->
+<!--									<field name="x_can_be_manufactured_mo_id" optional="show"/>-->
+<!--									<field name="x_stock_is_short" optional="show"/>-->
+<!--									<button name="create_stock_is_short_mo" icon="fa-play"-->
+<!--											string="Create Out of Stock MO" type="object" class="oe_edit_only"-->
+<!--											confirm="Are you sure you want to create MO for to be manufacture quantity?"/>-->
+<!--									<field name="x_stock_is_short_mo_id" optional="show"/>-->
+<!--									<field name="x_uom_id" optional="show"/>-->
+<!--								</tree>-->
+<!--								<form>-->
+<!--									<sheet>-->
+<!--										<group col="4">-->
+<!--											<field name="x_product_id"/>-->
+<!--											<field name="x_sale_order_demand_line_ids" widget="many2many_tags"/>-->
+<!--											<field name="x_quantity_so"/>-->
+<!--											<field name="x_quantity_sb"/>-->
+<!--											<field name="x_quantity_mn"/>-->
+<!--											<field name="x_available_qty"/>-->
+<!--											<field name="x_to_be_manufactured"/>-->
+<!--											<field name="x_bom_id"/>-->
+<!--											<field name="x_can_be_manufactured"/>-->
+<!--											<field name="x_can_be_manufactured_mo_id" widget="many2one"/>-->
+<!--											<field name="x_stock_is_short"/>-->
+<!--											<field name="x_stock_is_short_mo_id" widget="many2one"/>-->
+<!--											<field name="x_uom_id"/>-->
+<!--										</group>-->
+<!--									</sheet>-->
+<!--								</form>-->
+<!--							</field>-->
+<!--							<separator string="Semi-Finished Goods" col="4"/>-->
+<!--							<field name="sfg_production_planner_line_ids">-->
+<!--								<tree editable="bottom" create="0" decoration-success="x_to_be_manufactured == 0" decoration-info="x_can_be_manufactured != 0">-->
+<!--									<field name="x_sfg_planner_id" invisible="1"/>-->
+<!--									<field name="x_sequence" widget="handle"/>-->
+<!--									<field name="x_master_product_ids" widget="many2many_tags"/>-->
+<!--									<field name="x_product_id"/>-->
+<!--									<field name="x_sale_order_demand_line_ids" widget="many2many_tags" optional="show"/>-->
+<!--									<field name="x_quantity_so" optional="show"/>-->
+<!--									<field name="x_quantity_sb" optional="show"/>-->
+<!--									<field name="x_quantity_mn" optional="show"/>-->
+<!--									<field name="x_available_qty" optional="show"/>-->
+<!--									<field name="x_to_be_manufactured" optional="show"/>-->
+<!--									<field name="x_bom_id" optional="show"/>-->
+<!--									<field name="x_can_be_manufactured" optional="show"/>-->
+<!--									<button name="create_can_be_manufactured_mo" icon="fa-play"-->
+<!--											string="Create In Stock MO" type="object" class="oe_edit_only"-->
+<!--											confirm="Are you sure you want to create MO for can be manufacture quantity?"/>-->
+<!--									<field name="x_can_be_manufactured_mo_id" optional="show"/>-->
+<!--									<field name="x_stock_is_short" optional="show"/>-->
+<!--									<button name="create_stock_is_short_mo" icon="fa-play"-->
+<!--											string="Create Out of Stock MO" type="object" class="oe_edit_only"-->
+<!--											confirm="Are you sure you want to create MO for to be manufacture quantity?"/>-->
+<!--									<field name="x_stock_is_short_mo_id" optional="show"/>-->
+<!--									<field name="x_uom_id" optional="show"/>-->
+<!--								</tree>-->
+<!--								<form>-->
+<!--									<sheet>-->
+<!--										<group col="4">-->
+<!--											<field name="x_product_id"/>-->
+<!--											<field name="x_sale_order_demand_line_ids" widget="many2many_tags"/>-->
+<!--											<field name="x_quantity_so"/>-->
+<!--											<field name="x_quantity_sb"/>-->
+<!--											<field name="x_quantity_mn"/>-->
+<!--											<field name="x_available_qty"/>-->
+<!--											<field name="x_to_be_manufactured"/>-->
+<!--											<field name="x_bom_id"/>-->
+<!--											<field name="x_can_be_manufactured"/>-->
+<!--											<field name="x_can_be_manufactured_mo_id" widget="many2one"/>-->
+<!--											<field name="x_stock_is_short"/>-->
+<!--											<field name="x_stock_is_short_mo_id" widget="many2one"/>-->
+<!--											<field name="x_uom_id"/>-->
+<!--										</group>-->
+<!--									</sheet>-->
+<!--								</form>-->
+<!--							</field>-->
+<!--						</page>-->
+<!--						<page string="Manufacturing Orders">-->
+<!--							<field name="manufacturing_demand_line_ids" readonly="1">-->
+<!--								<tree>-->
+<!--									<field name="x_planner_id" invisible="1"/>-->
+<!--									<field name="x_order_id" widget="many2one"/>-->
+<!--									<field name="x_product_id"/>-->
+<!--									<field name="x_quantity"/>-->
+<!--									<field name="x_uom_id"/>-->
+<!--								</tree>-->
+<!--								<form>-->
+<!--									<sheet>-->
+<!--										<group col="4">-->
+<!--											<field name="x_order_id" widget="many2one"/>-->
+<!--											<field name="x_product_id"/>-->
+<!--											<field name="x_quantity"/>-->
+<!--											<field name="x_uom_id"/>-->
+<!--										</group>-->
+<!--									</sheet>-->
+<!--								</form>-->
+<!--							</field>-->
+<!--						</page>-->
+<!--					</notebook>-->
+<!--				</sheet>-->
+<!--                <div class="oe_chatter">-->
+<!--                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>-->
+<!--                    <field name="message_ids" widget="mail_thread"/>-->
+<!--                    <field name="activity_ids" widget="mail_activity"/>-->
+<!--                </div>-->
+<!--			</form>-->
+<!--		</field>-->
+<!--	</record>-->
+
+<!--    <record id="action_production_planner" model="ir.actions.act_window">-->
+<!--		<field name="name">Production Planner</field>-->
+<!--		<field name="type">ir.actions.act_window</field>-->
+<!--		<field name="res_model">production.planner</field>-->
+<!--		<field name="view_mode">form</field>-->
+<!--		<field name="view_id" ref="production_planner_view_form"/>-->
+<!--		<field name="context">{}</field>-->
+<!--		<field name="domain">[]</field>-->
+<!--		<field name="res_id">1</field>-->
+<!--    </record>-->
+
+<!--	<menuitem id="menu_production_planner"-->
+<!--			  name="Planner"-->
+<!--			  parent="mrp.menu_mrp_root"-->
+<!--			  action="action_production_planner"-->
+<!--			  sequence="10"/>-->
+</odoo>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

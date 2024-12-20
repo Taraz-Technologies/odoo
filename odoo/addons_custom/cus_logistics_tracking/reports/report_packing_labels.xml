@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_products_label">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page" style="font-family: Arial; font-size:16px">
+                        <t t-foreach="doc.x_shipping_invoice_lines" t-as="product" >
+                            <t t-if="not 'BOS' in product.product_id.name and not 'PACKING' in product.product_id.name and not 'Freight' in product.product_id.name">
+                                <div class="row border border-dark" style="page-break-after:always;">
+                                    <div class="col">
+                                        <div class="row border-bottom border-dark" style="height: 40px;">
+                                            <div class="col-6 p-0" style="top: 3px;left: 2px">
+                                                <img class="img" src="/customizations/static/images/Taraz Logo.png" style="width: 50%; height: auto;"/>
+                                            </div>
+                                            <div class="col-6 p-0 text-right" style="top: 3px;right: 2px;">
+                                                <img class="img" src="/customizations/static/images/ROHS.jpg" style="width: 50%; height: auto;"/>
+                                            </div>
+                                        </div>
+                                        <div class="row border-bottom border-dark">
+                                            <div class="col p-1">
+                                                <span t-field="product.product_id.name"/>
+                                            </div>
+                                        </div>
+                                        <div class="row border-bottom border-dark">
+                                            <div class="col p-1">
+                                                <span t-field="product.product_id.x_short_description"/>
+                                            </div>
+                                        </div>
+                                        <div class="row  border-bottom border-dark align-middle" style="height: 70px;">
+                                            <div class="col text-center align-middle" style="top: 5px;">
+                                                <t t-if="product.product_id.barcode">
+                                                    <img alt="Barcode" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', product.product_id.barcode, 600, 150)" style="width: 100%;"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <span class="text-muted">No barcode available</span>
+                                                </t>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-auto text-center p-1 border-right border-dark" style="width:35%;">
+                                                <span>COO:</span>
+                                                <span t-field="doc.company_id.country_id.code"/>
+                                            </div>
+                                            <div class="col-auto text-center p-1 border-right border-dark" style="width:29%;">
+                                                <span t-field="doc.origin"/>
+                                            </div>
+                                            <div class="col-auto text-center p-1" style="width:36%;">
+                                                <span t-esc="'%.0f'%(product.quantity)"/>
+                                                <span>Unit(s)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

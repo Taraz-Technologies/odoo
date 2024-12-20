@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_letter_to_customs">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: Arial; font-size:16px">
+                        <div class="row">
+                            <br/>
+                            <br/>
+                            <br/>To
+                            <br/>
+                            <br/>
+                            <br/>DC Customs,
+                            <br/>Pakistan
+                            <br/>
+                            <br/>Respected Sir,
+                            <br/>
+                            <br/>
+                            <span t-field="doc.x_body_letter_to_customs"/>
+                        </div>
+                        <div class="row" style="margin-left: 100px">
+                            <br/>
+                            <span>
+                                <strong>1) Description of Goods:</strong>
+                            </span>
+                            <span t-field="doc.x_description_of_goods"/>
+                            <br/>
+                            <strong>2) Origin:</strong>
+                            <span t-field="doc.company_id.country_id"/>
+                            <br/>
+                            <strong>3) Application:</strong>
+                            <span t-field="doc.x_application"/>
+                            <br/>
+                            <strong>4) Shipper:</strong>
+                            <span t-field="doc.company_id.name"/>
+                            <br/>
+                            <strong>5) Consignee:</strong>
+                            <t t-if="doc.partner_id.parent_id">
+                                <span t-field="doc.partner_id.parent_id"/>
+                            </t>
+                            <t t-else="else">
+                                <span t-field="doc.partner_id.name"/>
+                            </t>
+                        </div>
+                        <div class="row" style="margin-left: 211px">
+                            <t t-if="doc.partner_id.street">
+                                <span t-field="doc.partner_id.street"/>
+                            </t>
+                            <t t-if="doc.partner_id.street2">
+                                <br/>
+                                <span t-field="doc.partner_id.street2"/>
+                            </t>
+                            <t t-if="doc.partner_id.city or doc.partner_id.state_id or doc.partner_id.zip">
+                                <br/>
+                                <t t-if="doc.partner_id.city">
+                                    <span t-field="doc.partner_id.city"/>,
+                                </t>
+                                <t t-if="doc.partner_id.state_id">
+                                    <span t-field="doc.partner_id.state_id"/>,
+                                </t>
+                                <t t-if="doc.partner_id.zip">
+                                    <span t-field="doc.partner_id.zip"/>
+                                </t>
+                            </t>
+                            <t t-if="doc.partner_id.country_id">
+                                <br/>
+                                <span t-field="doc.partner_id.country_id"/>
+                            </t>
+                            <br/>
+                            <br/>Attn:
+                            <t t-if="doc.partner_id.is_company">
+                                <span t-field="doc.partner_id.x_contact_name"/>
+                            </t>
+                            <t t-else="else">
+                                <span t-field="doc.partner_id.name"/>
+                            </t>
+                            <br/>Email:
+                            <span t-field="doc.partner_id.email"/>
+                            <br/>Contact:
+                            <t t-if="doc.partner_id.phone">
+                                <span t-field="doc.partner_id.phone"/>
+                            </t>
+                            <t t-elif="doc.partner_id.mobile">
+                                <span t-field="doc.partner_id.mobile"/>
+                            </t>
+                        </div>
+                        <div class="row" style="margin-top: 100px">
+                            <br/>Regards,
+                            <br/>
+                            <br/>(<span t-field="doc.x_signatory_certificate"/>)
+                            <br/>
+                            <br/><span t-field="doc.x_date_certificate"/>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

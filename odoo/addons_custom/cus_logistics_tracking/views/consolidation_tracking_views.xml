@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record id="consolidation_tracking_view_form" model="ir.ui.view">
+		<field name="name">consolidation.tracking.view.form</field>
+		<field name="model">consolidation.tracking</field>
+		<field name="arch" type="xml">
+			<form string="consolidations">
+				<header>
+					<button name="change_state_to_in_progress" string="Consolidate" type="object" class="oe_highlight" states="draft"/>
+					<button name="change_state_to_done" string="Mark as done" type="object" class="oe_highlight" states="in_progress"/>
+					<button name="action_create_landed_cost_bill" string="Create Landed Cost Bill" type="object" class="oe_highlight" states="in_progress,done"/>
+					<button name="export_products_data" string="Export Products Data" type="object" class="oe_highlight"/>
+					<button name="change_state_to_draft" string="Set to draft" type="object" states="in_progress,done"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,done"/>
+				</header>
+				<sheet>
+					<div class="oe_button_box" name="button_box">
+						<button string="Landed Costs" type="object" name="action_view_landed_costs"
+								class="oe_stat_button" icon="fa-plus-square"/>
+						<button string="Bills" name="action_view_bills"
+								type="object" class="oe_stat_button" icon="fa-bars"/>
+						<button string="Receipt" name="action_view_picking"
+								type="object" class="oe_stat_button" icon="fa-bars"/>
+					</div>
+					<div class="oe_title">
+						<h2>
+							<field name="x_name"/>
+						</h2>
+					</div>
+					<group>
+						<group>
+							<field name="x_partner_id"/>
+							<label for="x_internal_ref"/>
+							<div class="o_row">
+								<field name="x_vendor_code" class="oe_edit_only"/>
+								<field name="x_vendor_counter" placeholder="Vendor Counter" class="oe_edit_only"/>
+								<field name="x_internal_ref"/>
+							</div>
+							<field name="x_forwarder_ref"/>
+							<label for="x_purchase_ids"/>
+							<div class="o_row">
+								<field name="x_purchase_ids" widget="many2many_tags" options="{'no_create': True, 'no_create_edit': True}"/>
+								<button name="update_receipt_list" string="Update Receipts" type="object" class="oe_highlight oe_edit_only"/>
+							</div>
+							<label for="x_consolidation_ids"/>
+							<div class="o_row">
+								<field name="x_consolidation_ids" widget="many2many_tags" options="{'no_create': True, 'no_create_edit': True}"/>
+								<button name="update_receipt_list" string="Update Receipts" type="object" class="oe_highlight oe_edit_only"/>
+							</div>
+							<field name="x_consolidation_ref" invisible="1"/>
+							<field name="x_shipping_invoice_name" invisible="1"/>
+							<field name="x_shipping_invoice" filename="x_shipping_invoice_name"/>
+						</group>
+						<group>
+							<label for="x_tracking_id"/>
+							<div class="o_row">
+								<field name="x_tracking_id" context="{'default_x_type': 'incoming', 'default_x_company_from': x_partner_id, 'default_x_consolidation_id': id}"/>
+								<button name="open_url" string="Tracking" type="object" icon="fa-truck" class="btn-warning" attrs="{'invisible': [('x_tracking_id', '=', False)]}"/>
+							</div>
+							<field name="x_route_id"/>
+							<field name="x_sub_route_id"/>
+							<label for="x_length" string="Dimension: L x W x H"/>
+							<div class="o_row">
+								<field name="x_length"/><span>cm</span><span>x</span>
+								<field name="x_width"/><span>cm</span><span>x</span>
+								<field name="x_height"/><span>cm</span>
+							</div>
+							<field name="x_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+							<field name="x_currency_id"/>
+							<field name="x_company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+						</group>
+					</group>
+					<separator string="Receipts List" colspan="4"/>
+					<field name="x_receipt_ids">
+						<tree editable="bottom" create="0">
+							<field name="x_consolidation_id" invisible="1"/>
+							<field name="x_currency_id" invisible="1"/>
+							<field name="x_source_consolidation_id" attrs="{'column_invisible': [('parent.x_consolidation_ids', '=', [])]}" widget="many2one"/>
+							<field name="x_package"/>
+							<field name="x_value" widget="monetary" options="{'currency_field': 'x_currency_id'}" sum="Total"/>
+							<field name="x_purchase_id" widget="many2one" string="Purchase Order"/>
+							<field name="x_picking_id" widget="many2one"/>
+							<field name="x_tracking_id" widget="many2one"/>
+							<button name="open_url" string="Tracking" type="object" icon="fa-truck"/>
+							<field name="x_volume" string="Volume (cm3)" sum="Total"/>
+							<field name="x_weight" string="Weight (kg)" sum="Total"/>
+							<field name="x_priority"/>
+							<field name="x_status"/>
+						</tree>
+						<form>
+							<sheet>
+								<field name="x_consolidation_id" invisible="1"/>
+								<group col="4">
+									<field name="x_source_consolidation_id"/>
+									<field name="x_package"/>
+									<field name="x_value" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+									<field name="x_purchase_id" string="Purchase Order"/>
+									<field name="x_picking_id"/>
+									<field name="x_tracking_id"/>
+									<field name="x_volume"/>
+									<field name="x_weight"/>
+									<field name="x_priority"/>
+									<field name="x_status"/>
+								</group>
+							</sheet>
+						</form>
+					</field>
+					<div class="o_row oe_right">
+						<button name="update_product_list" string="Fetch Products" type="object" class="oe_highlight"/>
+					</div>
+					<group col="6">
+						<field name="x_rule_id"/>
+						<field name="x_country_ids" widget="many2many_tags"/>
+						<field name="x_country_id"/>
+					</group>
+					<separator string="Products List" colspan="4"/>
+					<div class="o_row">
+						<span style="color: red;">
+							Only those products of receipt will appear in product list which have done quantities.<br/>
+							If receipt is not done then check 'Auto-fill Done Qty' checkbox True in receipt.
+						</span>
+					</div>
+					<field name="x_product_ids">
+						<tree editable="bottom" create="0">
+							<field name="x_consolidation_id" invisible="1"/>
+							<field name="x_currency_id" invisible="1"/>
+							<field name="x_picking_id" optional="hide"/>
+							<field name="x_product_id"/>
+							<field name="x_description" optional="hide"/>
+							<field name="x_dk_hs_code" string="HS Code" optional="hide"/>
+							<field name="x_country_id" string="COO" optional="hide"/>
+							<field name="x_unit_weight" optional="hide" sum="Total"/>
+							<field name="x_uom_id" optional="hide"/>
+							<field name="x_quantity" optional="hide"/>
+							<field name="x_unit_price" optional="hide" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+							<field name="x_subtotal" optional="hide" sum="Total" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+							<field name="x_uv_quantity" optional="hide"/>
+							<field name="x_uv_unit_price" optional="hide" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+							<field name="x_uv_subtotal" optional="hide" sum="Total" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+						</tree>
+						<form>
+							<sheet>
+								<field name="x_consolidation_id" invisible="1"/>
+								<field name="x_currency_id" invisible="1"/>
+								<group col="4">
+									<field name="x_picking_id"/>
+									<field name="x_product_id"/>
+									<field name="x_description"/>
+									<field name="x_dk_hs_code" string="HS Code"/>
+									<field name="x_country_id" string="COO"/>
+									<field name="x_unit_weight"/>
+									<field name="x_uom_id"/>
+									<field name="x_quantity"/>
+									<field name="x_unit_price" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+									<field name="x_subtotal" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+									<field name="x_uv_quantity"/>
+									<field name="x_uv_unit_price" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+									<field name="x_uv_subtotal" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+								</group>
+							</sheet>
+						</form>
+					</field>
+					<group>
+						<group/>
+						<group>
+							<label for="x_uv_percentage"/>
+							<div class="o_row">
+								<field name="x_uv_percentage" widget="percentage"/>
+								<button name="compute_uv" string="Compute" type="object" class="oe_highlight"/>
+							</div>
+						</group>
+					</group>
+				</sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                </div>
+			</form>
+		</field>
+	</record>
+
+	<record id="consolidation_tracking_view_tree" model="ir.ui.view">
+		<field name="name">consolidation.tracking.view.tree</field>
+		<field name="model">consolidation.tracking</field>
+		<field name="arch" type="xml">
+			<tree string="Consolidations" decoration-info="state == 'in_progress'" decoration-success="state == 'done'">
+				<field name="x_name"/>
+				<field name="x_internal_ref"/>
+				<field name="x_partner_id"/>
+				<field name="x_forwarder_ref"/>
+				<field name="state"/>
+				<field name="x_purchase_ids" widget="many2many_tags"/>
+				<field name="x_tracking_id"/>
+				<button name="open_url" string="Tracking" type="object" icon="fa-truck" class="btn-warning"/>
+				<field name="x_route_id"/>
+				<field name="x_sub_route_id"/>
+				<field name="x_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+				<field name="x_company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="consolidation_tracking_view_search" model="ir.ui.view">
+		<field name="name">consolidation.tracking.view.search</field>
+		<field name="model">consolidation.tracking</field>
+		<field name="arch" type="xml">
+			<search string="Consolidations">
+				<field name="x_name"/>
+				<field name="x_internal_ref"/>
+				<field name="x_partner_id"/>
+				<field name="x_forwarder_ref"/>
+				<field name="x_purchase_ids"/>
+				<field name="x_tracking_id"/>
+				<field name="x_route_id"/>
+				<field name="x_sub_route_id"/>
+				<field name="x_tag_ids"/>
+                <separator/>
+                <filter name="draft"  string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="in_progress"  string="In Progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter name="done"  string="Consolidated" domain="[('state', '=', 'done')]"/>
+				<group col="4" colspan="4" expand="0" string="Group By">
+                    <filter string="Forwarder" name="forwarder" context="{'group_by':'x_partner_id'}"/>
+                    <filter string="State" name="state" context="{'group_by':'state'}"/>
+                    <filter string="Route" name="route" context="{'group_by':'x_route_id'}"/>
+                    <filter string="Sub-Route" name="sub_route" context="{'group_by':'x_sub_route_id'}"/>
+                </group>
+			</search>
+		</field>
+	</record>
+
+    <record id="action_consolidation_tracking" model="ir.actions.act_window">
+		<field name="name">Consolidations</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">consolidation.tracking</field>
+		<field name="view_mode">tree,form</field>
+		<field name="context">{'search_default_state': 1}</field>
+		<field name="view_id" ref="consolidation_tracking_view_tree"/>
+		<field name="search_view_id" ref="consolidation_tracking_view_search"/>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face"/>
+		</field>
+    </record>
+</odoo>

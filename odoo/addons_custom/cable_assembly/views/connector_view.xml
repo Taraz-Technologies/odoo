@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--        Connectors Views-->
+    <record id="view_connector_label_form" model="ir.ui.view">
+        <field name="name">connector.label.form</field>
+        <field name="model">connector.label</field>
+        <field name="arch" type="xml">
+            <form string="Connectors">
+                <sheet>
+                    <group col="4">
+                        <field name="x_name"/>
+                        <field name="x_product_id"/>
+                        <field name="x_printer"/>
+                    </group>
+                    <separator string="Capture Images" colspan="4"/>
+                    <field name="x_image_ids" mode="kanban"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_connector_label_tree" model="ir.ui.view">
+        <field name="name">connector.label.tree</field>
+        <field name="model">connector.label</field>
+        <field name="arch" type="xml">
+            <tree string="Connectors">
+                <field name="x_name"/>
+                <field name="x_product_id"/>
+                <field name="x_printer"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_connector_label_filter" model="ir.ui.view">
+        <field name="name">connector.label.select</field>
+        <field name="model">connector.label</field>
+        <field name="arch" type="xml">
+            <search string="Connectors">
+                <field name="x_name" string="Connectors" filter_domain="[('x_name','ilike',self)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_connector_label" model="ir.actions.act_window">
+        <field name="name">Connectors</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">connector.label</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_connector_label_filter"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create new Record
+            </p>
+        </field>
+    </record>
+</odoo>

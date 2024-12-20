@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <menuitem id="cable_assembly_root"
+              name="Cable Manufacturing"
+              sequence="1"
+              groups="mrp.group_mrp_user"
+              web_icon="cable_assembly,static/description/icon.png"/>
+
+    <menuitem id="menu_cable_assembly"
+              name="Manufacturing Orders"
+              sequence="1"
+              groups="mrp.group_mrp_user"
+              parent="cable_assembly_root"
+              action="action_cable_assembly"/>
+
+    <menuitem id="menu_cable_assembly_bom"
+              name="Wiring BOM"
+              sequence="2"
+              groups="mrp.group_mrp_user"
+              parent="cable_assembly_root"
+              action="action_cable_assembly_bom"/>
+
+    <menuitem id="menu_configuration"
+              name="Configuration"
+              sequence="3"
+              groups="mrp.group_mrp_user"
+              parent="cable_assembly_root"/>
+
+    <menuitem id="menu_cable_assembly_project_task"
+              name="Project"
+              sequence="4"
+              groups="mrp.group_mrp_user"
+              parent="cable_assembly_root"
+              action="act_cable_assembly_project_task_all"/>
+
+    <menuitem id="menu_cable_assembly_bom_line"
+              name="Wiring BOM Line"
+              sequence="1"
+              groups="mrp.group_mrp_user"
+              parent="menu_configuration"
+              action="action_cable_assembly_bom_line"/>
+
+    <menuitem id="menu_harness"
+              name="Harness"
+              sequence="2"
+              groups="mrp.group_mrp_user"
+              parent="menu_configuration"
+              action="action_harness"/>
+
+    <menuitem id="menu_wire_core"
+              name="Wire Core"
+              sequence="3"
+              groups="mrp.group_mrp_user"
+              parent="menu_configuration"
+              action="action_wire_core"/>
+
+    <menuitem id="menu_product_label"
+              name="Products"
+              sequence="4"
+              groups="mrp.group_mrp_user"
+              parent="menu_configuration"
+              action="action_product_label"/>
+
+    <menuitem id="menu_connector_label"
+              name="Connectors"
+              sequence="5"
+              groups="mrp.group_mrp_user"
+              parent="menu_configuration"
+              action="action_connector_label"/>
+
+    <menuitem id="menu_wire_label"
+              name="Wires"
+              sequence="6"
+              groups="mrp.group_mrp_user"
+              parent="menu_configuration"
+              action="action_wire_label"/>
+</odoo>

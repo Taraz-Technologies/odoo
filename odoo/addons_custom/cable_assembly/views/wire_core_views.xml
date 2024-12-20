@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--        Wire Core Views-->
+    <record id="view_wire_core_form" model="ir.ui.view">
+        <field name="name">wire.core.form</field>
+        <field name="model">wire.core</field>
+        <field name="arch" type="xml">
+            <form string="Wire Core">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="x_name"/>
+                            <field name="x_onenote_link" widget="url"/>
+                            <field name="x_notes"/>
+                        </group>
+                        <group>
+                            <field name="x_start_label"/>
+                            <field name="x_end_label"/>
+                            <field name="x_wire_label"/>
+                            <field name="x_core_label"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="x_wiring_line_ids" nolabel="1"/>
+                    </group>
+                    <separator string="Capture Images" colspan="4"/>
+                    <field name="x_image_ids" mode="kanban"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_wire_core_tree" model="ir.ui.view">
+        <field name="name">wire.core.tree</field>
+        <field name="model">wire.core</field>
+        <field name="arch" type="xml">
+            <tree string="Wire Core">
+                <field name="x_name"/>
+                <field name="x_notes"/>
+                <field name="x_wiring_line_ids" widget="many2many_tags"/>
+                <field name="x_start_label"/>
+                <field name="x_end_label"/>
+                <field name="x_wire_label"/>
+                <field name="x_core_label"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_wire_core_filter" model="ir.ui.view">
+        <field name="name">wire.core.select</field>
+        <field name="model">wire.core</field>
+        <field name="arch" type="xml">
+            <search string="Wire Core">
+                <field name="x_name" string="Wire Core" filter_domain="[('x_name','ilike',self)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_wire_core" model="ir.actions.act_window">
+        <field name="name">Wire Core</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wire.core</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_wire_core_filter"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create new Record
+            </p>
+        </field>
+    </record>
+</odoo>

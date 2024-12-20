@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_receipt_order">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <div class="page" style="font-family: Arial; font-size:16px">
+                        <h3>
+                            <strong>
+                                Receipt Order:
+                                <span t-field="o.name"/>
+                            </strong>
+                        </h3>
+                        <style>
+                            table {
+                            width: 100%;
+                            margin: auto;
+                            margin-top: 10px;
+                            }
+                            tr:nth-child(odd)>td {
+                            background-color: rgba(220, 220, 220, 0.02);
+                            }
+                            table, th, td {
+                            border: 1px solid black;
+                            }
+                            th, td {
+                            padding: 3px;
+                            padding-bottom: 0px;
+                            }
+                        </style>
+                        <table style="text-align: center;">
+                            <tbody>
+                                <tr>
+                                    <th style="width:40%;">
+                                        <strong>Purchase Order</strong>
+                                    </th>
+                                    <th style="width:40%;">
+                                        <strong>Vendor</strong>
+                                    </th>
+                                    <th style="width:20%;">
+                                        <strong>Date</strong>
+                                    </th>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.purchase_id"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.partner_id"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.x_form_field_09"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table t-if="o.move_line_ids and o.move_ids_without_package">
+                            <thead>
+                                <tr>
+                                    <th style="width:3%;">
+                                        <strong>Sr#</strong>
+                                    </th>
+                                    <th style="width:20%;">
+                                        <strong>Product</strong>
+                                    </th>
+                                    <th style="width:20%;">
+                                        <strong>Description</strong>
+                                    </th>
+                                    <th style="width:6%;">
+                                        <strong>Ordered Quantity</strong>
+                                    </th>
+                                    <th style="width:6%;">
+                                        <strong>Received Quantity</strong>
+                                    </th>
+                                    <th style="width:5%;">
+                                        <strong>UoM</strong>
+                                    </th>
+                                    <th style="width:25%;">
+                                        <strong>Recommended Locations</strong>
+                                    </th>
+                                    <th style="width:15%;">
+                                        <strong>Comments</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="serial_no" t-value="1"/>
+                                <t t-foreach="o.move_line_ids" t-as="ml">
+                                    <tr>
+                                        <td>
+                                            <span t-esc="serial_no"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="ml.product_id"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="ml.product_id.x_short_description"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="'{0:,.2f}'.format(ml.move_id.product_uom_qty)"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="'{0:,.2f}'.format(ml.qty_done)"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="ml.product_uom_id"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="ml.x_location_ids"/>
+                                        </td>
+                                        <td/>
+                                    </tr>
+                                    <t t-set="serial_no" t-value="serial_no + 1"/>
+                                </t>
+                            </tbody>
+                        </table>
+                        <p t-field="o.note"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

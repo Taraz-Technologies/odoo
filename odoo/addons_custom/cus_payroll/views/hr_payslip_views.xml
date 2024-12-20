@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Payslip Views -->
+
+    <!-- From Payslip Account -->
+    <record id="view_hr_payslip_form_cus_payroll" model="ir.ui.view">
+        <field name="name">hr.payslip.inherit.form.cus_payroll</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="om_hr_payroll_account.view_hr_payslip_inherit_form"/>
+        <field name="arch" type="xml">
+			<button name="action_payslip_draft" position="before">
+				<button name="action_salary_register_payment" type="object" string="Register Payment" class="oe_highlight"
+						attrs="{'invisible': ['|',('state', '!=', 'done'),('x_amount_residual', '=', 0)]}"/>
+				<button name="action_balance_payable" type="object" string="Return Access Amount" class="btn-danger"
+						attrs="{'invisible': [('x_payment_salary_payable', '&lt;=', 0)]}"/>
+			</button>
+			<header position="after">
+				<div groups="account.group_account_invoice"
+					 class="alert alert-info" role="alert" style="margin-bottom:0px;"
+					 attrs="{'invisible': ['|', ('salary_has_outstanding', '=', False), ('x_amount_residual', '=', 0)]}">
+					You have <bold><a class="alert-link" href="#outstanding" role="button">outstanding payments</a></bold>
+					for this employee. You can allocate them to mark this payslip as paid.
+				</div>
+			</header>
+			<div class="oe_button_box" position="after">
+				<widget name="web_ribbon" title="Paid" attrs="{'invisible': ['|', ('state', '!=', 'done'), ('x_amount_residual', '!=', 0)]}"/>
+			</div>
+            <field name="number" position="before">
+                <field name="date" string="Accounting Date"/>
+                <field name="x_slip_type" required="1" widget="radio" options="{'horizontal': true}"/>
+                <field name="x_payment_date"/>
+            </field>
+            <field name="struct_id" position="after">
+                <field name="x_wht_cpr_number"/>
+                <field name="x_payment_journal_id"/>
+            </field>
+            <field name="credit_note" position="after">
+                <field name="x_show_balance_in_report"/>
+                <field name="x_hide_in_banking_document"/>
+            </field>
+            <xpath expr="/form/sheet/group" position="after">
+                <group>
+                    <group>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="x_currency_id" invisible="1"/>
+                        <field name="x_work_days_of_month" attrs="{'invisible':[('x_slip_type', '!=', 'Normal')]}"/>
+						<label for="x_payroll_rate_id"/>
+						<div class="o_row">
+							<field name="x_payroll_rate_id" context="{'default_currency_id': x_currency_id}"/>
+							<span>@</span>
+							<field name="x_rate"/>
+						</div>
+						<field name="x_payments"/>
+                    </group>
+                    <group>
+                        <field name="x_loan" widget="monetary" options="{'currency_field': 'currency_id'}"
+                               attrs="{'invisible':[('x_slip_type', '!=', 'Loan')]}"/>
+                        <field name="x_loan_return" widget="monetary" options="{'currency_field': 'currency_id'}"
+                               attrs="{'invisible':[('x_slip_type', '!=', 'Loan')]}"/>
+						<field name="x_loan_contract_id" attrs="{'invisible':[('x_slip_type', '!=', 'Loan')]}"/>
+                        <label for="x_advance_currency" attrs="{'invisible':[('x_slip_type', '!=', 'Advance')]}"/>
+                        <div class="o_row" attrs="{'invisible':[('x_slip_type', '!=', 'Advance')]}">
+                            <field name="x_advance_currency" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+                            <span>-</span>
+                            <field name="x_advance" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        </div>
+                        <field name="x_advance" widget="monetary" options="{'currency_field': 'currency_id'}"
+                               attrs="{'invisible':[('x_slip_type', '!=', 'Normal')]}"/>
+                        <field name="x_bonus" widget="monetary" options="{'currency_field': 'currency_id'}" invisible="1"/>
+                        <field name="x_fine" widget="monetary" options="{'currency_field': 'currency_id'}" invisible="1"/>
+                        <field name="x_sick_leaves" invisible="1"/>
+                        <field name="x_unpaid_leaves" invisible="1"/>
+                        <field name="x_additional_wht_salary" widget="monetary" options="{'currency_field': 'x_currency_id'}"
+                               attrs="{'invisible':[('x_slip_type', '!=', 'Normal')]}"/>
+                    </group>
+                </group>
+            </xpath>
+			<xpath expr="//field[@name='line_ids']/tree[1]/field[@name='total']" position="after">
+				<field name="x_currency_id" optional="hide"/>
+				<field name="x_amount_currency" widget="monetary" options="{'currency_field': 'x_currency_id'}" optional="show"/>
+			</xpath>
+            <field name='line_ids' position="after">
+				<field name="salary_has_outstanding" invisible="1"/>
+				<field name="x_payslip_type" invisible="1"/>
+				<group class="oe_subtotal_footer">
+					<field name="x_amount" string="Net Salary" options="{'currency_field': 'currency_id'}"/>
+					<field name="x_amount_payable" string="Salary Payable" options="{'currency_field': 'x_currency_id'}"/>
+					<field name="salary_payments_widget" colspan="2" nolabel="1" widget="payment"/>
+					<field name="x_amount_residual" string="Due Salary"  options="{'currency_field': 'x_currency_id'}"
+						   class="oe_subtotal_footer_separator" attrs="{'invisible': [('state', '!=', 'done')]}"/>
+				</group>
+				<field name="salary_outstanding_credits_debits_widget" class="oe_invoice_outstanding_credits_debits"
+					   colspan="2" nolabel="1" widget="payment"
+					   attrs="{'invisible': ['|', '|', ('state', '!=', 'done'), ('x_amount_residual', '=', 0),
+					   ('salary_outstanding_credits_debits_widget', '=', False)]}"/>
+			</field>
+            <field name="details_by_salary_rule_category" position="before">
+                <field name="x_salary_detail_ids"/>
+            </field>
+            <field name="payslip_run_id" position="after">
+                <field name="x_letter_head_report"/>
+            </field>
+            <group name="accounting" position="after">
+                <group string="Salary Info">
+                    <field name="x_gross_salary" options="{'currency_field': 'x_currency_id'}"/>
+                    <field name="x_wht_salary" options="{'currency_field': 'x_currency_id'}"/>
+                    <field name="x_eobi" options="{'currency_field': 'x_currency_id'}"/>
+                    <field name="x_net_salary" options="{'currency_field': 'x_currency_id'}"/>
+                    <field name="x_payment_salary_payable" options="{'currency_field': 'x_currency_id'}"/>
+                </group>
+                <group string="Deductions - Income Tax">
+                    <label for="x_wht_category"/>
+                    <div class="o_row">
+                        <field name="x_wht_category" class="oe_inline"/>
+                        <button name="compute_fiscal_year_income" class="oe_highlight" type="object" string="Compute Taxes"/>
+                    </div>
+                    <label for="x_fiscal_year_start" string="Fiscal Year"/>
+                    <div>
+                        <field name="x_fiscal_year_start" readonly="1" class="oe_inline"/>
+                        -
+                        <field name="x_fiscal_year_end" readonly="1" class="oe_inline"/>
+                    </div>
+                    <field name="x_taxable_income" readonly="1" options="{'currency_field': 'x_currency_id'}"/>
+                    <field name="x_wht_payable" readonly="1" options="{'currency_field': 'x_currency_id'}"/>
+                    <field name="x_wht_deducted" readonly="1" options="{'currency_field': 'x_currency_id'}"/>
+                    <field name="x_wht_recoverable" readonly="1" options="{'currency_field': 'x_currency_id'}"/>
+                    <field name="x_remaining_months" readonly="1"/>
+                    <field name="x_wht_current" readonly="1" options="{'currency_field': 'x_currency_id'}"/>
+                </group>
+			</group>
+            <xpath expr="/form/sheet/notebook/page[4]" position="after">
+				<page name="deductions" string="Deductions" attrs="{'invisible':[('x_slip_type', '!=', 'Normal')]}">
+                    <group col="4">
+                        <field name="x_deductions" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+                    </group>
+                    <field name="x_deduction_ids"/>
+                </page>
+				<page name="fines" string="Bonus &amp; Fines" attrs="{'invisible':[('x_slip_type', '!=', 'Normal')]}">
+					<separator col="4" string="Bonus"/>
+					<field name="x_bonus_ids">
+						<tree>
+							<field name="x_payslip_id" invisible="1"/>
+							<field name="x_due_date"/>
+							<field name="x_employee_id"/>
+							<field name="x_amount" sum="Total Fine"/>
+							<field name="x_note"/>
+						</tree>
+					</field>
+					<separator col="4" string="Fines"/>
+					<field name="x_payslip_fine_ids">
+						<tree>
+							<field name="x_payslip_id" invisible="1"/>
+							<field name="x_currency_id" invisible="1"/>
+							<field name="x_name"/>
+							<field name="x_amount" sum="Total Fine" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+						</tree>
+					</field>
+					<separator col="4" string="Manual Fines"/>
+					<field name="x_fine_ids">
+						<tree>
+							<field name="x_payslip_id" invisible="1"/>
+							<field name="x_due_date"/>
+							<field name="x_employee_id"/>
+							<field name="x_amount" sum="Total Fine"/>
+							<field name="x_note"/>
+						</tree>
+					</field>
+					<separator col="4" string="Attendance Fines"/>
+					<field name="x_attendance_ids"/>
+				</page>
+                <page string="Loan Details" name="loan_details">
+					<separator col="4" string="Loan Repayments"/>
+					<field name="x_loan_installment_ids"/>
+                </page>
+            </xpath>
+		</field>
+	</record>
+
+    <!-- From Payslip -->
+    <record id="view_hr_payslip_tree_cus_payroll" model="ir.ui.view">
+        <field name="name">hr.payslip.inherit.tree.cus_payroll</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="om_hr_payroll.view_hr_payslip_tree"/>
+        <field name="arch" type="xml">
+			<field name="name" position="attributes">
+				<attribute name="optional">hide</attribute>
+			</field>
+            <field name="date_from" position="before">
+                <field name="x_slip_type" optional="show"/>
+                <field name="x_payment_date" optional="show"/>
+            </field>
+			<field name="date_to" position="after">
+                <field name="currency_id" invisible="1"/>
+                <field name="x_amount" widget="monetary" options="{'currency_field': 'currency_id'}" optional="show" sum="Total"/>
+                <field name="x_currency_id" invisible="1"/>
+                <field name="x_hide_in_banking_document" optional="hide"  widget="boolean_toggle"/>
+                <field name="x_gross_salary" widget="monetary" options="{'currency_field': 'x_currency_id'}" sum="Total" optional="show"/>
+                <field name="x_wht_salary" widget="monetary" options="{'currency_field': 'x_currency_id'}" sum="Total" optional="show"/>
+                <field name="x_net_salary" widget="monetary" options="{'currency_field': 'x_currency_id'}" sum="Total" optional="show"/>
+				<field name="x_amount_residual" widget="monetary" options="{'currency_field': 'x_currency_id'}" string="Due Salary" sum="Total" optional="show"/>
+			</field>
+			<field name="state" position="after">
+                <field name="x_payment_journal_id" optional="show"/>
+				<field name="x_payments" optional="show"/>
+			</field>
+		</field>
+	</record>
+
+    <!-- From Payslip Account -->
+    <record id="view_hr_payslip_filter_cus_payroll" model="ir.ui.view">
+        <field name="name">hr.payslip.inherit.select.cus_payroll</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="om_hr_payroll_account.view_hr_payslip_inherit_filter"/>
+        <field name="arch" type="xml">
+            <filter name="refund" position="after">
+                <separator/>
+                <filter string="Paid" name="paid" domain="[('x_amount_residual','=',0)]"/>
+                <filter string="Unpaid" name="unpaid" domain="[('x_amount_residual','!=',0)]"/>
+                <separator/>
+                <filter string="Normal" name="normal" domain="[('x_slip_type','=','Normal')]" help="Normal Slip"/>
+                <filter string="Advance" name="advance" domain="[('x_slip_type','=','Advance')]" help="Advance Slip"/>
+                <filter string="Loan" name="loan" domain="[('x_slip_type','=','Loan')]" help="Loan Slip"/>
+                <filter string="Bonus" name="bonus" domain="[('x_slip_type','=','Bonus')]" help="Bonus Slip"/>
+            </filter>
+            <filter name="state" position="after">
+                <filter string="Slip Type" name="slip_type" context="{'group_by':'x_slip_type'}"/>
+            </filter>
+        </field>
+    </record>
+
+
+    <!-- Payslip Run Views -->
+
+    <!-- From Payslip Account -->
+    <record id="hr_payslip_run_tree_cus_payroll" model="ir.ui.view">
+        <field name="name">hr.payslip.run.tree.cus_payroll</field>
+        <field name="model">hr.payslip.run</field>
+        <field name="inherit_id" ref="om_hr_payroll_account.hr_payslip_run_tree_inherit"/>
+        <field name="arch" type="xml">
+            <field name="date_start" position="before">
+                <field name="x_payment_date" optional="show"/>
+                <field name="x_date" optional="hide"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- From Payslip Account -->
+    <record id="hr_payslip_run_form_cus_payroll" model="ir.ui.view">
+        <field name="name">hr.payslip.run.form.cus_payroll</field>
+        <field name="model">hr.payslip.run</field>
+        <field name="inherit_id" ref="om_hr_payroll_account.hr_payslip_run_form_inherit"/>
+        <field name="arch" type="xml">
+			<button name="verify_payslip_run" position="before">
+                <button name="compute_sheets" string="Compute Sheets" type="object" class="oe_highlight" states="draft"/>
+                <button name="download_slips" string="Download Slips" type="object" class="oe_highlight" states="done"/>
+                <button name="create_wht_bill" string="Create WHT Bill" type="object" class="oe_highlight"
+                        attrs="{'invisible': ['|', ('x_wht_salary_bill_id', '!=', False), ('state', '!=', 'done')]}"/>
+            </button>
+            <field name="credit_note" position="before">
+				<field name="x_payment_date"/>
+				<field name="x_date"/>
+				<label for="x_payroll_rate_id"/>
+				<div class="o_row">
+					<field name="x_payroll_rate_id" context="{'default_currency_id': x_currency_id}"/>
+					<span>@</span>
+					<field name="x_rate"/>
+				</div>
+            </field>
+			<xpath expr="/form/sheet/group" position="after">
+				<field name="x_currency_id" invisible="1"/>
+				<group col="4">
+					<field name="x_bank_id"/>
+					<field name="x_cheque_number"/>
+					<field name="x_letter_head_report"/>
+					<field name="x_amount_in_words"/>
+					<field name="x_wht_salary_bill_id" attrs="{'invisible': [('x_wht_salary_bill_id', '=', False)]}" readonly="1"/>
+				</group>
+			</xpath>
+        </field>
+    </record>
+</odoo>

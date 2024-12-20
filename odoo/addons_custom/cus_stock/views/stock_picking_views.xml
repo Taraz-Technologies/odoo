@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_view_picking_lines" model="ir.actions.act_window">
+            <field name="name">Picking Lines</field>
+            <field name="res_model">stock.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('picking_id', '=', active_id)]</field>
+            <field name="context">{'search_default_group_by_product_id': 1}</field>
+        </record>
+
+        <record id="view_picking_form_cus_stock_1" model="ir.ui.view">
+            <field name="name">view_picking_form_cus_stock_1</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <header position="inside">
+                        <button name="create_new_receipt" string="Create New Receipt" class="oe_highlight" type="object"
+                                attrs="{'invisible':['|', '|', ('picking_type_code', '!=', 'incoming'), ('is_locked', '=', False)]}"/>
+                    </header>
+                    <field name="scheduled_date" position="after">
+                        <field name="x_compute_schedule_date" invisible="1"/>
+                        <field name="x_deadline" attrs="{
+                            'readonly': [('state', 'in', ('done', 'cancel'))],
+                            'invisible': [('picking_type_code', 'not in', ('outgoing'))],
+                        }"/>
+                        <field name="x_expected_date"
+                               attrs="{
+                               'invisible': [('picking_type_code', 'not in', ('outgoing', 'incoming'))],
+                               'readonly': [('picking_type_code', 'in', ('outgoing'))],
+                               }"
+                        />
+                    </field>
+                    <field name="origin" position="after">
+                        <field name="x_chat_url" widget="url"/>
+                        <field name="x_order_value"/>
+                        <field name="x_sale_order_payment_method"/>
+                        <field name="x_sale_order_payment_terms"/>
+                    </field>
+                    <button name="action_picking_move_tree" position="replace">
+<!--                        <attribute name="attrs">{'invisible': False}</attribute>-->
+                        <button name="action_picking_move_tree_cus_stock"
+                            class="oe_stat_button"
+                            icon="fa-arrows-v"
+                            type="object"
+                            help="List view of operations"
+                            groups="stock.group_stock_manager">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_text">Operations</span>
+                            </div>
+                        </button>
+                    </button>
+                    <xpath expr="//page[1]" position="inside">
+                        <field name="x_show_recommended_locations" invisible="1"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <record id="open_operations_action" model="ir.actions.act_window">
+            <field name="name">Operations</field>
+            <field name="res_model">stock.move.line.merged</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Add a new operation
+              </p>
+            </field>
+        </record>
+
+        <record id="stock_move_line_merged_tree_view_cus_stock" model="ir.ui.view">
+            <field name="name">stock.move.line.merged.tree.view.cus.stock</field>
+            <field name="model">stock.move.line.merged</field>
+            <field name="arch" type="xml">
+                    <tree  editable="bottom" decoration-success="x_checkbox_done == True" string="Stock Moves">
+                        <field name="x_image_128" widget="image" class="o_kanban_image_fill_left" optional="show" height="50" width="50"/>
+                        <field name="x_product_id" attrs="{'readonly': True}"/>
+                        <field name="x_product_description"/>
+                        <field name="x_location_id" attrs="{'readonly': True}"/>
+                        <field name="x_product_uom_quantity" attrs="{'readonly': True}"/>
+                        <field name="x_reserved_availability" attrs="{'readonly': True}"/>
+                        <field name="x_qty_picked" attrs="{'readonly': False}"/>
+                        <field name="x_qty_done" attrs="{'readonly': False}"/>
+                        <field name="x_qty_error" attrs="{'readonly': True}"/>
+                        <field name="x_product_uom_id" attrs="{'readonly': True}"/>
+                        <field name="x_checkbox_bom_error"/>
+                        <field name="x_comment"/>
+                        <field name="x_custom_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        <field name="x_checkbox_done"/>
+                    </tree>
+            </field>
+        </record>
+
+        <record id="stock_move_line_merged_search_view_cus_stock" model="ir.ui.view">
+            <field name="name">stock.move.line.merged.search.view.cus.stock</field>
+            <field name="model">stock.move.line.merged</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="x_picking_id" string="Picking"
+                           filter_domain="[
+                           '|', '|', '|', '|',
+                           ('x_product_id', 'ilike', self),
+                           ('x_custom_tag_ids', 'ilike', self),
+                           ('x_product_description', 'ilike', self),
+                           ('x_location_id', 'ilike', self),
+                           ('x_comment', 'ilike', self),
+                           ]"/>
+                    <field name="x_product_id" string="Product" filter_domain="[('x_product_id', 'ilike', self)]"/>
+                    <field name="x_product_description" string="Description" filter_domain="[('x_product_description', 'ilike', self)]"/>
+                    <field name="x_location_id" string="Location" filter_domain="[('x_location_id', 'ilike', self)]"/>
+                    <field name="x_comment" string="Comment" filter_domain="[('x_comment', 'ilike', self)]"/>
+                    <field name="x_custom_tag_ids" string="Tags" filter_domain="[('x_custom_tag_ids', 'ilike', self)]"/>
+                    <filter name="tagged" string="Tagged" domain="[('x_custom_tag_ids', '!=', False)]"/>
+                    <separator/>
+                    <filter name="is_reserved" string="Reserved" domain="[('x_reserved_availability', '&gt;', 0)]"/>
+                    <filter name="not_reserved" string="Not Reserved" domain="[('x_reserved_availability', '&lt;=', 0)]"/>
+                    <separator/>
+                    <filter name="is_picked" string="Picked" domain="[('x_qty_picked', '&gt;', 0)]"/>
+                    <filter name="not_picked" string="To Be Picked" domain="[('x_qty_picked', '&lt;=', 0)]"/>
+                    <separator/>
+                    <filter name="is_done" string="Done" domain="[('x_qty_done', '&gt;', 0)]"/>
+                    <filter name="not_done" string="Not Done" domain="[('x_qty_done', '&lt;=', 0)]"/>
+                    <separator/>
+                    <filter name="error" string="Error" domain="[('x_qty_error', '!=', 0)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Product" name="product" context="{'group_by': 'x_product_id'}"/>
+                        <filter string="Location" name="location" context="{'group_by': 'x_location_id'}"/>
+                        <filter string="Is Done" name="is_done" context="{'group_by': 'x_checkbox_done'}"/>
+                        <filter string="Is Bom Error" name="is_bom_error" context="{'group_by': 'x_checkbox_bom_error'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="view_picking_form_cus_stock_2" model="ir.ui.view">
+            <field name="name">view_picking_form_cus_stock_2</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="customizations.view_picking_form_customization_0"/>
+            <field name="arch" type="xml">
+                <button name="compute_shipping_invoice_data" position="after">
+                    <button string="Dropship" name="run_transit_trade_operation" type="object" class="oe_highlight"
+                            confirm="Are you sure you want to run Dropship Operation?"
+                            attrs="{'invisible': ['&amp;', '|',
+                            ('picking_type_code', '!=', 'outgoing'),
+                            ('state', 'in', ('done', 'cancel')),
+                            ]}"/>
+                    <strong>
+                        For "Dropship AV" make sure shipping invoice total amount
+                        is equal to sale order total amount
+                    </strong>
+                </button>
+                <field name="x_invoice_id" position="attributes">
+                    <attribute name="attrs">{'invisible': [('x_transit_invoice_id', '!=', False)]}</attribute>
+                </field>
+                <field name="x_invoice_id" position="before">
+                    <field name="x_transit_bill_id"/>
+                    <field name="x_transit_invoice_id"/>
+                </field>
+                <field name="x_show_payment_method" position="after">
+                    <label for="x_show_payment_terms" attrs="{'invisible': [('x_transit_invoice_id', '!=', False)]}"/>
+                    <div class="o_row" attrs="{'invisible': [('x_transit_invoice_id', '!=', False)]}">
+                        <field name="x_show_payment_terms"/>
+                        <field name="x_invoice_payment_term_id"/>
+                    </div>
+
+                    <label for="x_show_payment_method" attrs="{'invisible': [('x_transit_invoice_id', '!=', False)]}"/>
+                    <div class="o_row" attrs="{'invisible': [('x_transit_invoice_id', '!=', False)]}">
+                        <field name="x_show_payment_method"/>
+                        <field name="x_payment_method"/>
+                    </div>
+
+                    <label for="x_show_transit_invoice_payment_terms"
+                           attrs="{'invisible': [('x_transit_invoice_id', '=', False)]}"/>
+                    <div class="o_row" attrs="{'invisible': [('x_transit_invoice_id', '=', False)]}">
+                        <field name="x_show_transit_invoice_payment_terms"/>
+                        <field name="x_transit_invoice_payment_term_id"/>
+                    </div>
+
+                    <label for="x_show_transit_invoice_payment_method"
+                           attrs="{'invisible': [('x_transit_invoice_id', '=', False)]}"/>
+                    <div class="o_row" attrs="{'invisible': [('x_transit_invoice_id', '=', False)]}">
+                        <field name="x_show_transit_invoice_payment_method"/>
+                        <field name="x_transit_invoice_payment_method"/>
+                    </div>
+                </field>
+                <xpath expr="//field[@name='x_shipping_invoice_lines']/tree[1]/field[@name='name']" position="after">
+                    <field name="accessories" optional="hide"/>
+                    <field name="hs_code_id" optional="hide"/>
+                    <field name="country_id" optional="hide"/>
+                    <field name="weight" sum="Total" optional="hide"/>
+                </xpath>
+                <xpath expr="//field[@name='x_packing_list_ids']/tree[1]/field[@name='x_quantity']" position="after">
+                    <field name="x_net_weight" sum="Total Net"/>
+                    <field name="x_gross_weight" sum="Total Gross"/>
+                    <field name="x_accessories"/>
+                </xpath>
+                <xpath expr="//field[@name='x_packing_list_ids']/form[1]/sheet/group/field[@name='x_quantity']" position="after">
+                    <field name="x_net_weight"/>
+                    <field name="x_gross_weight"/>
+                    <field name="x_accessories"/>
+                </xpath>
+<!--                <xpath expr="//field[@name='x_package_ids']/tree[1]/field[@name='x_package']" position="before">-->
+<!--                    <field name="x_compute_weights" invisible="1"/>-->
+<!--                </xpath>-->
+                <xpath expr="//field[@name='x_package_ids']/form[1]/group[1]" position="after">
+                    <separator string="Packing List" colspan="4"/>
+                    <field name="x_packing_list_ids">
+                        <tree editable="bottom">
+                            <field name="x_picking_id" invisible="1"/>
+                            <field name="x_package_ids" invisible="1"/>
+                            <field name="x_product_id"/>
+                            <field name="x_quantity"/>
+                            <field name="x_net_weight" sum="Total Net"/>
+                            <field name="x_gross_weight" sum="Total Gross"/>
+                            <field name="x_accessories"/>
+                            <field name="x_package" options="{'no_quick_create':True,'no_create_edit':True}"/>
+                        </tree>
+                        <form string="Package">
+                            <sheet>
+                                <group>
+                                    <field name="x_picking_id" invisible="1"/>
+                                    <field name="x_package_ids" invisible="1"/>
+                                    <field name="x_product_id"/>
+                                    <field name="x_quantity"/>
+                                    <field name="x_net_weight"/>
+                                    <field name="x_gross_weight"/>
+                                    <field name="x_accessories"/>
+                                    <field name="x_package" options="{'no_quick_create':True,'no_create_edit':True}"/>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_picking_type_form_cus_stock" model="ir.ui.view">
+            <field name="name">stock.picking.type.form.cus_stock</field>
+            <field name="model">stock.picking.type</field>
+            <field name="inherit_id" ref="stock.view_picking_type_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="show_operations" position="after">
+                        <field name="x_show_recommended_locations"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <record id="stock_picking_kanban_cus_stock" model="ir.ui.view">
+            <field name="name">stock_picking_kanban_cus_stock</field>
+            <field name="model">stock.picking</field>
+            <field name="priority" eval="20"/>
+            <field name="inherit_id" ref="cus_logistics_tracking.stock_picking_kanban_cus_logistics_tracking"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="x_shipping_invoice_lines" position="after">
+                        <field name="x_deadline"/>
+                        <field name="x_expected_date"/>
+                        <field name="x_deadline_days"/>
+                        <field name="x_expected_days"/>
+                        <field name="x_chat_url"/>
+                        <field name="x_tracking_id"/>
+                        <field name="x_delivery_order_state"/>
+                        <field name="x_shipping_date"/>
+                    </field>
+                    <div class="o_kanban_record_top mb8" position="inside">
+                        <button name="open_chat" string="Open Chat" type="object"
+                                class="btn fa fa-comments fa-2x" style="padding-left:2px;"
+                                attrs="{'invisible': [('x_chat_url', '=', False)]}"/>
+                        <button name="open_url" string="Tracking" type="object"
+                                class="btn fa fa-truck fa-2x" style="padding-left:2px;"
+                                attrs="{'invisible': [('x_tracking_id', '=', False)]}"/>
+                    </div>
+                    <div class="o_kanban_record_body" position="inside">
+                        <t t-if="record.x_delivery_order_state.raw_value == 'shipped'">
+                            <t t-if="record.x_shipping_date.value">
+                                <br/>
+                                <strong>Shipped Date: </strong>
+                                <span><t t-esc="record.x_shipping_date.value"/> </span>
+                            </t>
+                        </t>
+                        <t t-else="">
+                            <t t-if="record.x_deadline.value">
+                                <strong>Deadline: </strong><t
+                                    t-esc="record.x_deadline.value and record.x_deadline.value.split(' ')[0] or False"/>
+                                (
+                                <t t-if="record.x_deadline_days.raw_value &gt; 0">
+                                    <span style="font-weight:bold;color:Green"><field name="x_deadline_days"/>days</span>
+                                </t>
+                                <t t-elif="record.x_deadline_days.raw_value == 0">
+                                    <span style="font-weight:bold;color:MediumSeaGreen">Today</span>
+                                </t>
+                                <t t-elif="record.x_deadline_days.raw_value &lt; 0">
+                                    <span style="font-weight:bold;color:Red"><field name="x_deadline_days"/>days</span>
+                                </t>
+                                )
+                            </t>
+                            <t t-if="record.x_expected_date.value">
+                                <br/>
+                                <strong>Expected: </strong><t
+                                    t-esc="record.x_expected_date.value and record.x_expected_date.value.split(' ')[0] or False"/>
+                                (
+                                <t t-if="record.x_expected_days.raw_value &gt; 0">
+                                    <span style="font-weight:bold;color:Green"><field name="x_expected_days"/>days</span>
+                                </t>
+                                <t t-elif="record.x_expected_days.raw_value == 0">
+                                    <span style="font-weight:bold;color:MediumSeaGreen">Today</span>
+                                </t>
+                                <t t-elif="record.x_expected_days.raw_value &lt; 0">
+                                    <span style="font-weight:bold;color:Red"><field name="x_expected_days"/>days</span>
+                                </t>
+                                )
+                            </t>
+                        </t>
+                        <br/>
+                    </div>
+                </data>
+            </field>
+        </record>
+
+        <record id="view_picking_tree_cus_stock" model="ir.ui.view">
+            <field name="name">view_picking_tree_cus_stock</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.vpicktree"/>
+            <field name="priority" eval="99"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name='origin' position="after">
+                        <field name="x_currency_id" invisible="1"/>
+                        <field name="x_order_value" sum="Total" widget="monetary" options="{'currency_field': 'x_currency_id'}" optional="show"/>
+                        <field name="x_sale_order_payment_method" optional="hide"/>
+                        <field name="x_sale_order_payment_terms" optional="hide"/>
+                        <field name="x_shipping_date"/>
+                        <field name="date_done" string="Effective Date"/>
+                        <field name="x_total_amount" sum="Total" string="Shipping Value" widget="monetary" options="{'currency_field': 'x_currency_id'}" optional="show"/>
+                        <field name="x_form_field_09" string="In/Out Date" optional="hide"/>
+                        <field name="x_deadline_days" string="Deadline Days"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <record id="cus_stock_view_picking_internal_search" model="ir.ui.view">
+            <field name="name">cus_stock_view_picking_internal_search</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+            <field name="arch" type="xml">
+                <filter name="picking_type" position="after">
+                    <separator/>
+                    <filter string="Payment Method" name="payment_method" domain="[]" context="{'group_by': 'x_sale_order_payment_method'}"/>
+                    <filter string="Payment Terms" name="payment_terms" domain="[]" context="{'group_by': 'x_sale_order_payment_terms'}"/>
+                </filter>
+            </field>
+        </record>
+    </data>
+</odoo>

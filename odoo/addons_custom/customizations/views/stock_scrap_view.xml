@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_scrap_form_customization_0" model="ir.ui.view">
+        <field name="name">stock.scrap.form.customization</field>
+        <field name="model">stock.scrap</field>
+        <field name="inherit_id" ref="stock.stock_scrap_form_view"/>
+        <field name="priority" eval="99" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='date_done']" position="after">
+                    <field name="x_journal_entry_id"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

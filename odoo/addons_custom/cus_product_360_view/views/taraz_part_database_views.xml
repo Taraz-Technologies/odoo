@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<!--    Taraz Part Number Views-->
+    <record id="view_taraz_part_number_form" model="ir.ui.view">
+        <field name="name">taraz.part.number.form</field>
+        <field name="model">taraz.part.number</field>
+        <field name="arch" type="xml">
+            <form string="Taraz Part Number">
+                <header>
+                    <button name="merge_taraz_part" string="Merge Taraz Part Numbers" class="btn-primary" type="object"/>
+                    <button name="compute_safety_stock" string="Compute Safety Stock" class="btn-primary" type="object"/>
+                </header>
+                <sheet>
+                    <div name="button_box" class="oe_button_box">
+					    <button name="action_view_note" type="object" string="Help" class="oe_stat_button" icon="fa-question"/>
+                        <button string="Stock Status" name="action_view_stock_status" type="object"
+                                class="oe_stat_button" icon="fa-tasks"/>
+                        <button string="Purchase History" name="action_view_purchase_history" type="object"
+                                class="oe_stat_button" icon="fa-tasks"/>
+                        <button string="Manufacturing History" name="action_view_manufacturing_history" type="object"
+                                class="oe_stat_button" icon="fa-tasks"/>
+                        <button string="BoM Tool Usage" name="action_view_bom_tool_usage" type="object"
+                                class="oe_stat_button" icon="fa-tasks"/>
+                    </div>
+                    <span class="text-danger">
+                        Such parts which has slight variation in name with comma or dash but are same parts should be
+                        defined in 'Product Duplicate Names' module.
+                    </span>
+                    <field name="x_average_demand" invisible="1"/>
+                    <group>
+                        <group>
+                            <field name="x_name"/>
+                            <field name="x_description"/>
+                            <field name="x_category"/>
+                            <field name="x_mounting_type"/>
+                            <field name="x_creation"/>
+                            <field name="x_uom_id"/>
+                        </group>
+                        <group>
+				            <field name="x_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            <field name="x_product_purchase_packaging_id"/>
+                            <field name="x_enable_safety_stock"/>
+                            <field name="x_consider_compromised"/>
+                            <field name="x_virtual_available"/>
+                            <field name="x_backorder_qty"/>
+                            <field name="x_qty_available"/>
+                            <field name="x_quantity_buffer"/>
+                            <field name="x_safety_stock" readonly="1"/>
+                            <field name="x_reorder_point" readonly="1"/>
+                            <field name="x_roq"/>
+                        </group>
+                        <group>
+                            <label for="x_start_date" string="Period"/>
+                            <div class="o_row">
+                                <field name="x_start_date"/>
+                                -
+                                <field name="x_end_date"/>
+                            </div>
+                            <field name="x_total_purchased" attrs="{'invisible':[('x_total_purchased', '=', 0)]}"/>
+                            <field name="x_total_manufactured" attrs="{'invisible':[('x_total_manufactured', '=', 0)]}"/>
+                            <field name="x_total_consumed" attrs="{'invisible':[('x_total_consumed', '=', 0)]}"/>
+                            <field name="x_total_sold" attrs="{'invisible':[('x_total_sold', '=', 0)]}"/>
+                        </group>
+                        <group>
+                            <field name="x_order_quantity"/>
+                            <field name="x_period_purchased" attrs="{'invisible':[('x_period_purchased', '=', 0)]}"/>
+                            <field name="x_period_manufactured" attrs="{'invisible':[('x_period_manufactured', '=', 0)]}"/>
+                            <field name="x_period_consumed" attrs="{'invisible':[('x_period_consumed', '=', 0)]}"/>
+                            <field name="x_period_sold" attrs="{'invisible':[('x_period_sold', '=', 0)]}"/>
+                            <field name="x_inventory_turnover" attrs="{'invisible':[('x_inventory_turnover', '=', 0)]}"/>
+                        </group>
+                        <group>
+                            <field name="x_tz_qty_available"/>
+                            <field name="x_tz_to_consume_qty"/>
+                            <field name="x_tz_tray_out_qty"/>
+                            <field name="x_tz_available_qty"/>
+                        </group>
+                        <group>
+                            <field name="x_tz_incoming_qty"/>
+                            <field name="x_tz_backorder_qty"/>
+                            <field name="x_tz_outgoing_qty"/>
+                            <field name="x_tz_virtual_available"/>
+                        </group>
+                    </group>
+                    <separator colspan="4" string="Alternates"/>
+                    <div class="o_row">
+                        <button name="alternate_mass_usage_editing" string="Usage Mass Editing" class="btn-primary" type="object"/>
+                    </div>
+                    <field name="x_alternate_ids">
+                        <tree>
+                            <field name="x_taraz_part_number_id" invisible="1"/>
+                            <field name="x_product_id" widget="many2one"/>
+                            <field name="x_description"/>
+                            <field name="x_qty_available" sum="Total"/>
+                            <field name="x_to_consume_qty" sum="Total"/>
+                            <field name="x_tray_out_qty" sum="Total"/>
+                            <field name="x_available_qty" sum="Total"/>
+                            <field name="x_incoming_qty" sum="Total"/>
+                            <field name="x_backorder_qty" sum="Total"/>
+                            <field name="x_outgoing_qty" sum="Total"/>
+                            <field name="x_virtual_available" sum="Total"/>
+                        </tree>
+                    </field>
+                    <separator colspan="4" string="Compromised"/>
+                    <div class="o_row">
+                        <button name="compromised_mass_usage_editing" string="Usage Mass Editing" class="btn-primary" type="object"/>
+                    </div>
+                    <field name="x_compromised_ids">
+                        <tree decoration-success="x_two_way_comp == True">
+                            <button name="compute_two_way_comp" icon="fa-chain" string="Two Way Compromised" type="object" style="width:10%;"/>
+                            <field name="x_taraz_part_number_id" invisible="1"/>
+                            <field name="x_two_way_comp" invisible="1"/>
+                            <field name="x_compromised_id" widget="many2one"/>
+                            <field name="x_description"/>
+                            <field name="x_tz_qty_available" sum="Total"/>
+                            <field name="x_tz_to_consume_qty" sum="Total"/>
+                            <field name="x_tz_tray_out_qty" sum="Total"/>
+                            <field name="x_tz_available_qty" sum="Total"/>
+                            <field name="x_tz_incoming_qty" sum="Total"/>
+                            <field name="x_tz_backorder_qty" sum="Total"/>
+                            <field name="x_tz_outgoing_qty" sum="Total"/>
+                            <field name="x_tz_virtual_available" sum="Total"/>
+                        </tree>
+                    </field>
+                    <field name="x_usage_ids" invisible="1"/>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_taraz_part_number_tree" model="ir.ui.view">
+        <field name="name">taraz.part.number.tree</field>
+        <field name="model">taraz.part.number</field>
+        <field name="arch" type="xml">
+            <tree string="Taraz Part Number">
+                <field name="x_name"/>
+                <field name="x_description" optional="hide"/>
+                <field name="x_virtual_available" sum="Total"/>
+                <field name="x_backorder_qty" sum="Total"/>
+                <field name="x_qty_available" sum="Total"/>
+                <field name="x_enable_safety_stock" optional="show"/>
+                <field name="x_safety_stock" optional="show"/>
+                <field name="x_reorder_point" optional="show"/>
+                <field name="x_tag_ids" widget="many2many_tags" optional="hide" options="{'color_field': 'color'}"/>
+                <field name="x_alternate_ids" widget="many2many_tags" optional="hide"/>
+                <field name="x_compromised_ids" widget="many2many_tags" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_taraz_part_number_search" model="ir.ui.view">
+        <field name="name">taraz.part.number.search</field>
+        <field name="model">taraz.part.number</field>
+        <field name="arch" type="xml">
+            <search string="Taraz Part Number">
+                <field name="x_name" filter_domain="['|', ('x_name', 'ilike', self), ('x_alternate_ids', 'ilike', self)]"/>
+                <field name="x_description"/>
+                <field name="x_tag_ids"/>
+                <field name="x_alternate_ids"/>
+                <field name="x_compromised_ids"/>
+                <separator/>
+                <filter name="enable_safety_stock" string="Safety Stock Enabled" domain="[('x_enable_safety_stock', '=', True)]"/>
+                <filter name="disable_safety_stock" string="Safety Stock Disabled" domain="[('x_enable_safety_stock', '=', False)]"/>
+                <separator/>
+                <group expand="0" string="Group by">
+                    <filter name="product_purchase_packaging" string="Product Purchase Packaging"
+                            domain="[]" context="{'group_by': 'x_product_purchase_packaging_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_taraz_part_number" model="ir.actions.act_window">
+		<field name="name">Taraz Part Number</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">taraz.part.number</field>
+		<field name="view_mode">tree,form</field>
+		<field name="context">{}</field>
+		<field name="domain">[]</field>
+		<field name="search_view_id" ref="view_taraz_part_number_search"/>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				No content to Show
+			</p>
+		</field>
+    </record>
+
+    <menuitem id="menu_taraz_part_number"
+              name="Taraz Part Database"
+              parent="stock.menu_stock_root"
+              action="cus_product_360_view.action_taraz_part_number"
+              sequence="5"/>
+
+    <record id="action_open_taraz_part_number_from_product" model="ir.actions.act_window">
+		<field name="name">Taraz Part Number</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">taraz.part.number</field>
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="cus_product_360_view.view_taraz_part_number_form"/>
+    </record>
+<!--    Taraz Part Alternates-->
+    <record id="view_taraz_part_alternates_form" model="ir.ui.view">
+        <field name="name">taraz.part.alternates.form</field>
+        <field name="model">taraz.part.alternates</field>
+        <field name="arch" type="xml">
+            <form string="Taraz Part Alternate">
+                <sheet>
+                    <group col="4">
+                        <field name="x_product_id"/>
+                        <field name="x_description"/>
+                        <field name="x_creation"/>
+                        <field name="x_qty_available"/>
+                        <field name="x_virtual_available"/>
+                        <field name="x_uom_id"/>
+                    </group>
+                    <separator colspan="4" string="Define Alternate Usage:"/>
+                    <field name="x_product_usage_ids" invisible="1"/>
+                    <group col="4" class="oe_edit_only">
+                        <label for="x_search_usage"/>
+                        <div class="o_row">
+                            <field name="x_search_usage" placeholder="Search Usage"/>
+                            <button name="select_all_usage" string="Select All" type="object" class="btn-primary"/>
+                            <button name="unselect_all_usage" string="Unselect All" type="object" class="btn-primary"/>
+                            <button name="usage_auto_use" string="Auto Use" type="object" class="btn-success"/>
+                            <button name="usage_not_use" string="Don't Use" type="object" class="btn-danger"/>
+                        </div>
+                    </group>
+                    <field name="x_usage_ids" style="width:100%;"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+<!--    Taraz Part Compromised-->
+    <record id="view_taraz_part_compromised_form" model="ir.ui.view">
+        <field name="name">taraz.part.compromised.form</field>
+        <field name="model">taraz.part.compromised</field>
+        <field name="arch" type="xml">
+            <form string="Taraz Part Compromised">
+                <sheet>
+                    <group col="4">
+                        <field name="x_compromised_id"/>
+                        <field name="x_creation"/>
+                        <field name="x_description"/>
+                        <field name="x_uom_id"/>
+                        <field name="x_qty_available"/>
+                        <field name="x_virtual_available"/>
+                    </group>
+                    <separator colspan="4" string="Define Compromised Usage:"/>
+                    <field name="x_product_usage_ids" invisible="1"/>
+                    <group col="4" class="oe_edit_only">
+                        <label for="x_search_usage"/>
+                        <div class="o_row">
+                            <field name="x_search_usage" placeholder="Search Usage"/>
+                            <button name="select_all_usage" string="Select All" type="object" class="btn-primary"/>
+                            <button name="unselect_all_usage" string="Unselect All" type="object" class="btn-primary"/>
+                            <button name="usage_auto_use" string="Auto Use" type="object" class="btn-success"/>
+                            <button name="usage_use" string="Use" type="object" class="btn-info"/>
+                            <button name="usage_not_use" string="Don't Use" type="object" class="btn-danger"/>
+                        </div>
+                    </group>
+                    <field name="x_usage_ids" style="width:100%;"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+<!--    Product Usage View-->
+    <record id="view_component_usage_form" model="ir.ui.view">
+        <field name="name">component.usage.form</field>
+        <field name="model">component.usage</field>
+        <field name="arch" type="xml">
+            <form string="Component Usage">
+                <sheet>
+                    <field name="x_alternate_id" invisible="1"/>
+                    <field name="x_compromised_id" invisible="1"/>
+                    <group col="4">
+                        <field name="x_product_id"/>
+                        <field name="x_usage"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_component_usage_tree" model="ir.ui.view">
+        <field name="name">component.usage.tree</field>
+        <field name="model">component.usage</field>
+        <field name="arch" type="xml">
+            <tree string="Component Usage" editable="bottom" create="false" delete="false">
+                <field name="x_line_select"/>
+                <field name="x_product_id" invisible="1"/>
+                <field name="x_usage"/>
+                <field name="x_mass_editing"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_component_usage" model="ir.actions.act_window">
+		<field name="name">Component Usage</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">component.usage</field>
+		<field name="view_mode">tree,form</field>
+		<field name="context">{}</field>
+		<field name="domain">[]</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				No content to Show
+			</p>
+		</field>
+    </record>
+<!--    Product Mass Usage View-->
+    <record id="view_mass_component_usage_form" model="ir.ui.view">
+        <field name="name">mass.component.usage.form</field>
+        <field name="model">mass.component.usage</field>
+        <field name="arch" type="xml">
+            <form string="Mass Component Usage">
+                <sheet>
+                    <field name="x_taraz_part_id" invisible="1"/>
+                    <group col="4">
+                        <field name="x_usage_type"/>
+                        <field name="x_usage"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_mass_component_usage_tree" model="ir.ui.view">
+        <field name="name">mass.component.usage.tree</field>
+        <field name="model">mass.component.usage</field>
+        <field name="arch" type="xml">
+            <tree string="Mass Component Usage" editable="bottom" create="false" delete="false">
+                <field name="x_taraz_part_id" invisible="1"/>
+                <field name="x_line_select"/>
+                <field name="x_usage"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_mass_component_usage" model="ir.actions.act_window">
+		<field name="name">Mass Component Usage</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">mass.component.usage</field>
+		<field name="view_mode">tree,form</field>
+		<field name="context">{}</field>
+		<field name="domain">[]</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				No content to Show
+			</p>
+		</field>
+    </record>
+</odoo>

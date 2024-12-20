@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<!--        ND4 Feeders-->
+        <record id="nd4_feeders_view_tree_cus_production_planner" model="ir.ui.view">
+            <field name="name">nd4_feeders_view_tree_cus_production_planner</field>
+            <field name="model">nd4.feeders</field>
+            <field name="arch" type="xml">
+                <tree string="ND4 Feeders" editable="bottom" limit="22" create="0" delete="0"
+                      decoration-muted="x_group == 0" decoration-info="x_group == 1"
+                      decoration-success="x_group == 2" decoration-danger="x_group == 3"
+                      decoration-warning="x_group == 5" decoration-bf="x_group == 4"
+                >
+                    <field name="x_group" optional="hide"/>
+                    <field name="x_name"/>
+                    <field name="x_x_mm" optional="hide"/>
+                    <field name="x_y_mm" optional="hide"/>
+                    <field name="x_pick_angle" optional="hide"/>
+                    <field name="x_product_id"/>
+                    <field name="x_package_id" optional="hide"/>
+                    <field name="x_feed_rate" optional="hide"/>
+                    <field name="x_pick_height" optional="hide"/>
+                    <field name="x_place_height" optional="hide"/>
+                    <field name="x_nozzle" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+<!--        ND4 Packages-->
+        <record id="nd4_packages_view_form_cus_production_planner" model="ir.ui.view">
+            <field name="name">nd4_packages_view_form_cus_production_planner</field>
+            <field name="model">nd4.packages</field>
+            <field name="arch" type="xml">
+                <form string="ND4 Packages" editable="bottom">
+                    <sheet>
+                        <group>
+                            <field name="x_name"/>
+                            <field name="x_feed_rate"/>
+                            <field name="x_pick_height"/>
+                            <field name="x_place_height"/>
+                            <field name="x_tape_width"/>
+                            <field name="x_nozzle_ids" widget="many2many_tags"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="nd4_packages_view_tree_cus_production_planner" model="ir.ui.view">
+            <field name="name">nd4_packages_view_tree_cus_production_planner</field>
+            <field name="model">nd4.packages</field>
+            <field name="arch" type="xml">
+                <tree string="ND4 Packages" editable="bottom">
+                    <field name="x_name"/>
+                    <field name="x_feed_rate"/>
+                    <field name="x_pick_height"/>
+                    <field name="x_place_height"/>
+                    <field name="x_tape_width"/>
+                    <field name="x_nozzle_ids" widget="many2many_tags"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="nd4_packages_view_search_cus_production_planner" model="ir.ui.view">
+           <field name="name">nd4_packages_search_tree_cus_production_planner</field>
+           <field name="model">nd4.packages</field>
+            <field name="arch" type="xml">
+                <search string="">
+                    <field name="x_name"/>
+                    <field name="x_nozzle_ids"/>
+                </search>
+           </field>
+        </record>
+
+        <record id="nd4_packages_action" model="ir.actions.act_window">
+            <field name="name">ND4 Packages</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">nd4.packages</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="nd4_packages_menu"
+                  name="ND4 Packages"
+                  parent="mrp.menu_mrp_configuration"
+                  action="nd4_packages_action"
+                  sequence="99"/>
+<!--        ND4 Nozzles-->
+        <record id="nd4_nozzles_view_tree_cus_production_planner" model="ir.ui.view">
+            <field name="name">nd4_nozzles_view_tree_cus_production_planner</field>
+            <field name="model">nd4.nozzles</field>
+            <field name="arch" type="xml">
+                <tree string="ND4 Nozzles" editable="bottom">
+                    <field name="x_name"/>
+                    <field name="x_package_ids" widget="many2many_tags"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="nd4_nozzles_view_search_cus_production_planner" model="ir.ui.view">
+           <field name="name">nd4_nozzles_search_tree_cus_production_planner</field>
+           <field name="model">nd4.nozzles</field>
+            <field name="arch" type="xml">
+                <search string="">
+                    <field name="x_name"/>
+                    <field name="x_package_ids" widget="many2many_tags"/>
+                </search>
+           </field>
+        </record>
+
+        <record id="nd4_nozzles_action" model="ir.actions.act_window">
+            <field name="name">ND4 Nozzles</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">nd4.nozzles</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem id="nd4_nozzles_menu"
+                  name="ND4 Nozzles"
+                  parent="mrp.menu_mrp_configuration"
+                  action="nd4_nozzles_action"
+                  sequence="100"/>
+<!--        ND2 Feeders-->
+        <record id="nd2_feeders_view_tree_cus_production_planner" model="ir.ui.view">
+            <field name="name">nd2_feeders_view_tree_cus_production_planner</field>
+            <field name="model">nd2.feeders</field>
+            <field name="arch" type="xml">
+                <tree string="ND2 Feeders" editable="bottom" create="0" delete="0">
+                    <field name="x_name"/>
+                    <field name="x_product_id"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

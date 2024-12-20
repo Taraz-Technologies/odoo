@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_letter_reports" model="ir.sequence">
+            <field name="name">Letters</field>
+            <field name="code">letter.reports</field>
+            <field name="prefix">DOC</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

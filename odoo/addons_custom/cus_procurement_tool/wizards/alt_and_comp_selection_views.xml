@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+<!--	<record id="alt_comp_selection_wizard_view_form" model="ir.ui.view">-->
+<!--		<field name="name">alt.comp.selection.wizard.view.form</field>-->
+<!--		<field name="model">alt.comp.selection</field>-->
+<!--		<field name="arch" type="xml">-->
+<!--			<form>-->
+<!--				<field name="x_proc_cycle_id" invisible="1"/>-->
+<!--				<field name="x_component_id" invisible="1"/>-->
+<!--				<group col="4">-->
+<!--					<field name="x_product_id"/>-->
+<!--					<field name="x_missing_qty"/>-->
+<!--				</group>-->
+<!--				<group>-->
+<!--					<group string="Alternates">-->
+<!--						<field name="x_alternate_ids" nolabel="1">-->
+<!--							<tree>-->
+<!--								<field name="x_product_id"/>-->
+<!--								<field name="x_available"/>-->
+<!--								<field name="x_used"/>-->
+<!--								<field name="x_uom_id"/>-->
+<!--								<button name="plus_component" icon="fa-plus-square"-->
+<!--										string="Use" type="object"/>-->
+<!--								<button name="minus_component" icon="fa-minus-square"-->
+<!--										string="Don't Use" type="object"/>-->
+<!--							</tree>-->
+<!--						</field>-->
+<!--					</group>-->
+<!--					<group string="Compromised">-->
+<!--						<field name="x_compromised_ids" nolabel="1">-->
+<!--							<tree>-->
+<!--								<field name="x_product_id"/>-->
+<!--								<field name="x_available"/>-->
+<!--								<field name="x_used"/>-->
+<!--								<field name="x_uom_id"/>-->
+<!--								<button name="plus_component" icon="fa-plus-square"-->
+<!--										string="Use" type="object"/>-->
+<!--								<button name="minus_component" icon="fa-minus-square"-->
+<!--										string="Don't Use" type="object"/>-->
+<!--							</tree>-->
+<!--						</field>-->
+<!--					</group>-->
+<!--				</group>-->
+<!--			</form>-->
+<!--		</field>-->
+<!--	</record>-->
+</odoo>

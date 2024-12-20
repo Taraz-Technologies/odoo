@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="mrp_workcenter_view_cus_mrp_workorder">
+            <field name="name">mrp_workcenter_view_cus_mrp_workorder</field>
+            <field name="model">mrp.workcenter</field>
+            <field name="inherit_id" ref="mrp.mrp_workcenter_view"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="user_id" required="1"/>
+                    <field name="x_mounting_type"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mrp_workcenter_tree_view_cus_mrp_workorder">
+            <field name="name">mrp_workcenter_view_cus_mrp_workorder</field>
+            <field name="model">mrp.workcenter</field>
+            <field name="inherit_id" ref="mrp.mrp_workcenter_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="user_id"/>
+                    <field name="x_mounting_type"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

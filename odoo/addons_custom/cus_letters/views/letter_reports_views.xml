@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+	<record id="letter_reports_view_form" model="ir.ui.view">
+		<field name="name">letter.reports.view.form</field>
+		<field name="model">letter.reports</field>
+		<field name="arch" type="xml">
+			<form string="Letter Reports">
+				<sheet>
+					<div class="oe_title">
+						<h1>
+							<field name="x_name"/>
+						</h1>
+					</div>
+
+					<group col="4">
+						<field name="company_id"/>
+						<field name="x_letter_head_report"/>
+						<field name="x_ref"/>
+						<field name="x_sale_order_id"/>
+						<field name="x_purchase_order_id"/>
+					</group>
+
+					<br/><label for="x_letter_content"/>
+					<br/><field name="x_letter_content"/>
+
+					<br/><field name="x_add_signature"/>
+					<label for="x_add_signature"/>
+					<br/><field name="x_user_id" attrs="{'invisible': [('x_add_signature', '=', False)]}"/>
+					<br/><field name="x_signature" attrs="{'invisible': [('x_add_signature', '=', False)]}"/>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="letter_reports_view_list" model="ir.ui.view">
+		<field name="name">letter.reports.view.list</field>
+		<field name="model">letter.reports</field>
+		<field name="arch" type="xml">
+			<tree string="Letter Reports">
+				<field name="x_name"/>
+				<field name="x_ref"/>
+				<field name="x_user_id"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="letter_reports_view_search" model="ir.ui.view">
+		<field name="name">letter.reports.view.search</field>
+		<field name="model">letter.reports</field>
+		<field name="arch" type="xml">
+			<search string="Letter Reports">
+				<field name="x_name"/>
+				<field name="x_ref"/>
+				<field name="x_sale_order_id"/>
+				<field name="x_purchase_order_id"/>
+				<field name="x_letter_content"/>
+				<field name="x_user_id"/>
+				<group expand="0" string="Group by">
+					<filter name="sale" string="Sale Order" context="{'group_by': 'x_sale_order_id'}"/>
+					<filter name="purchase" string="Purchase Order" context="{'group_by': 'x_purchase_order_id'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+
+    <record id="action_letter_reports" model="ir.actions.act_window">
+		<field name="name">Letter Reports</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">letter.reports</field>
+		<field name="view_mode">tree,form</field>
+		<field name="context">{}</field>
+		<field name="domain">[]</field>
+		<field name="search_view_id" ref="letter_reports_view_search"/>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face"/>
+		</field>
+    </record>
+</odoo>

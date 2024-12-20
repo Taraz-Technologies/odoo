@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="cus_production_planner_view_move_tree_receipt_picking" model="ir.ui.view">
+            <field name="name">cus_production_planner_view_move_tree_receipt_picking</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_tree_receipt_picking"/>
+            <field name="priority" eval="99" />
+            <field name="arch" type="xml">
+                <data>
+                    <field name="origin" position="after">
+                        <field name="x_mrp_demand_ids" widget="many2many_tags" string="Sale Orders" optional="show"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <record id="cus_production_planner_view_move_tree" model="ir.ui.view">
+            <field name="name">cus_production_planner_view_move_tree</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_tree"/>
+            <field name="priority" eval="99" />
+            <field name="arch" type="xml">
+                <data>
+                    <field name="reference" position="after">
+                        <field name="x_mrp_demand_ids" widget="many2many_tags" string="Sale Orders" optional="show"/>
+                    </field>
+                    <field name="product_uom_qty" position="attributes">
+                        <attribute name="sum">Total</attribute>
+                    </field>
+                    <field name="product_uom_qty" position="after">
+                        <field name="reserved_availability" sum="Total"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <record id="cus_view_stock_move_raw_tree" model="ir.ui.view">
+            <field name="name">stock.move.raw.tree</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="mrp.view_stock_move_raw_tree"/>
+            <field name="priority">1000</field>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="product_id" position="before">
+                        <field name="x_ref_des" optional="hide"/>
+                        <field name="x_goods_type" optional="hide"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <record id="cus_view_stock_move_line_detailed_operation_tree" model="ir.ui.view">
+            <field name="name">stock.move.line.operations.tree</field>
+            <field name="model">stock.move.line</field>
+            <field name="inherit_id" ref="stock.view_stock_move_line_detailed_operation_tree"/>
+            <field name="priority">1000</field>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="product_id" position="before">
+                        <field name="x_image_128" widget="image" class="o_kanban_image_fill_left" optional="show" height="50" width="50"/>
+                        <field name="x_ref_des" optional="hide"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+	    <record id="view_move_form_cus_production_planner" model="ir.ui.view">
+	        <field name="name">view_move_form_cus_production_planner</field>
+	        <field name="model">stock.move</field>
+	        <field name="inherit_id" ref="stock.view_move_form"/>
+	        <field name="arch" type="xml">
+		        <field name="move_dest_ids" position="after">
+			        <field name="x_mrp_demand_ids" attrs="{'invisible': [('x_mrp_demand_ids', '=', [])]}"/>
+		        </field>
+	        </field>
+	    </record>
+
+        <record id="view_move_tree_cus_production_planner_short_parts" model="ir.ui.view">
+            <field name="name">view_move_tree_cus_production_planner_short_parts</field>
+            <field name="model">stock.move</field>
+            <field name="arch" type="xml">
+                <tree default_order="sequence" string="Moves" create="0" delete="0">
+                    <field name="sequence" invisible="1"/>
+                    <field name="product_id" widget="many2one"/>
+                    <field name="product_uom_qty" sum="Total"/>
+                    <field name="reserved_availability" sum="Total"/>
+                    <field name="product_uom" options="{'no_open': True, 'no_create': True}" string="Unit of Measure" groups="uom.group_uom"/>
+                    <field name="picking_id" widget="many2one" string="Picking" optional="show"/>
+                    <field name="x_production_id" widget="many2one" string="Manufacturing Order" optional="show"/>
+                    <field name="x_finished_product_id" widget="many2one" string="Finished Product" optional="show"/>
+                    <field name="x_mrp_demand_ids" widget="many2many_tags" string="Demand Details" optional="show"/>
+                    <field name="x_demand_batch_id" invisible="1"/>
+                    <field name="state" invisible="1"/>
+                    <field name="company_id" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_move_search_cus_production_planner" model="ir.ui.view">
+            <field name="name">view_move_search_cus_production_planner</field>
+            <field name="model">stock.move</field>
+            <field name="arch" type="xml">
+                <search string="Stock Moves">
+                    <field name="origin" string="Reference"
+                           filter_domain="['|', '|', '|', '|', '|', '|', '|',
+                           ('origin', 'ilike', self),
+                           ('name', 'ilike', self),
+                           ('product_id', 'ilike', self),
+                           ('picking_id', 'ilike', self),
+                           ('x_mrp_demand_ids', 'ilike', self),
+                           ('x_finished_product_id', 'ilike', self),
+                           ('x_production_id', 'ilike', self),
+                           ('x_demand_batch_id', 'ilike', self),
+                           ]"/>
+                    <field name="product_id"/>
+                    <field name="picking_id" string="Picking"/>
+                    <field name="x_mrp_demand_ids"/>
+                    <field name="x_finished_product_id"/>
+                    <field name="x_production_id"/>
+                    <filter string="Not Available" name="confirmed" domain="[('state','=','confirmed')]"/>
+                    <filter string="Partially Available" name="partially_available" domain="[('state','=','partially_available')]"/>
+                    <separator/>
+                    <filter string="Semi Finished Goods" name="semi_finished_goods" domain="[('product_id.categ_id.name','ilike','Finished Goods')]"/>
+                    <filter string="Raw Material" name="raw_material" domain="[('product_id.categ_id.name','ilike','Material')]"/>
+                    <separator/>
+                    <filter string="Raw Material Local" name="raw_material_local" domain="[('product_id.categ_id.name','ilike','Raw Material Local')]"/>
+                    <filter string="Raw Material Imported" name="raw_material_imported" domain="[('product_id.categ_id.name','ilike','Raw Material Imported')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Product" name="by_product" domain="[]" context="{'group_by': 'product_id'}"/>
+                        <filter string="Manufacturing" name="groupby_manufacturing" domain="[]" context="{'group_by': 'x_production_id'}"/>
+                        <filter string="Finished Product" name="by_finished_product" domain="[]" context="{'group_by': 'x_finished_product_id'}"/>
+                        <filter string="PRC Cycle" name="by_demand_batch_id" domain="[]" context="{'group_by': 'x_demand_batch_id'}"/>
+                        <filter string="Status" name="status" domain="[]" context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="short_parts_manufacturing_stock_move_action" model="ir.actions.act_window">
+            <field name="name">Short Parts</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.move</field>
+            <field name="search_view_id" ref="view_move_search_cus_production_planner"/>
+            <field name="view_id" ref="view_move_tree_cus_production_planner_short_parts"/>
+            <field name="context">
+                {
+                'search_default_raw_material': 1,
+                }
+            </field>
+            <field name="domain">
+                [
+                ('product_uom_qty', '>', 0),
+                '|', ('picking_id.name', 'ilike', 'WH/PC/'), ('picking_id.name', 'ilike', 'WTR/PC/'),
+                ('state', 'in', ('confirmed', 'partially_available')),
+                ]
+            </field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+		<record id="manufacturing_raw_material_tree_view_cus_production_planner" model="ir.ui.view">
+			<field name="name">manufacturing.raw.material.tree.view.cus.production.planner</field>
+			<field name="model">stock.move</field>
+			<field name="arch" type="xml">
+				<tree default_order="sequence" string="Moves" create="0" delete="0">
+                    <field name="sequence" invisible="1"/>
+					<field name="product_id"/>
+					<field name="x_description"/>
+					<field name="product_uom_qty" string="Quantity"/>
+					<field name="product_uom"/>
+                    <field name="state" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_manufacturing_raw_material_cus_production_planner" model="ir.actions.act_window">
+			<field name="name">Manufacturing Raw Material</field>
+			<field name="res_model">stock.move</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="manufacturing_raw_material_tree_view_cus_production_planner"/>
+		</record>
+
+
+<!--        <menuitem id="menu_short_parts_manufacturing_stock_move_action"-->
+<!--                  name="Short Parts"-->
+<!--                  parent="mrp.menu_mrp_root"-->
+<!--                  action="short_parts_manufacturing_stock_move_action"-->
+<!--                  sequence="20"/>-->
+    </data>
+</odoo>

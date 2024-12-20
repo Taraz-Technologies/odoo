@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="add_move_source_view_form" model="ir.ui.view">
+            <field name="name">add_move_source_view_form</field>
+            <field name="model">add.move.source</field>
+            <field name="arch" type="xml">
+                <form string="Add Move Source">
+                    <group>
+                        <field name="x_move_id" invisible="1"/>
+                        <field name="x_add_to" invisible="1"/>
+                        <field name="x_company_id" invisible="1"/>
+                        <field name="x_partner_id" invisible="1"/>
+                        <field name="x_sale_id" attrs="{'invisible': [('x_add_to', '!=', 'sale')]}" widget="selection"/>
+                        <field name="x_purchase_id" attrs="{'invisible': [('x_add_to', '!=', 'purchase')]}" widget="selection"/>
+                        <field name="x_purchase_ids" attrs="{'invisible': [('x_add_to', '!=', 'related_purchase')]}" widget="many2many_tags" create="0"/>
+                        <field name="x_sale_ids" attrs="{'invisible': [('x_add_to', '!=', 'related_sale')]}" widget="many2many_tags" create="0"/>
+                    </group>
+                    <footer>
+                        <button name="action_add" string="Add" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="action_add_move_source"
+                    name="Add Move Source"
+                    res_model="add.move.source"
+                    binding_model="account.move"
+                    binding_views="from"
+                    view_mode="form"
+                    target="new"/>
+    </data>
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mrp_production_form_view_cus_mrp" model="ir.ui.view">
+            <field name="name">mrp_production_form_view_cus_mrp</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="cus_production_planner.mrp_production_form_view_cus_production_planner_1"/>
+            <field name="arch" type="xml">
+                <field name="x_mrp_demand_ids" position="after">
+                    <separator string="Child Manufacturing Orders" colspan="4"/>
+                    <field name="x_child_ids">
+                        <tree string="Child Manufacturing Order" editable="bottom">
+                            <field name="manufacturing_id" invisible="1"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="child_manufacturing_id" widget="many2one"/>
+                            <field name="picking_type_id"/>
+                            <field name="product_id"/>
+                            <field name="product_qty"/>
+                            <field name="to_consume_qty"/>
+                            <field name="product_uom_id"/>
+                            <field name="bom_id"/>
+                            <field name="state"/>
+                        </tree>
+                    </field>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

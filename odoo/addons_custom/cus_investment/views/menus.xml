@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<menuitem id="investment_root"
+	          name="Investments"
+	          sequence="1"
+              groups="account.group_account_manager"
+	          web_icon="cus_investment,static/description/icon.png"/>
+
+    <menuitem id="menu_investment"
+              name="Investments"
+              sequence="1"
+              groups="account.group_account_manager"
+              parent="investment_root"
+              action="action_view_investment"/>
+
+    <menuitem id="menu_investment_return"
+              name="Investment Returns"
+              sequence="2"
+              groups="account.group_account_manager"
+              parent="investment_root"
+              action="action_view_investment_return"/>
+
+    <menuitem id="menu_investor"
+              name="Investors"
+              sequence="3"
+              groups="account.group_account_manager"
+              parent="investment_root"
+              action="action_view_investors"/>
+</odoo>

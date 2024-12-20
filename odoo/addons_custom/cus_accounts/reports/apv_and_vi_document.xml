@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Custom Header with Logo for Third Page -->
+    <template id="custom_header_with_logo">
+            <div class="header" style="padding-top: 10px;">
+                <img src="/cus_accounts/static/description/bank_alfalah_logo.png" alt="Bank Alfalah Islamic" style="width: 300px; height= 100px;"/>
+            </div>
+    </template>
+
+    <!-- Custom Header for Fourth Page with "ANNEXURE A" Style -->
+    <template id="custom_header_annexure_a">
+            <div class="header" style="text-align: right; padding-top: 80px;">
+                <span style="font-weight: bold; font-size: 18px;">ANNEXURE A</span>
+                <div style="text-align: left; padding-top: 5px;">
+                    <span style="font-size: 16px; color: #4682B4;">Format for Customer’s undertaking for Trade Pricing</span>
+                    <hr style="border-top: 1px dashed black; margin-top: 5px;"/>
+                </div>
+            </div>
+    </template>
+
+
+<!--    <template id="external_layout_no_page_number" inherit_id="web.external_layout_standard">-->
+<!--        <xpath expr="//t[5]" position="after">-->
+<!--        <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">-->
+<!--            <div class="text-center" style="border-top: 1px solid black;">-->
+<!--                <ul class="list-inline mb4">-->
+<!--                    &lt;!&ndash; using the list-inline-item class from bootstrap causes weird behaviours in pdf report-->
+<!--                         adding d-inline class fixes the problem&ndash;&gt;-->
+<!--                    <li t-if="company.phone" class="list-inline-item d-inline">Phone: <span class="o_force_ltr" t-field="company.phone"/></li>-->
+<!--                    <li t-if="company.email" class="list-inline-item d-inline">Email: <span t-field="company.email"/></li>-->
+<!--                    <li t-if="company.website" class="list-inline-item d-inline">Web: <span t-field="company.website"/></li>-->
+<!--                    <li t-if="company.vat" class="list-inline-item d-inline"><t t-esc="company.country_id.vat_label or 'Tax ID'"/>: <span t-field="company.vat"/></li>-->
+<!--                </ul>-->
+
+<!--                <div name="financial_infos">-->
+<!--                    <span t-field="company.report_footer"/>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        </xpath>-->
+<!--    </template>-->
+
+    <template id="report_apv_and_vi_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                 <t t-set="fixed_company" t-value="env['res.company'].browse(1)"/>
+
+                <!-- First Body Section with Standard Header and Footer -->
+                <t t-call="web.external_layout">
+                    <t t-set="company" t-value="fixed_company"/>
+                    <div class="page">
+                        <div class="row">
+                            <div class="col" style="text-align: justify;">
+                                <span t-raw="doc.x_body1_apv"/>
+                            </div>
+                        </div>
+                    </div>
+<!--                </t>-->
+
+<!--                &lt;!&ndash; Second Body Section with Standard Header and Footer (New Page) &ndash;&gt;-->
+<!--                <t t-call="web.external_layout">-->
+<!--                    <t t-set="company" t-value="fixed_company"/>-->
+                    <div class="page" style="page-break-before: always;">
+                        <div class="row">
+                            <div class="col" style="text-align: justify;">
+                                <span t-raw="doc.x_body2_apv"/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+
+
+                <div class="article o_report_layout_standard" t-att-data-oe-model="doc and doc._name" t-att-data-oe-id="doc and doc.id">
+                <!-- Third Body Section with Logo Header, No Footer (New Page) -->
+                <t t-call="cus_accounts.custom_header_with_logo"/>
+                    <div class="page" style="page-break-before: always;">
+                        <div class="row">
+                            <div class="col" style="text-align: justify;">
+                                <span t-raw="doc.x_body3_apv"/>
+                            </div>
+                        </div>
+                    </div>
+<!--                </t>-->
+                </div>
+
+                <div class="article o_report_layout_standard" t-att-data-oe-model="doc and doc._name" t-att-data-oe-id="doc and doc.id">
+
+                <!-- Fourth Body Section with "ANNEXURE A" Header, No Footer (New Page) -->
+                <t t-call="cus_accounts.custom_header_annexure_a"/>
+                    <div class="page" style="page-break-before: always;">
+                        <div class="row">
+                            <div class="col" style="text-align: justify;">
+                                <span t-raw="doc.x_body4_apv"/>
+                            </div>
+                        </div>
+                    </div>
+<!--                </t>-->
+
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

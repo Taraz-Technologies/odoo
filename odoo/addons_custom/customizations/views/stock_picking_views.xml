@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_form_customization_0" model="ir.ui.view">
+        <field name="name">stock.picking.form.customization</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="priority" eval="99"/>
+        <field name="arch" type="xml">
+            <data>
+                <group name="carrier_data" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </group>
+                <button name="action_cancel" position="after">
+                    <button string="Send by Email" name="send_email" type="object" class="oe_highlight"
+                            attrs="{'invisible':[('picking_type_code','!=','outgoing')]}"
+                            confirm="Are you sure you want to send delivery by email?"/>
+                </button>
+                <button name="action_see_move_scrap" position="before">
+                    <button name="action_view_note" type="object" string="Help" class="oe_stat_button"
+                            icon="fa-question"/>
+                </button>
+                <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                    <field name="x_task_id" invisible="1"/>
+                    <button string="Task"
+                            name="action_view_task"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-tasks"
+                            attrs="{'invisible': [('x_task_id', '=', False)]}"/>
+                </xpath>
+                <field name="owner_id" position="after">
+                    <field name="x_backorder_products" invisible="1"/>
+                    <field name="purchase_id" attrs="{'invisible': [('purchase_id', '=', False)]}"/>
+                    <field name="x_purchase_id"
+                           attrs="{'invisible': ['|', ('x_purchase_id', '=', False), ('purchase_id', '!=', False)]}"/>
+                </field>
+                <xpath expr="/form/sheet/group[1]" position="before">
+                    <button string="Get Addresses" name="get_addresses" type="object" class="oe_highlight"
+                            groups="base.group_user" attrs="{'invisible':[('picking_type_code','!=','outgoing')]}"/>
+                </xpath>
+                <div class="o_td_label" position="before">
+                    <field name="x_customer_id" attrs="{'invisible':[('picking_type_code','!=','outgoing')]}"/>
+                    <field name="x_partner_invoice_id" attrs="{'invisible':[('picking_type_code','!=','outgoing')]}"/>
+                </div>
+                <field name="partner_id" position="after">
+                    <field name="x_end_user_id" attrs="{'invisible':[('picking_type_code','!=','outgoing')]}"/>
+                    <field name="x_update_partner_data" invisible="1"/>
+                </field>
+                <field name='location_dest_id' position="after">
+                    <field name="x_attachment" attrs="{'invisible':[('picking_type_code','!=','incoming')]}"/>
+                </field>
+                <field name='note' position="after">
+                    <group>
+                    </group>
+                </field>
+                <page name='note' position="after">
+                    <page string="Shipping Invoice" name="shipping_invoice"
+                          attrs="{'invisible':[('picking_type_code','!=','outgoing')]}">
+                        <div class="o_row">
+                            <button string="Refresh" name="compute_shipping_invoice_data"
+                                    type="object" class="oe_highlight"/>
+                        </div>
+                        <group col="4" attrs="{'invisible':[('x_picking_id', '=', False)]}">
+                            <field name="x_picking_id"/>
+                        </group>
+                        <group attrs="{'invisible':[('x_picking_id', '!=', False)]}">
+                            <group name="customer_data_left_group">
+                                <field name="x_show_bill_to"/>
+                                <field name="x_show_customer"/>
+                            </group>
+                            <group name="customer_data_right_group">
+                                <field name="x_show_ship_to"/>
+                                <field name="x_show_end_user"/>
+                            </group>
+                            <group>
+                                <field name="x_invoice_id"/>
+                                <field name="x_shipping_invoice_number"/>
+                                <field name="x_shipping_date"/>
+                                <field name="x_signatory_certificate"/>
+                                <field name="x_designation"/>
+                                <field name="x_number_of_boxes"/>
+                                <field name="carrier_id"/>
+                                <field name="carrier_tracking_ref"/>
+                                <field name="x_down_factor"/>
+                                <field name="x_coo_value"/>
+                                <field name="x_apply_freight"/>
+                                <field name="x_picking_ids" widget="many2many_tags"/>
+                            </group>
+                            <group>
+                                <field name="x_show_freight"/>
+                                <field name="x_letter_head_report"/>
+                                <field name="x_hide_customer"/>
+                                <field name="x_hide_product"/>
+                                <field name="x_hide_discount"/>
+                                <field name="x_distributor_order"/>
+                                <field name="x_sample_unit"/>
+                                <field name="x_show_payment_terms" invisible="1"/>
+                                <field name="x_show_payment_method" invisible="1"/>
+                                <label for="x_appear_shipping_remarks" string="Shipping Remarks?"/>
+                                <div class="o_row">
+                                    <field name="x_appear_shipping_remarks"/>
+                                    <field name="x_shipping_remarks"
+                                           placeholder="Add a remark that will be appear on the Shipping Invoice"/>
+                                </div>
+                                <label for="x_appear_delivery_remarks_on_report" string="Delivery Remarks?"/>
+                                <div class="o_row">
+                                    <field name="x_appear_delivery_remarks_on_report"/>
+                                    <field name="x_delivery_remarks"
+                                           placeholder="Add a remark that will be appear on the Delivery &amp; Return Report"/>
+                                </div>
+                                <field name="x_reason_of_export"/>
+                            </group>
+                        </group>
+                        <field name="x_shipping_invoice_lines" attrs="{'invisible':[('x_picking_id', '!=', False)]}">
+                            <tree string="Shipping Invoice Line" editable="bottom">
+                                <field name="currency_id" invisible="1"/>
+                                <field name="product_id"/>
+                                <field name="name"/>
+                                <field name="quantity" readonly="0"/>
+                                <field name="product_uom_id" readonly="0"/>
+                                <field name="unit_price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="discount"/>
+                                <field name="amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </tree>
+                        </field>
+                        <group class="oe_subtotal_footer oe_right"
+                               attrs="{'invisible':[('x_picking_id', '!=', False)]}">
+                            <field name="x_currency_id" invisible="1"/>
+                            <field name="x_total_amount" options="{'currency_field': 'x_currency_id'}"
+                                   class="oe_subtotal_footer_separator"/>
+                        </group>
+                    </page>
+                    <page string="Certificates" id="certificates" attrs="{'invisible':['|',('picking_type_code','!=','outgoing'),('x_picking_id', '!=', False)]}">
+                        <group>
+                            <group>
+                                <field name="x_sale_order_id" invisible="1"/>
+                                <field name="x_description_of_goods"/>
+                                <field name="x_application"/>
+                                <field name="x_awb"/>
+                                <field name="x_number_of_boxes"/>
+                            </group>
+                            <group>
+                                <field name="x_date_certificate"/>
+                                <field name="x_signatory_certificate"/>
+                                <field name="x_designation"/>
+                                <field name="x_cnic"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Letter to Customs">
+                                <field name="x_body_letter_to_customs"
+                                       nolabel="1"
+                                       placeholder="Letter to Custom Body"
+                                       force_save="1"/>
+                            </group>
+                            <group string="Undertaking">
+                                <field name="x_body_undertaking"
+                                       nolabel="1"
+                                       placeholder="Undertaking Body"
+                                       force_save="1"/>
+                            </group>
+                        </group>
+                        <group col="4" string="Quality Certificate">
+                            <field name="x_date_certificate_quality" string="Date"/>
+                            <field name="x_signatory_quality" string="Signatory"/>
+                        </group>
+                        <b>Certificate Body:</b>
+                        <field name="x_body_quality" nolabel="1"/>
+                        <group col="4" string="Warranty Certificate">
+                            <field name="x_date_certificate_warranty" string="Date"/>
+                            <field name="x_signatory_warranty" string="Signatory"/>
+                        </group>
+                        <b>Certificate Body:</b>
+                        <field name="x_body_warranty" nolabel="1"/>
+                        <group col="4" string="Request Letter">
+                            <field name="x_date_certificate_rl" string="Date"/>
+                            <field name="x_signatory_rl" string="Signatory"/>
+                        </group>
+                        <b>Certificate Body:</b>
+                        <field name="x_body_rl" nolabel="1"/>
+                        <group col="4" string="Routing Order Form">
+                            <field name="x_date_certificate_rof" string="Date"/>
+                            <field name="x_signatory_rof" string="Signatory"/>
+                            <field name="x_ups_account_no_rof" string="UPS Account No."/>
+                            <field name="x_weight_rof" string="Volumetric Weight"/>
+                        </group>
+                        <b>Certificate Body:</b>
+                        <field name="x_body_rof" nolabel="1"/>
+                        <group col="6" string="Shipper Undertaking">
+                            <field name="x_date_certificate_su" string="Date"/>
+                            <field name="x_signatory_su" string="Signatory"/>
+                            <field name="x_ups_account_no_su" string="UPS Account No."/>
+                        </group>
+                        <b>Certificate Body:</b>
+                        <field name="x_body_su" nolabel="1"/>
+                    </page>
+                    <page string="Packaging" name="packaging"
+                          attrs="{'invisible':['|',('picking_type_code','!=','outgoing'),('x_picking_id', '!=', False)]}">
+<!--                        <group col="2">-->
+                        <group>
+                            <group>
+                            <div class="o_row">
+                                <button string="Refresh" name="compute_packing_list_data" type="object"
+                                        class="oe_highlight" attrs="{'invisible':[('x_picking_id', '!=', False)]}"/>
+                            </div>
+                                </group>
+                        <group>
+                            <field name="x_show_total_weights"/>
+                        </group>
+                        </group>
+                        <separator string="Packages" colspan="4"/>
+                        <field name="x_package_ids">
+                            <form string="Package">
+                                <group>
+                                    <group>
+                                        <field name="x_package"/>
+                                        <field name="x_marking"/>
+                                        <field name="x_net_weight"/>
+                                        <field name="x_gross_weight"/>
+                                        <field name="x_shipping_box"/>
+                                    </group>
+                                    <group>
+                                        <field name="x_description"/>
+                                        <field name="x_dimension"/>
+                                        <field name="x_allowed_weight"/>
+                                        <field name="x_quantity_on_hand"/>
+                                    </group>
+                                </group>
+                            </form>
+                            <tree editable="bottom" width="100%">
+                                <field name="x_package"/>
+                                <field name="x_marking"/>
+                                <field name="x_net_weight" sum="Total Net"/>
+                                <field name="x_gross_weight" sum="Total Gross"/>
+                                <field name="x_shipping_box"/>
+                                <field name="x_description"/>
+                                <field name="x_dimension"/>
+                                <field name="x_allowed_weight"/>
+                                <field name="x_quantity_on_hand"/>
+                            </tree>
+                        </field>
+                        <separator string="Packing List" colspan="4"/>
+                        <field name="x_packing_list_ids">
+                            <tree editable="bottom">
+                                <field name="x_picking_id" invisible="1"/>
+                                <field name="x_package_ids" invisible="1"/>
+                                <field name="x_product_id"/>
+                                <field name="x_quantity"/>
+                                <field name="x_package" options="{'no_quick_create':True,'no_create_edit':True}"/>
+                            </tree>
+                            <form string="Package">
+                                <sheet>
+                                    <group>
+                                        <field name="x_picking_id" invisible="1"/>
+                                        <field name="x_package_ids" invisible="1"/>
+                                        <field name="x_product_id"/>
+                                        <field name="x_quantity"/>
+                                        <field name="x_package" options="{'no_quick_create':True,'no_create_edit':True}"/>
+                                    </group>
+                                </sheet>
+                            </form>
+                        </field>
+                    </page>
+                    <page string="Product Details" attrs="{'invisible':[('picking_type_code','!=','incoming')]}">
+                        <field name="x_compute_products" invisible="1"/>
+                        <field name="x_product_ids">
+                            <kanban>
+                                <field name="id"/>
+                                <field name="name"/>
+                                <field name="weight"/>
+                                <field name="hs_code"/>
+                                <field name="x_custom_duty"/>
+                                <field name="x_additional_custom_duty"/>
+                                <field name="x_regulatory_duty"/>
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div class="oe_kanban_global_click">
+                                            <div class="o_kanban_image">
+                                                <img t-att-src="kanban_image('product.product', 'image_1920', record.id.raw_value)"
+                                                     alt="Product" class="o_image_64_contain"/>
+                                            </div>
+                                            <div class="oe_kanban_details">
+                                                <strong class="o_kanban_record_title">
+                                                    <field name="name"/>
+                                                </strong>
+                                                <strong class="o_kanban_record_title">
+                                                    <field name="name"/>
+                                                </strong>
+                                                <div name="tags"/>
+                                                <ul>
+                                                    <li>Weight: <field name="weight"/></li>
+                                                    <li>HS Code: <field name="hs_code"/></li>
+                                                    <li>Custom Duty (%): <field name="x_custom_duty"/></li>
+                                                    <li>Additional CD (%): <field name="x_additional_custom_duty"/></li>
+                                                    <li>Regulatory Duty (%): <field name="x_regulatory_duty"/></li>
+                                                </ul>
+                                                <div name="tags"/>
+                                            </div>
+                                            <div class="o_dropdown_kanban dropdown" t-if="!selection_mode"
+                                                 groups="base.group_user">
+                                                <a role="button" class="dropdown-toggle o-no-caret btn"
+                                                   data-toggle="dropdown" data-display="static" href="#"
+                                                   aria-label="Dropdown menu" title="Dropdown menu">
+                                                    <span class="fa fa-ellipsis-v"/>
+                                                </a>
+                                                <div class="dropdown-menu" role="menu">
+                                                    <!--													<a name="assist_task" role="menuitem" type="object" class="dropdown-item">Assist</a>-->
+                                                    <a role="menuitem" type="delete" class="dropdown-item">Delete</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                        </field>
+                    </page>
+                    <page string="Journal Entries" name="journal_entries"
+                          attrs="{'invisible':[('picking_type_code','not in', ('outgoing', 'incoming'))]}">
+                        <field name="x_journal_entries"/>
+                    </page>
+                </page>
+            </data>
+        </field>
+    </record>
+
+    <record id="view_picking_tree_customization_0" model="ir.ui.view">
+        <field name="name">stock.picking.tree.customization</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="priority" eval="99"/>
+        <field name="arch" type="xml">
+            <data>
+                <field name="origin" position="after">
+                    <field name="purchase_id" widget="many2one" optional="hide"/>
+                    <field name="x_picking_id" widget="many2one" optional="hide"/>
+                </field>
+            </data>
+        </field>
+    </record>
+
+    <record id="view_picking_internal_search_customization_0" model="ir.ui.view">
+        <field name="name">stock.picking.internal.search.customization.0</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+        <field name="arch" type="xml">
+            <data>
+                <filter name="backorder" position="attributes">
+                    <attribute name="domain">
+                        ['|',
+                        ('x_backorder_products', '!=', False),
+                        ('backorder_id', '!=', False),
+                        ('state', 'in', ('assigned', 'waiting', 'confirmed')),
+                        ]
+                    </attribute>
+                </filter>
+            </data>
+        </field>
+    </record>
+
+    <record id="action_picking_tree_receipts" model="ir.actions.act_window">
+        <field name="name">Receipts</field>
+        <field name="res_model">stock.picking</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">kanban,tree,form,calendar</field>
+        <field name="domain">[('picking_type_code', '=', 'incoming')]</field>
+        <field name="search_view_id" ref="view_picking_internal_search_customization_0"/>
+    </record>
+
+    <menuitem id="picking_tree_receipts"
+              name="Receipts"
+              action="action_picking_tree_receipts"
+              parent="stock.menu_stock_root"
+              groups="purchase.group_purchase_user"
+              sequence="2"/>
+
+    <menuitem id="picking_tree_receipts_purchase"
+              name="Receipts"
+              action="action_picking_tree_receipts"
+              parent="purchase.menu_purchase_root"
+              groups="purchase.group_purchase_user"
+              sequence="99"/>
+</odoo>

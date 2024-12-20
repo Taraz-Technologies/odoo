@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_assembly_process,access.assembly.process,model_assembly_process,,1,1,1,1
+access_assembly_processing,access.assembly.processing,model_assembly_processing,,1,1,1,1
+access_nd4_feeders,access.nd4.feeders,model_nd4_feeders,,1,1,1,1
+access_nd4_packages,access.nd4.packages,model_nd4_packages,,1,1,1,1
+access_nd4_nozzles,access.nd4.nozzles,model_nd4_nozzles,,1,1,1,1
+access_nd2_feeders,access.nd2.feeders,model_nd2_feeders,,1,1,1,1
+access_nozzle_config,access.nozzle.config,model_nozzle_config,,1,1,1,1
+access_custom_demand_lines,access.custom.demand.lines,model_custom_demand_lines,,1,1,1,1
+access_stock_build_rule_list,access.stock.build.rule.list,model_stock_build_rule_list,,1,1,1,1
+access_mrp_source_details,access.mrp.source.details,model_mrp_source_details,,1,1,1,1
+access_mrp_procurement_batch,access.mrp.procurement.batch,model_mrp_procurement_batch,,1,1,1,1
+access_mrp_bom_tool_lines,access.bom.tool.lines,model_bom_tool_lines,,1,1,1,1
+access_product_delivery_status,access.product.delivery.status,model_product_delivery_status,,1,1,1,1
+
+

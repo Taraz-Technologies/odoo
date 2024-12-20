@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="purchase_order_tree_cus_procurement_tool" model="ir.ui.view">
+            <field name="name">purchase_order_tree_cus_procurement_tool</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="customizations.view_purchase_order_tree_customization_0"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="x_internal_ref"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="purchase_order_view_tree_customizations_cus_procurement_tool" model="ir.ui.view">
+            <field name="name">purchase_order_view_tree_customizations_cus_procurement_tool</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="customizations.purchase_order_view_tree_customizations"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="x_internal_ref"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="purchase_order_view_form_cus_procurement_tool" model="ir.ui.view">
+            <field name="name">purchase_order_view_form_cus_procurement_tool</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_ref" position="before">
+                    <field name="x_internal_ref"/>
+                </field>
+                <field name="order_line" position="before">
+                    <group col="4">
+                        <field name="x_show_hs_code"/>
+                        <field name="x_show_coo"/>
+                    </group>
+                </field>
+                <page name="purchase_delivery_invoice" position="after">
+                    <page name="demand_details" string="Demand Details">
+                        <group col="4">
+                            <field name="x_proc_cycle_id"/>
+                        </group>
+                        <field name="x_demand_list_ids" readonly="1">
+                            <tree editable="bottom">
+                                <field name="x_component_id"/>
+                                <field name="x_quantity" sum="Total"/>
+                                <field name="x_uom_id"/>
+                                <field name="x_manufacturing_id"/>
+                                <field name="x_type"/>
+                                <field name="x_sale_id"/>
+                                <field name="x_deadline"/>
+                                <field name="x_product_id"/>
+                            </tree>
+                            <form>
+                                <sheet>
+                                    <group>
+                                        <field name="x_component_id"/>
+                                        <field name="x_quantity"/>
+                                        <field name="x_uom_id"/>
+                                        <field name="x_manufacturing_id"/>
+                                        <field name="x_type"/>
+                                        <field name="x_sale_id"/>
+                                        <field name="x_deadline"/>
+                                        <field name="x_product_id"/>
+                                    </group>
+                                </sheet>
+                            </form>
+                        </field>
+                    </page>
+                </page>
+            </field>
+        </record>
+
+        <record id="purchase_order_view_search_cus_procurement_tool_1" model="ir.ui.view">
+            <field name="name">purchase_order_view_search_cus_procurement_tool</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_view_search"/>
+            <field name="arch" type="xml">
+                <field name="name" position="attributes">
+                    <attribute name="filter_domain">
+                        [
+                        '|', '|', '|',
+                        ('name', 'ilike', self),
+                        ('partner_ref', 'ilike', self),
+                        ('x_internal_ref', 'ilike', self),
+                        ('partner_id', 'child_of', self),
+                        ]
+                    </attribute>
+                </field>
+                <field name="product_id" position="after">
+                    <field name="x_proc_cycle_id"/>
+                    <field name="x_demand_list_ids"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="purchase_order_view_search_cus_procurement_tool_2" model="ir.ui.view">
+            <field name="name">purchase_order_view_search_cus_procurement_tool</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="arch" type="xml">
+                <field name="name" position="attributes">
+                    <attribute name="filter_domain">
+                        [
+                        '|', '|', '|',
+                        ('name', 'ilike', self),
+                        ('partner_ref', 'ilike', self),
+                        ('x_internal_ref', 'ilike', self),
+                        ('partner_id', 'child_of', self),
+                        ]
+                    </attribute>
+                </field>
+                <field name="product_id" position="after">
+                    <field name="x_proc_cycle_id"/>
+                    <field name="x_demand_list_ids"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

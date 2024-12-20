@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report id="action_report_bom_details"
+                string="RM Report 1"
+                model="mrp.bom"
+                report_type="qweb-pdf"
+                file="cus_product_360_view.report_bom_details"
+                name="cus_product_360_view.report_bom_details"
+                print_report_name="'RM Report 1 - %s' % (object.product_tmpl_id.name)"
+                paperformat="base.paperformat_euro"/>
+
+        <report id="action_report_part_details_a"
+                string="RM Report 2"
+                model="mrp.bom"
+                report_type="qweb-pdf"
+                file="cus_product_360_view.report_part_details_a"
+                name="cus_product_360_view.report_part_details_a"
+                print_report_name="'RM Report 2 - %s' % (object.product_tmpl_id.name)"
+                paperformat="base.paperformat_euro_landscape"/>
+
+        <report id="action_report_part_details_b"
+                string="RM Report 3"
+                model="mrp.bom"
+                report_type="qweb-pdf"
+                file="cus_product_360_view.report_part_details_b"
+                name="cus_product_360_view.report_part_details_b"
+                print_report_name="'RM Report 3 - %s' % (object.product_tmpl_id.name)"
+                paperformat="base.paperformat_euro_landscape"/>
+
+        <report id="action_report_inventory_sale_report"
+                string="Sales Report"
+                model="inventory.sale.report"
+                report_type="qweb-pdf"
+                file="cus_product_360_view.report_inventory_sale_report"
+                name="cus_product_360_view.report_inventory_sale_report"
+                print_report_name="'%s' % object.x_name"
+                paperformat="base.paperformat_euro"/>
+
+        <report id="action_report_inventory_sale_report_products"
+                string="Products Portfolio"
+                model="inventory.sale.report"
+                report_type="qweb-pdf"
+                file="cus_product_360_view.report_inventory_sale_report_products"
+                name="cus_product_360_view.report_inventory_sale_report_products"
+                print_report_name="'%s' % object.x_name"
+                paperformat="base.paperformat_euro"/>
+
+        <report id="inventory_sale_report_excel"
+                model="inventory.sale.report"
+                string="Sale Report (Excel)"
+                report_type="xlsx"
+                name="cus_product_360_view.inventory_sale_report_excel"
+                file="cus_product_360_view.inventory_sale_report_excel"
+                print_report_name="object.x_name"/>
+    </data>
+</odoo>

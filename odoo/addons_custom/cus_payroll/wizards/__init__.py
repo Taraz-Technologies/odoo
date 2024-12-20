@@ -1,0 +1,1 @@
+from . import add_hr_contract_bulk_tagging

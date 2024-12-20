@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report id="consolidation_products_xlsx"
+                model="consolidation.tracking"
+                string="Products Data (Excel)"
+                report_type="xlsx"
+                name="cus_logistics_tracking.consolidation_products_xlsx"
+                file="cus_logistics_tracking.consolidation_products_xlsx"
+                print_report_name="'Products Data - %s' % (object.x_internal_ref)"/>
+
+        <report id="free_zone_product_details"
+                model="free.zone.operations"
+                string="Products Detail (Excel)"
+                report_type="xlsx"
+                name="cus_logistics_tracking.free_zone_product_details"
+                file="cus_logistics_tracking.free_zone_product_details"
+                print_report_name="'Products Detail - %s' % (object.x_form_field_01)"/>
+
+        <report id="report_dhl_item_list"
+                model="stock.picking"
+                string="DHL Item list (XLSX)"
+                report_type="xlsx"
+                name="cus_logistics_tracking.report_dhl_item_list"
+                file="cus_logistics_tracking.report_dhl_item_list"
+                print_report_name="'Products Detail - %s' % (object.origin)"/>
+
+        <!-- Receipt/Delivery Order Reports -->
+        <report id="action_report_receipt_order"
+                string="Receipt Order"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                name="cus_logistics_tracking.report_receipt_order"
+                file="cus_logistics_tracking.report_receipt_order"
+                print_report_name="'Receipt Order - %s' % (object.origin)"
+                paperformat="base.paperformat_euro_landscape_borderless"/>
+
+        <report id="action_report_product_barcodes"
+                string="Product Barcodes (Label)"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                name="cus_logistics_tracking.report_product_barcodes"
+                file="cus_logistics_tracking.report_product_barcodes"
+                print_report_name="'Products QR Codes - %s' % (object.name)"
+                paperformat="base.paperformat_label"/>
+
+        <report id="action_report_product_qrcodes"
+                string="Product QR Codes (Label)"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                name="cus_logistics_tracking.report_product_qrcodes"
+                file="cus_logistics_tracking.report_product_qrcodes"
+                print_report_name="'Products QR Codes - %s' % (object.name)"
+                paperformat="base.paperformat_label"/>
+
+        <report id="action_report_return"
+                string="Return Slip"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                name="cus_logistics_tracking.report_returnslip"
+                file="cus_logistics_tracking.report_returnslip"
+                print_report_name="'Return Slip - %s' % (object.origin)"/>
+
+        <report id="action_report_shipping_invoice"
+                string="Shipping Invoice"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                file="cus_logistics_tracking.report_shipping_invoice"
+                name="cus_logistics_tracking.report_shipping_invoice"
+                print_report_name="'Shipping Invoice - %s (%s)' % (object.x_shipping_invoice_number, object.origin)"/>
+
+        <report id="action_report_accessories_labels"
+                string="Accessories Labels"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                file="cus_logistics_tracking.report_accessories_labels"
+                name="cus_logistics_tracking.report_accessories_labels"
+                print_report_name="'Accessories Labels - %s' % (object.origin)"
+                paperformat="base.paperformat_label"/>
+
+        <report id="action_report_final_packing_checklist"
+                string="Final Packing Checklist"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                file="cus_logistics_tracking.report_final_packing_checklist"
+                name="cus_logistics_tracking.report_final_packing_checklist"
+                print_report_name="'Final Packing Checklist - %s' % (object.origin)"/>
+
+        <report id="action_report_certificate_of_origin"
+                string="Certificate of Origin"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                file="cus_logistics_tracking.report_certificate_of_origin"
+                name="cus_logistics_tracking.report_certificate_of_origin"
+                print_report_name="'Certificate of Origin - %s' % (object.origin)"
+                paperformat="base.paperformat_euro_borderless"/>
+
+        <report id="action_report_certificate_of_origin_multi"
+                string="Certificate of Origin (Multi)"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                file="cus_logistics_tracking.report_certificate_of_origin_multi"
+                name="cus_logistics_tracking.report_certificate_of_origin_multi"
+                print_report_name="'Certificate of Origin - %s' % (object.origin)"
+                paperformat="base.paperformat_euro_borderless"/>
+
+        <report id="action_report_letter_to_customs"
+                string="Letter to Customs"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                file="cus_logistics_tracking.report_letter_to_customs"
+                name="cus_logistics_tracking.report_letter_to_customs"
+                print_report_name="'Letter to Customs - %s' % (object.origin)"/>
+
+        <report id="action_report_undertaking"
+                string="Undertaking"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                file="cus_logistics_tracking.report_undertaking"
+                name="cus_logistics_tracking.report_undertaking"
+                print_report_name="'Undertaking - %s' % (object.origin)"/>
+
+        <report id="action_report_request_letter_for_CCI"
+                string="Request Letter for CCI"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                file="cus_logistics_tracking.report_request_letter_for_CCI"
+                name="cus_logistics_tracking.report_request_letter_for_CCI"
+                print_report_name="'Request Letter - %s' % (object.origin)"/>
+
+        <report id="action_report_routing_order_form"
+                string="Routing Order Form"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                file="cus_logistics_tracking.report_routing_order_form"
+                name="cus_logistics_tracking.report_routing_order_form"
+                print_report_name="'Routing Order Form - %s' % (object.origin)"/>
+
+        <report id="action_report_shipper_undertaking"
+                string="Shipper Undertaking"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                file="cus_logistics_tracking.report_shipper_undertaking"
+                name="cus_logistics_tracking.report_shipper_undertaking"
+                print_report_name="'Shipper Undertaking - %s' % (object.origin)"/>
+
+        <report id="action_report_quality_certificate"
+                string="Quality Certificate"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                file="cus_logistics_tracking.report_quality_certificate"
+                name="cus_logistics_tracking.report_quality_certificate"
+                print_report_name="'Quality Certificate - %s' % (object.origin)"/>
+
+        <report id="action_report_warranty_certificate"
+                string="Warranty Certificate"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                file="cus_logistics_tracking.report_warranty_certificate"
+                name="cus_logistics_tracking.report_warranty_certificate"
+                print_report_name="'Warranty Certificate - %s' % (object.origin)"/>
+
+        <report id="action_report_products_label"
+                string="Packing Labels"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                file="cus_logistics_tracking.report_products_label"
+                name="cus_logistics_tracking.report_products_label"
+                print_report_name="'Packing Labels - %s' % (object.origin)"
+                paperformat="base.paperformat_label"/>
+
+        <report id="action_report_packing_list"
+                string="Packing List"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                file="cus_logistics_tracking.report_packing_list"
+                name="cus_logistics_tracking.report_packing_list"
+                print_report_name="'Packing List - %s' % (object.origin)"/>
+
+        <report id="action_report_marking_label"
+                string="Marking"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                file="cus_logistics_tracking.report_marking_label"
+                name="cus_logistics_tracking.report_marking_label"
+                print_report_name="'Package Marking - %s' % (object.origin)"
+                paperformat="base.paperformat_label"/>
+
+        <report id="action_report_shipping_label_from"
+                string="Shipping Label from"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                file="cus_logistics_tracking.report_shipping_label_from"
+                name="cus_logistics_tracking.report_shipping_label_from"
+                print_report_name="'Shipping Label From - %s' % (object.origin)"
+                paperformat="base.paperformat_label"/>
+
+        <report id="action_report_shipping_label_to"
+                string="Shipping Label To"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                file="cus_logistics_tracking.report_shipping_label_to"
+                name="cus_logistics_tracking.report_shipping_label_to"
+                print_report_name="'Shipping Label To - %s' % (object.origin)"
+                paperformat="base.paperformat_label"/>
+    </data>
+</odoo>

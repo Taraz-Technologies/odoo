@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<menuitem id="menu_employee_fines"
+			  name="Employee Fines"
+			  parent="om_hr_payroll.menu_hr_payroll_root"
+			  groups="om_hr_payroll.group_hr_payroll_user"
+			  sequence="50"/>
+<!--	Employee Fines-->
+	<record id="hr_fines_form_view" model="ir.ui.view">
+		<field name="name">hr.fines.form.view</field>
+		<field name="model">hr.fines</field>
+		<field name="arch" type="xml">
+			<form string="Employee Fines">
+				<header>
+					<field name="x_state" widget="statusbar" statusbar_visible="not_paid,paid"/>
+				</header>
+				<sheet>
+					<widget name="web_ribbon" title="Paid" attrs="{'invisible': [('x_state', '!=', 'paid')]}"/>
+					<group col="4">
+						<field name="x_employee_id"/>
+						<field name="x_payslip_id" readonly="1"/>
+						<field name="x_amount" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+						<field name="x_currency_id"/>
+						<field name="x_due_date"/>
+						<field name="x_batch_id"/>
+						<field name="x_note"/>
+					</group>
+					<field name="x_percentage" invisible="1"/>
+					<field name="x_salary" invisible="1"/>
+					<field name="x_hours" invisible="1"/>
+				</sheet>
+				<div class="oe_chatter">
+					<field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+					<field name="message_ids" widget="mail_thread"/>
+					<field name="activity_ids" widget="mail_activity"/>
+				</div>
+			</form>
+		</field>
+	</record>
+
+	<record id="hr_fines_tree_view" model="ir.ui.view">
+		<field name="name">hr.fines.tree.view</field>
+		<field name="model">hr.fines</field>
+		<field name="arch" type="xml">
+			<tree string="Employee Fines">
+				<field name="x_due_date"/>
+				<field name="x_employee_id"/>
+				<field name="x_note"/>
+				<field name="x_currency_id" invisible="1"/>
+				<field name="x_amount" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+				<field name="x_state"/>
+				<field name="x_payslip_id"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="hr_fines_search_view" model="ir.ui.view">
+		<field name="name">hr.fines.search.view</field>
+		<field name="model">hr.fines</field>
+		<field name="arch" type="xml">
+			<search string="Employee Fines">
+				<filter name="not_paid" string="Not Paid" domain="[('x_state', '=', 'not_paid')]"/>
+				<filter name="paid" string="Paid" domain="[('x_state', '=', 'paid')]"/>
+				<group expand="0" string="Group by">
+					<filter name="employee" string="Employee" context="{'group_by': 'x_employee_id'}"/>
+					<filter name="status" string="Status" context="{'group_by': 'x_state'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+
+	<record id="action_view_hr_fines" model="ir.actions.act_window">
+		<field name="name">Employee Fines</field>
+		<field name="res_model">hr.fines</field>
+		<field name="view_mode">tree,form</field>
+		<field name="search_view_id" ref="hr_fines_search_view"/>
+	</record>
+
+	<menuitem id="menu_hr_fines"
+			  name="Employee Fines"
+			  action="action_view_hr_fines"
+			  parent="cus_payroll.menu_employee_fines"
+			  groups="om_hr_payroll.group_hr_payroll_user"
+			  sequence="1"/>
+<!--	Fines Batch-->
+	<record id="hr_fines_batch_form_view" model="ir.ui.view">
+		<field name="name">hr.fines.batch.form.view</field>
+		<field name="model">hr.fines.batch</field>
+		<field name="arch" type="xml">
+			<form string="Fine Batches">
+				<header>
+					<button name="action_batch_done" string="Mark as Done" type="object" states="draft" class="oe_highlight"/>
+					<button name="action_batch_draft" string="Set to Draft" type="object" states="cancel,done"/>
+					<button name="action_batch_cancel" string="Cancel" type="object" states="draft"/>
+					<field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+				</header>
+				<sheet>
+					<div class="oe_title">
+						<label for="x_name" class="oe_edit_only"/>
+						<h1>
+							<field name="x_name"/>
+						</h1>
+					</div>
+					<group>
+						<group>
+							<field name="x_amount" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+							<field name="x_payment_date" string="Due Date"/>
+							<field name="x_split"/>
+							<label for="x_date_from" attrs="{'invisible': [('x_split', '!=', 'hours')]}"/>
+							<div class="d-flex" attrs="{'invisible': [('x_split', '!=', 'hours')]}">
+								<field name="x_date_from" string="Period" class="oe_inline" attrs="{'required': [('x_split', '=', 'hours')]}"/>
+								<span class="mx-2">-</span>
+								<field name="x_date_to" class="oe_inline" attrs="{'required': [('x_split', '=', 'hours')]}"/>
+							</div>
+						</group>
+						<group>
+							<field name="x_currency_id"/>
+							<field name="x_note"/>
+							<field name="x_default_values" invisible="1"/>
+						</group>
+					</group>
+					<separator col="4" string="Bonuses"/>
+					<field name="x_fines_ids">
+						<tree editable="bottom">
+							<field name="x_due_date"/>
+							<field name="x_employee_id"/>
+							<field name="x_note"/>
+							<field name="x_percentage" attrs="{'column_invisible': [('parent.x_split', '!=', 'percentage')]}"/>
+							<field name="x_salary" attrs="{'column_invisible': [('parent.x_split', '!=', 'salary')]}"/>
+							<field name="x_hours" attrs="{'column_invisible': [('parent.x_split', '!=', 'hours')]}"/>
+							<field name="x_amount" sum="Total Bonus"/>
+							<field name="x_state"/>
+						</tree>
+					</field>
+				</sheet>
+				<div class="oe_chatter">
+					<field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+					<field name="message_ids" widget="mail_thread"/>
+					<field name="activity_ids" widget="mail_activity"/>
+				</div>
+			</form>
+		</field>
+	</record>
+
+	<record id="hr_fines_batch_tree_view" model="ir.ui.view">
+		<field name="name">hr.fines.batch.tree.view</field>
+		<field name="model">hr.fines.batch</field>
+		<field name="arch" type="xml">
+			<tree string="Fine Batches">
+				<field name="x_name"/>
+				<field name="x_currency_id" invisible="1"/>
+				<field name="x_amount" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+				<field name="x_note"/>
+				<field name="x_payment_date"/>
+				<field name="x_split"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="hr_fines_batch_search_view" model="ir.ui.view">
+		<field name="name">hr.fines.batch.search.view</field>
+		<field name="model">hr.fines.batch</field>
+		<field name="arch" type="xml">
+			<search string="Fine Batches">
+				<filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+				<filter name="done" string="Done" domain="[('state', '=', 'done')]"/>
+				<filter name="cancel" string="Cancel" domain="[('state', '=', 'cancel')]"/>
+				<group expand="0" string="Group by">
+					<filter name="payment_date" string="Payment Date" context="{'group_by': 'x_payment_date'}"/>
+					<filter name="status" string="Status" context="{'group_by': 'state'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+
+	<record id="action_view_hr_fines_batch" model="ir.actions.act_window">
+		<field name="name">Fine Batches</field>
+		<field name="res_model">hr.fines.batch</field>
+		<field name="view_mode">tree,form</field>
+		<field name="search_view_id" ref="hr_fines_batch_search_view"/>
+	</record>
+
+	<menuitem id="menu_hr_fines_batch"
+			  name="Fine Batches"
+			  action="action_view_hr_fines_batch"
+			  parent="cus_payroll.menu_employee_fines"
+			  groups="om_hr_payroll.group_hr_payroll_user"
+			  sequence="2"/>
+</odoo>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

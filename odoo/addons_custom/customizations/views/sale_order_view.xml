@@ -1,0 +1,729 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="view_sale_order_form_customization" model="ir.ui.view">
+		<field name="name">sale.order.form.customization</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_order_form"/>
+		<field name="priority" eval="99" />
+		<field name="arch" type="xml">
+			<data>
+				<xpath expr="//button[@name='%(sale.action_view_sale_advance_payment_inv)d']" position="after">
+					<button name="create_delivery" string="Create Delivery" type="object" class="btn-primary"
+							attrs="{'invisible': ['|', ('delivery_count', '!=', 0), ('state', 'not in', ('sale', 'done'))]}"/>
+				</xpath>
+				<xpath expr="//button[@name='action_confirm'][1]" position="before">
+					<button name="upcoming_order" string="Upcoming Order" type="object" class="btn-primary" attrs="{'invisible': [('x_upcoming', '=', False)]}"/>
+				</xpath>
+				<xpath expr="//button[@name='action_confirm'][1]" position="attributes">
+					<attribute name="attrs">{'invisible': ['|',('x_upcoming', '=', True),('state', 'not in', ['sent'])]}</attribute>
+				</xpath>
+				<xpath expr="//button[@name='action_confirm'][2]" position="attributes">
+					<attribute name="attrs">{'invisible': ['|',('x_upcoming', '=', True),('state', 'not in', ['draft'])]}</attribute>
+				</xpath>
+				<xpath expr="//button[@name='action_view_invoice']" position="after">
+					<field name="x_task_id" invisible="1"/>
+					<button string="Task"
+							name="action_view_task"
+							type="object"
+							class="oe_stat_button"
+							icon="fa-tasks"
+							attrs="{'invisible': [('x_task_id', '=', False)]}"/>
+				</xpath>
+				<field name='partner_shipping_id' position="after">
+					<field name="x_end_user"/>
+					<field name="x_update_partner_data" invisible="1"/>
+					<field name='client_order_ref' position="move"/>
+					<field name="x_customer_po"/>
+					<field name="x_web_order_number"/>
+					<field name="x_lead_time"/>
+				</field>
+				<field name='validity_date' position="before">
+					<field name="x_folder_name"/>
+				</field>
+				<field name="date_order" position="attributes">
+					<attribute name="readonly">0</attribute>
+				</field>
+				<field name='payment_term_id' position="after">
+					<field name='incoterm' position="move"/>
+					<field name="x_upcoming" invisible="1"/>
+					<field name="x_sale_type_turkey" attrs="{'invisible':['|', ('state','not in',('sale', 'done')), ('company_id','!=',2)],
+					'required':[('state','in',('sale', 'done')), ('company_id','=',2)]}"/>
+					<field name="x_sale_type" attrs="{'invisible':['|', ('state','not in',('sale', 'done')), ('company_id','!=',1)],
+					'required':[('state','in',('sale', 'done')), ('company_id','=',1)]}"/>
+					<field name="x_payment_method" attrs="{'invisible':['|', ('state','not in',('sale', 'done')), ('company_id','!=',1)],
+					'required':[('state','in',('sale', 'done')), ('company_id','=',1)]}"/>
+					<field name="carrier_id" invisible="1"/>
+					<field name="x_tracking_reference" attrs="{'invisible': [('state','not in',('sale', 'done'))]}"/>
+					<field name="x_contain_pelab" attrs="{'invisible': [('x_contain_pelab','=', False)]}"/>
+					<field name="x_deadline"/>
+					<field name="x_production_deadline"/>
+				</field>
+				<xpath expr="//field[@name='order_line']/tree[1]//field[@name='name']" position="after">
+					<field name="x_internal_notes"/>
+				</xpath>
+				<field name="name" position="before">
+					<div style="padding-bottom: 15px;">
+                    	<field name="x_internal_notes" placeholder="Internal Notes" style="border-radius: 5px; border: 1px solid black; font-style: italic; padding:5px; font-size: 15px;"/>
+					</div>
+				</field>
+                <xpath expr="//group[@name='note_group']" position="before">
+                    <div class="oe_right">
+                        <button string="Add BOS" name="add_bos_products" type="object"/>
+                    </div>
+                </xpath>
+				<field name='amount_total' position="after">
+					<field name="x_ui_value" readonly="1"/>
+					<field name="x_total_without_discount"/>
+					<field name="x_total_discount"/>
+					<field name="x_total_cgs"/>
+					<field name="x_total_profit"/>
+					<field name="x_estimated_profit" invisible="1"/>
+					<field name="x_profit_margin" widget="percentage"/>
+					<field name="x_estimated_profit_margin" widget="percentage" invisible="1"/>
+				</field>
+				<page name="order_lines" position="inside">
+					<group>
+						<group>
+							<field name="x_show_bill_to"/>
+							<field name="x_show_customer"/>
+							<field name="x_letter_head_report"/>
+							<field name="x_hs_code_and_coo"/>
+							<field name="x_distributor_order"/>
+							<field name="x_hide_customer"/>
+							<field name="x_hide_product"/>
+							<field name="x_hide_discount"/>
+							<field name="x_hide_discount_description"/>
+							<field name="x_hide_gst"/>
+							<field name="x_show_sale_person"/>
+							<field name="x_remove_proforma"/>
+							<field name="x_date_docs"/>
+						</group>
+						<group>
+							<field name="x_show_ship_to"/>
+							<field name="x_show_end_user"/>
+							<field name="x_appear_payment_method"/>
+							<field name="x_appear_pt_table"/>
+							<field name="x_attach_short_terms"/>
+							<field name="x_attach_long_terms"/>
+							<field name="x_appear_gst_withheld"/>
+							<field name="x_appear_it_withheld"/>
+							<field name="x_appear_paypal_link"/>
+							<field name="x_appear_banking_details"/>
+							<field name="x_bank" readonly="0"
+								   attrs="{'required':[('x_appear_banking_details', '=', True)]}"/>
+						</group>
+					</group>
+<!--					<field name="x_internal_notes" placeholder="Internal Notes"/>-->
+				</page>
+				<page name='order_lines' position="after">
+					<page string="Freight Calculation" name="freight_calculation">
+						<button name="compute_shipment_product" string="Refresh" type="object" class="oe_highlight"/>
+						<field name="x_sale_order_product_ids" options="{'create_edit': false}">
+							<tree editable="bottom">
+								<field name="x_sale_order_id" invisible="1"/>
+								<field name="x_product_id"/>
+								<field name="x_short_description"/>
+								<field name="x_gross_weight"/>
+								<field name="x_quantity"/>
+								<field name="x_total_weight" sum="Total Weight"/>
+							</tree>
+						</field>
+						<group>
+							<group>
+								<field name="x_currency_id" invisible="1"/>
+								<field name="x_shipment_weight"/>
+								<field name="x_dhl_export_zone"/>
+	                            <label for="x_weight_from" string="DHL Range (kg)"/>
+	                            <div>
+	                                <field name="x_dhl_weight_from" class="oe_inline"/>
+	                                -
+	                                <field name="x_dhl_weight_to" class="oe_inline"/>
+	                            </div>
+								<field name="x_dhl_shipping_rate" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+							</group>
+							<group>
+								<field name="x_delivery_country"/>
+								<field name="x_ups_export_zone"/>
+	                            <label for="x_weight_from" string="UPS Range (kg)"/>
+	                            <div>
+	                                <field name="x_ups_weight_from" class="oe_inline"/>
+	                                -
+	                                <field name="x_ups_weight_to" class="oe_inline"/>
+	                            </div>
+								<field name="x_ups_shipping_rate" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+							</group>
+							<group string="DHL Charges">
+								<field name="x_dhl_charges" nolabel="1">
+									<tree editable="bottom">
+										<field name="x_sale_order_id" invisible="1"/>
+										<field name="x_name"/>
+										<field name="currency_id" invisible="1"/>
+										<field name="x_amount" sum="Total Freight" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+									</tree>
+								</field>
+							</group>
+							<group string="UPS Charges">
+								<field name="x_ups_charges" nolabel="1">
+									<tree editable="bottom">
+										<field name="x_sale_order_id" invisible="1"/>
+										<field name="x_name"/>
+										<field name="currency_id" invisible="1"/>
+										<field name="x_amount" sum="Total Freight" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+									</tree>
+								</field>
+							</group>
+						</group>
+						<field name="x_total_dhl" invisible="1"/>
+						<field name="x_total_ups" invisible="1"/>
+					</page>
+					<page string="CGS Analysis" name="cgs_analysis">
+						<button name="get_settings" string="Refresh" type="object" class="oe_highlight"/>
+						<group string="Settings" invisible="1">
+							<group>
+								<field name="x_inclusive_of_bonus"/>
+								<field name="x_inclusive_of_currency"/>
+							</group>
+							<group>
+								<field name="x_inclusive_of_investor_profit"/>
+								<field name="x_inclusive_of_other_costs"/>
+							</group>
+						</group>
+						<group col="6" name="cgs_analysis" string="CGS Analysis" class="mb0">
+							<group colspan="2">
+								<field name="x_price" widget="monetary"/>
+							</group>
+							<group colspan="2">
+								<field name="x_cost" widget="monetary"/>
+								<field name="x_cost_percentage" widget="percentage"/>
+								<field name="x_cost_multiplier"/>
+							</group>
+							<group colspan="2">
+								<field name="x_profit" widget="monetary"/>
+								<field name="x_profit_percentage" widget="percentage"/>
+								<field name="x_markup" widget="percentage"/>
+							</group>
+						</group>
+						<group col="6" class="mt0">
+							<group colspan="2" class="mb0">
+							</group>
+							<group colspan="1" class="mb0" string="Sale Price">
+							</group>
+							<group colspan="1" class="mb0" string="Cost">
+							</group>
+							<group colspan="1" class="mb0" string="Profit">
+							</group>
+							<group colspan="2" class="mt0 mb0">
+								<field name="x_product"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_product_price" nolabel="1"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_product_cost" nolabel="1"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_product_profit" nolabel="1"/>
+							</group>
+							<group colspan="2" class="mt0 mb0">
+								<field name="x_freight"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_freight_price" nolabel="1"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_freight_cost" nolabel="1"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_freight_profit" nolabel="1"/>
+							</group>
+							<group colspan="2" class="mt0 mb0">
+								<field name="x_discount"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_discount_price" nolabel="1"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_discount_cost" nolabel="1"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_discount_profit" nolabel="1"/>
+							</group>
+							<group colspan="2" class="mt0 mb0">
+								<field name="x_fees"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_fees_price" nolabel="1"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_fees_cost" nolabel="1"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_fees_profit" nolabel="1"/>
+							</group>
+							<group colspan="2" class="mt0 mb0">
+								<field name="x_other_real"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_other_real_price" nolabel="1"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_other_real_cost" nolabel="1"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_other_real_profit" nolabel="1"/>
+							</group>
+							<group colspan="2" class="mt0 mb0">
+								<field name="x_other_estimated"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_other_estimated_price" nolabel="1"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_other_estimated_cost" nolabel="1"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_other_estimated_profit" nolabel="1"/>
+							</group>
+							<group colspan="2" class="mt0 mb0">
+								<field name="x_bonus"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_bonus_price" nolabel="1"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_bonus_cost" nolabel="1"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_bonus_profit" nolabel="1"/>
+							</group>
+							<group colspan="2" class="mt0 mb0">
+								<field name="x_investor_share"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_investor_share_price" nolabel="1"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_investor_share_cost" nolabel="1"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_investor_share_profit" nolabel="1"/>
+							</group>
+							<group colspan="2" class="mt0 mb0">
+								<field name="x_currency"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_currency_price" nolabel="1"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_currency_cost" nolabel="1"/>
+							</group>
+							<group colspan="1" class="mt0 mb0">
+								<field name="x_currency_profit" nolabel="1"/>
+							</group>
+						</group>
+						<button type="action" name="%(customizations.act_sale_order_cgs_graph)d" string="Pie Graph" class="oe_highlight"/>
+						<field name="x_costing_complete" invisible="1"/>
+						<field name="x_cgs_line_ids"/>
+					</page>
+					<page string="Attachment Doc" name="attachment_doc">
+						<group col="4">
+							<field name="x_content_title" placeholder="Report content title"/>
+							<field name="x_content_show"/>
+						</group>
+						<field name="x_content_text" placeholder="Report content text"/>
+					</page>
+				</page>
+				<field name='user_id' position="before">
+					<field name="x_team_member_ids" widget="many2many_tags"/>
+				</field>
+				<field name='analytic_account_id' position="after">
+					<field name="x_sale_tax_invoice_number" attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+					<field name="x_so_payment_state" states="sale,done"/>
+				</field>
+				<field name='effective_date' position="after">
+					<field name="x_update_freight"/>
+					<field name="x_total_freight"/>
+					<field name="x_total_weight"/>
+					<field name="x_freight_per_kg"/>
+				</field>
+				<field name='source_id' position="after">
+					<field name="x_exclude_from_dashboard" groups="base.group_erp_manager"/>
+					<field name="x_date_dashboard" groups="base.group_erp_manager"/>
+				</field>
+				<page name='customer_signature' position="after">
+					<page string="Stock Level" id="stock_level">
+						<group>
+							<group>
+								<field name="x_stock_status"/>
+							</group>
+							<group>
+								<field name="x_packing_type"/>
+							</group>
+						</group>
+						<button string="Check Stock" name="update_stock_level" type="object" class="oe_highlight" groups="base.group_user"/>
+						<group>
+							<field name="x_stock_level" readonly="1" force_save="1" nolabel="1">
+								<tree>
+									<field name="name"/>
+									<field name="qty_available"/>
+									<field name="virtual_available"/>
+								</tree>
+							</field>
+						</group>
+					</page>
+					<page string="Sale Order Task" id="sale_order_task">
+						<button name="create_project_task" string="Create task" type="object" class="oe_highlight"
+								attrs="{'invisible': [('x_task_id', '!=', False)]}"/>
+						<group>
+							<group>
+								<field name="x_task_name"/>
+								<field name="x_user_responsible"/>
+								<field name="x_user_participants" widget="many2many_tags"/>
+								<field name="x_user_observers" widget="many2many_tags"/>
+								<field name="x_processes" widget="many2many_tags"/>
+							</group>
+							<group>
+								<field name="x_start_task_on"/>
+								<field name="x_notes"/>
+								<field name="x_update_tags" invisible="1"/>
+								<field name="x_tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+							</group>
+						</group>
+						<separator string="Tasks" colspan="4"/>
+						<field name="x_tasks">
+							<tree>
+								<field name="x_name"/>
+								<field name="x_description"/>
+								<field name="x_user_responsible"/>
+								<field name="x_user_participants" widget="many2many_tags"/>
+								<field name="x_user_observers" widget="many2many_tags"/>
+								<field name="x_checklist_items" widget="many2many_tags"/>
+								<field name="x_project_stage_id"/>
+							</tree>
+						</field>
+					</page>
+				</page>
+			</data>
+		</field>
+	</record>
+
+	<record id="view_sale_order_tree_customization" model="ir.ui.view">
+		<field name="name">sale.order.tree.customization</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_quotation_tree"/>
+		<field name="priority" eval="99" />
+		<field name="arch" type="xml">
+			<data>
+				<xpath expr="//field[@name='name']" position="after">
+					<field name="x_web_order_number" optional="show"/>
+					<field name="x_sale_type" optional="show"/>
+				</xpath>
+				<xpath expr="//field[@name='partner_id']" position="after">
+					<field name="x_end_user" optional="show"/>
+					<field name="x_country" optional="show"/>
+					<field name="x_payment_method" optional="show"/>
+				</xpath>
+				<xpath expr="//field[@name='state']" position="after">
+					<field name="x_is_commented" invisible="1"/>
+					<button name="action_show_notes" type="object" icon="fa-comment" string="Show Notes"
+                                    attrs="{'invisible': [('x_is_commented', '=', False)]}"/>
+					<field name="x_total_cgs" optional="hide"/>
+					<field name="x_total_profit" optional="hide"/>
+					<field name="x_estimated_profit" optional="hide"/>
+					<field name="x_profit_margin" widget="percentage" optional="hide"/>
+					<field name="x_estimated_profit_margin" widget="percentage" optional="hide"/>
+					<field name="x_total_freight" optional="hide" sum="Total Freight"/>
+					<field name="x_total_weight" optional="hide" sum="Total Weight"/>
+					<field name="x_freight_per_kg" optional="hide" sum="Freight per KG"/>
+					<field name="x_tracking_reference" optional="show"/>
+				</xpath>
+			</data>
+		</field>
+	</record>
+
+	<record id="view_sales_order_filter_customization" model="ir.ui.view">
+		<field name="name">sale.order.list.select.customization</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_sales_order_filter"/>
+		<field name="priority" eval="99" />
+		<field name="arch" type="xml">
+			<data>
+				<filter name="my_sale_orders_filter" position="after">
+					<separator/>
+                    <filter string="Costing Available" name="costing_available" domain="[('x_costing_complete', '=', True)]"/>
+				</filter>
+			</data>
+		</field>
+	</record>
+
+	<record id="view_order_line_tree_customization" model="ir.ui.view">
+		<field name="name">sale.order.line.tree.customization</field>
+		<field name="model">sale.order.line</field>
+		<field name="inherit_id" ref="sale.view_order_line_tree"/>
+		<field name="priority" eval="99" />
+		<field name="arch" type="xml">
+			<data>
+				<field name="name" position="after">
+					<field name="x_internal_notes"/>
+				</field>
+			</data>
+		</field>
+	</record>
+
+	<record id="act_sale_order_project_task_all" model="ir.actions.act_window">
+		<field name="name">Sale Order Tracking Tasks</field>
+		<field name="res_model">project.task</field>
+		<field name="view_mode">kanban,tree,form,calendar,pivot,graph,activity</field>
+		<field name="context">{
+			'pivot_row_groupby': ['user_id'],
+			'search_default_project_id': [2],
+			'search_default_trackbot_task': 1,
+			'search_default_pending_task': 1,
+			'search_default_normal_task': 1,
+			'search_default_blocked_task': 1,
+			'default_project_id': 2,
+			'default_user_id': uid,
+			}</field>
+		<field name="domain">[('project_id', '=', 2),('user_id', '=', 28)]</field>
+		<field name="search_view_id" ref="project.view_task_search_form"/>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Click <i>Create</i> to start a new task.
+			</p><p>
+			To get things done, use activities and status on tasks.<br/>
+			Chat in real time or by email to collaborate efficiently.
+		</p>
+		</field>
+	</record>
+
+    <record id="view_sale_order_cgs_graph_view" model="ir.ui.view">
+        <field name="name">sale.order.cgs.graph</field>
+        <field name="model">sale.order.cgs</field>
+        <field name="arch" type="xml">
+            <graph string="Sales Order CGS" type="pie">
+                <field name="x_sale_order_id"/>
+                <field name="x_price_subtotal" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+	<record id="act_sale_order_cgs_graph" model="ir.actions.act_window">
+		<field name="name">CGS Analysis</field>
+		<field name="res_model">sale.order.cgs</field>
+		<field name="view_mode">graph,tree,form,pivot</field>
+		<field name="context">{
+			'search_default_real': 1,
+			'search_default_products': 1,
+			'search_default_freight': 1,
+			'search_default_fees': 1,
+			'search_default_other_real': 1,
+			'search_default_type': 1,
+			'search_default_x_sale_order_id': active_id,
+			}</field>
+		<field name="domain">[]</field>
+		<field name="view_id" ref="view_sale_order_cgs_graph_view"/>
+		<field name="search_view_id" ref="view_sale_order_cgs_search"/>
+	</record>
+
+	<menuitem id="menu_sale_currency_rates"
+			  name="Currency Rates"
+			  parent="sale.sale_menu_root"
+			  action="act_view_currency_rates"
+              groups="sales_team.group_sale_manager"
+			  sequence="6"/>
+
+	<menuitem id="menu_sale_fuel_surcharge"
+			  name="Fuel Surcharge"
+			  parent="sale.sale_menu_root"
+			  action="action_fuel_surcharge"
+              groups="sales_team.group_sale_manager"
+			  sequence="6"/>
+
+	<menuitem id="menu_sale_shipping_rates"
+			  name="Shipping Rates"
+			  parent="sale.sale_menu_root"
+			  action="action_shipping_rates"
+              groups="sales_team.group_sale_manager"
+			  sequence="6"/>
+
+	<menuitem id="menu_sale_order_project_task"
+			  name="SO Tracking"
+			  parent="sale.sale_menu_root"
+			  action="act_sale_order_project_task_all"
+              groups="sales_team.group_sale_manager"
+			  sequence="7"/>
+
+	<menuitem id="menu_action_payment_term_in_sale_order"
+			  action="account.action_payment_term_form"
+			  parent="sale.menu_sale_config"
+			  sequence="2"/>
+<!--	Sale Order CGS Views-->
+	<record id="view_sale_order_cgs_form" model="ir.ui.view">
+		<field name="name">sale.order.cgs.form</field>
+		<field name="model">sale.order.cgs</field>
+		<field name="arch" type="xml">
+			<form>
+				<sheet>
+					<group>
+						<group>
+							<field name="x_journal_entry_id" attrs="{'invisible':[('x_journal_entry_id', '=', False)]}" widget="many2one"/>
+							<field name="x_bos_move_id" attrs="{'invisible':[('x_bos_move_id', '=', False)]}" widget="many2one"/>
+							<field name="x_sale_order_id"/>
+							<field name="x_date_order"/>
+							<field name="x_partner_id"/>
+							<field name="x_product_id"/>
+							<field name="x_calculation_type"/>
+							<field name="x_type"/>
+							<field name="x_product_type"/>
+							<field name="x_line_code"/>
+						</group>
+						<group>
+							<field name="x_quantity"/>
+							<field name="x_uom_id" invisible="1"/>
+							<field name="x_currency_id" invisible="1"/>
+							<field name="x_price_unit" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+							<field name="x_discount" widget="percentage"/>
+							<field name="x_price_subtotal" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+							<field name="x_profit_margin" widget="percentage"/>
+							<field name="x_markup" widget="percentage"/>
+							<field name="x_cost_multiplier"/>
+							<field name="x_pkr_currency_id" invisible="1"/>
+							<field name="x_cgs_unit_pkr" widget="monetary" options="{'currency_field': 'x_pkr_currency_id'}"/>
+							<field name="x_cgs_subtotal_pkr" widget="monetary" options="{'currency_field': 'x_pkr_currency_id'}"/>
+						</group>
+					</group>
+					<field name="x_note" placeholder="Notes"/>
+					<field name="x_description" attrs="{'invisible':[('x_description', '=', False)]}"/>
+					<label for="x_move_line_ids"/>
+					<field name="x_move_line_ids"/>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="view_sale_order_cgs_tree" model="ir.ui.view">
+		<field name="name">sale.order.cgs.tree</field>
+		<field name="model">sale.order.cgs</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="x_journal_entry_id" attrs="{'invisible':[('x_journal_entry_id', '=', False)]}" widget="many2one" optional="hide"/>
+				<field name="x_bos_move_id" attrs="{'invisible':[('x_bos_move_id', '=', False)]}" widget="many2one" optional="hide"/>
+				<field name="x_date_order" optional="hide"/>
+				<field name="x_sale_order_id" optional="hide"/>
+				<field name="x_partner_id" optional="hide"/>
+				<field name="x_product_id"/>
+				<field name="x_quantity"/>
+				<field name="x_uom_id" optional="hide"/>
+				<field name="x_calculation_type" optional="hide"/>
+				<field name="x_type" optional="hide"/>
+				<field name="x_product_type" optional="hide"/>
+				<field name="x_currency_id" invisible="1"/>
+				<field name="x_price_unit" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+				<field name="x_discount" widget="percentage" optional="hide"/>
+				<field name="x_price_subtotal" widget="monetary" options="{'currency_field': 'x_currency_id'}" sum="Total Price"/>
+				<field name="x_profit_margin" widget="percentage" optional="hide"/>
+				<field name="x_markup" widget="percentage" optional="hide"/>
+				<field name="x_cost_multiplier" optional="hide"/>
+				<field name="x_pkr_currency_id" invisible="1"/>
+				<field name="x_cgs_unit_pkr" widget="monetary" options="{'currency_field': 'x_pkr_currency_id'}" optional="hide"/>
+				<field name="x_cgs_subtotal_pkr" widget="monetary" options="{'currency_field': 'x_pkr_currency_id'}" optional="hide" sum="Total Cost PKR"/>
+			</tree>
+		</field>
+	</record>
+
+    <record id="view_sale_order_cgs_graph" model="ir.ui.view">
+        <field name="name">sale.order.cgs.graph</field>
+        <field name="model">sale.order.cgs</field>
+        <field name="arch" type="xml">
+            <graph string="Sales Order CGS" type="line">
+                <field name="x_sale_order_id"/>
+                <field name="x_price_subtotal" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_sale_order_cgs_pivot" model="ir.ui.view">
+        <field name="name">sale.order.cgs.pivot</field>
+        <field name="model">sale.order.cgs</field>
+        <field name="arch" type="xml">
+            <pivot string="Sales Order CGS">
+                <field name="x_sale_order_id" type="row"/>
+                <field name="x_price_subtotal" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+	<record id="view_sale_order_cgs_search" model="ir.ui.view">
+		<field name="name">sale.order.cgs.search</field>
+		<field name="model">sale.order.cgs</field>
+		<field name="arch" type="xml">
+			<search string="Search CGS">
+                <field name="x_sale_order_id"/>
+                <field name="x_product_id"/>
+                <field name="x_journal_entry_id"/>
+				<separator/>
+				<filter string="Real" name="real" domain="[('x_calculation_type', '=', 'real')]"/>
+				<filter string="Estimated" name="estimated" domain="[('x_calculation_type', '=', 'estimated')]"/>
+				<separator/>
+				<filter string="Price" name="price" domain="[('x_type', '=', 'price')]"/>
+				<filter string="Cost" name="cost" domain="[('x_type', '=', 'cost')]"/>
+				<filter string="Profit" name="profit" domain="[('x_type', '=', 'profit')]"/>
+				<filter string="Loss" name="loss" domain="[('x_type', '=', 'loss')]"/>
+				<separator/>
+				<filter string="Products" name="products" domain="[('x_product_type', '=', 'products')]"/>
+				<filter string="Freight" name="freight" domain="[('x_product_type', '=', 'freight')]"/>
+				<filter string="Discount" name="discount" domain="[('x_product_type', '=', 'discount')]"/>
+				<filter string="Fees" name="fees" domain="[('x_product_type', '=', 'fees')]"/>
+				<filter string="Other Real" name="other_real" domain="[('x_product_type', '=', 'other_real')]"/>
+				<filter string="Other Estimated" name="other_estimated" domain="[('x_product_type', '=', 'other_estimated')]"/>
+				<filter string="Bonus" name="bonus" domain="[('x_product_type', '=', 'bonus')]"/>
+				<filter string="Investor Share" name="investor_profit" domain="[('x_product_type', '=', 'investor_profit')]"/>
+				<filter string="Currency" name="currency" domain="[('x_product_type', '=', 'currency')]"/>
+                <separator/>
+<!--                    After July-->
+<!--                <filter string="Current Fiscal Year" name="current_fiscal_year"-->
+<!--                        domain="[('x_date_order', '&lt;', (context_today() + relativedelta(years=1)).strftime('%%Y-07-01')), ('x_date_order','&gt;=', time.strftime('%%Y-07-01'))]"/>-->
+<!--                <filter string="Previous Fiscal Year" name="previous_fiscal_year"-->
+<!--                        domain="[('x_date_order', '&gt;=', (context_today() - relativedelta(years=1)).strftime('%%Y-07-01')), ('x_date_order', '&lt;', time.strftime('%%Y-07-01'))]"/>-->
+<!--                    Before July-->
+                <filter string="Current Fiscal Year" name="current_fiscal_year"
+                        domain="[('x_date_order', '&gt;=', (context_today() - relativedelta(years=1)).strftime('%%Y-07-01')), ('x_date_order','&lt;', time.strftime('%%Y-07-01'))]"/>
+                <filter string="Previous Fiscal Year" name="previous_fiscal_year"
+                        domain="[('x_date_order', '&gt;=', (context_today() - relativedelta(years=2)).strftime('%%Y-07-01')), ('x_date_order', '&lt;', (context_today() - relativedelta(years=1)).strftime('%%Y-07-01'))]"/>
+                <group col="8" colspan="4" expand="0" string="Group By">
+                    <filter string="Sale Order" name="sale_order" context="{'group_by':'x_sale_order_id'}"/>
+                    <filter string="Customer" name="customer" context="{'group_by':'x_partner_id'}"/>
+                    <filter string="Order Date" name="date_order" context="{'group_by':'x_date_order'}"/>
+                    <filter string="Product" name="product" context="{'group_by':'x_product_id'}"/>
+                    <filter string="Type" name="type" context="{'group_by':'x_type'}"/>
+                    <filter string="Sub-type" name="product_type" context="{'group_by':'x_product_type'}"/>
+                </group>
+			</search>
+		</field>
+	</record>
+
+	<record id="act_sale_order_cgs" model="ir.actions.act_window">
+		<field name="name">CGS Analysis</field>
+		<field name="res_model">sale.order.cgs</field>
+		<field name="view_mode">graph,tree,form,pivot</field>
+		<field name="context">{
+			'search_default_real': 1,
+			'search_default_products': 1,
+			'search_default_freight': 1,
+			'search_default_fees': 1,
+			'search_default_other_real': 1,
+			'search_default_date_order': 1,
+			'search_default_type': 1,
+			}</field>
+		<field name="domain">[]</field>
+		<field name="limit">800</field>
+		<field name="search_view_id" ref="view_sale_order_cgs_search"/>
+	</record>
+
+	<menuitem id="menu_sale_order_cgs"
+			  name="CGS Analysis"
+			  parent="sale.sale_menu_root"
+			  action="act_sale_order_cgs"
+              groups="sales_team.group_sale_manager"
+			  sequence="8"/>
+</odoo>

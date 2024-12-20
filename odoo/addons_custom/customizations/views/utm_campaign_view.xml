@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="utm_campaign_view_form_custom">
+        <field name="name">utm.campaign.view.form.custom</field>
+        <field name="model">utm.campaign</field>
+	    <field name="inherit_id" ref="utm.utm_campaign_view_form"/>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <data>
+                <header position="inside">
+                    <button name="action_edit_mailing_content" string="Edit Email"  class="oe_highlight"
+                            type="object" attrs="{'invisible': [('mailing_mail_count', '=', 0)]}"/>
+                    <button name="create_new_mailing_for_current_campaign" string="Create New Email" class="oe_highlight"
+                            type="object" attrs="{'invisible': [('mailing_mail_count', '=', 0)]}"/>
+                </header>
+                <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                    <button name="action_edit_mailing_content" type="object" class="oe_stat_button order-12"
+                            icon="fa-pencil-square-o" attrs="{'invisible': [('mailing_mail_count', '=', 0)]}"
+                            groups="mass_mailing.group_mass_mailing_campaign" string="Latest Email">
+                    </button>
+                </xpath>
+                <field name="name" position="attributes">
+                    <attribute name="string">Newsletter Name</attribute>
+                </field>
+                <field name="tag_ids" position="after">
+                    <field name="x_campaign_id"/>
+                </field>
+                <group id="top-group" position="after">
+                    <group string="Email Rules">
+                        <label for="x_company_type"/>
+                        <div>
+                            <field name="x_relation_01" class="oe_inline"/>
+                            -
+                            <field name="x_company_type" class="oe_inline" widget="radio" options="{'horizontal': true}"/>
+                        </div>
+                        <label for="x_company_status"/>
+                        <div>
+                            <field name="x_relation_02" class="oe_inline"/>
+                            -
+                            <field name="x_company_status" class="oe_inline" widget="radio" options="{'horizontal': true}"/>
+                        </div>
+                        <label for="x_customer_status"/>
+                        <div>
+                            <field name="x_relation_03" class="oe_inline"/>
+                            -
+                            <field name="x_customer_status" class="oe_inline" widget="radio" options="{'horizontal': true}"/>
+                        </div>
+                        <label for="x_customer_group_ids"/>
+                        <div>
+                            <field name="x_relation_04" class="oe_inline"/>
+                            -
+                            <field name="x_customer_group_ids" widget="many2many_tags" class="oe_inline"/>
+                        </div>
+                        <label for="x_interest_ids"/>
+                        <div>
+                            <field name="x_relation_05" class="oe_inline"/>
+                            -
+                            <field name="x_operation_01" class="oe_inline"/>
+                            -
+                            <field name="x_interest_ids" widget="many2many_tags" class="oe_inline"/>
+                        </div>
+                        <label for="x_interested_product_ids"/>
+                        <div>
+                            <field name="x_relation_06" class="oe_inline"/>
+                            -
+                            <field name="x_operation_02" class="oe_inline"/>
+                            -
+                            <field name="x_interested_product_ids" widget="many2many_tags" class="oe_inline"/>
+                        </div>
+                        <label for="x_purchased_product_ids"/>
+                        <div>
+                            <field name="x_relation_07" class="oe_inline"/>
+                            -
+                            <field name="x_operation_03" class="oe_inline"/>
+                            -
+                            <field name="x_purchased_product_ids" widget="many2many_tags" class="oe_inline"/>
+                        </div>
+                    </group>
+                    <field name="x_comment" placeholder="Internal notes..."/>
+                </group>
+                <sheet position="after">
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                    </div>
+                </sheet>
+            </data>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_utm_campaign_view_search_custom">
+        <field name="name">utm.campaign.view.search.custom</field>
+        <field name="model">utm.campaign</field>
+	    <field name="inherit_id" ref="utm.view_utm_campaign_view_search"/>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <data>
+                <filter name="group_user_id" position="after">
+                    <filter string="Campaign" name="group_campaign_id" context="{'group_by': 'x_campaign_id'}"/>
+                </filter>
+            </data>
+        </field>
+    </record>
+</odoo>

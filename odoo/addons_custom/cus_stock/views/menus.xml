@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+<!--        Inventory App Menus-->
+<!--        <menuitem id="main_menu_logistics_tracking" name="Logistics" parent="stock.menu_stock_root" sequence="3"/>-->
+    </data>
+</odoo>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_cut_list">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page" style="font-family: Arial; font-size:16px">
+                        <style>
+                            table, th, td {
+                                border: 1px solid black;
+                                border-collapse: collapse;
+                            }
+                        </style>
+                        <h4 class="mt8 mb8">
+                            <span>Products</span>
+                        </h4>
+                        <table class="table-sm" name="product_table" style="width: 100%;">
+                            <tbody>
+                                <t t-foreach="o.x_bom_ids" t-as="line">
+                                    <tr>
+                                        <td class="text-center" style="width: 60%;">
+                                            <span t-field="line.x_product_id"/>
+                                        </td>
+                                        <td class="text-center" style="width: 40%;">
+                                            <span t-field="line.x_quantity"/>
+                                            <span>Unit(s)</span>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <h3 class="mt8 mb8" style="color:#009999;">
+                            <span>Cut List: </span>
+                            <span t-field="o.x_name"/>
+                        </h3>
+                        <table class="table-sm" name="wiring_line_table" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <t t-set="colspan" t-value="6"/>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Ref Def</span>
+                                    </th>
+                                    <th class="text-left" style="color:#009999;">
+                                        <span>Cable Details</span>
+                                    </th>
+                                    <th class="text-left" style="color:#009999;">
+                                        <span>Label Details</span>
+                                    </th>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Qty</span>
+                                    </th>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Unit Length</span>
+                                    </th>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Wire Core</span>
+                                    </th>
+                                    <th class="text-center" style="color:#009999;">
+                                        <span>Harness</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.x_wiring_lines" t-as="line">
+                                    <t t-set="cable_details" t-value=""/>
+                                    <t t-set="cable_label" t-value=""/>
+                                    <tr>
+                                        <td class="text-center" style="width: auto;">
+                                            <span t-field="line.x_ref_des.x_ref_des"/>
+                                        </td>
+                                        <td class="text-left" style="width: auto;">
+                                            <t t-if="line.x_wire">
+                                                Wire: <strong t-field="line.x_wire.x_name"/>
+                                            </t>
+                                            <t t-if="line.x_start_connector">
+                                                Start Conn: <strong t-field="line.x_start_connector.x_name"/>
+                                            </t>
+                                            <t t-if="line.x_end_connector">
+                                                End Conn: <strong t-field="line.x_end_connector.x_name"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-left" style="width: auto;">
+                                            <t t-if="line.x_wire">
+                                                Wire Label: <strong t-field="line.x_name"/>
+                                            </t>
+                                            <t t-if="line.x_start_connector">
+                                                Start Label: <strong t-field="line.x_start_heat_shrink_label"/>
+                                            </t>
+                                            <t t-if="line.x_end_connector">
+                                                End Label: <strong t-field="line.x_end_heat_shrink_label"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-center" style="width: auto;">
+                                            <span t-field="line.x_quantity"/>
+                                        </td>
+                                        <td class="text-center" style="width: auto;">
+                                            <span t-esc="'%.2f'%(line.x_unit_length)"/>
+                                            <span t-field="line.x_uom_id"/>
+                                        </td>
+                                        <td class="text-center" style="width: auto;">
+                                            <span t-field="line.x_wire_core"/>
+                                        </td>
+                                        <td class="text-center" style="width: auto;">
+                                            <span t-field="line.x_harness"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

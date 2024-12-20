@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hr_benefits_view_form" model="ir.ui.view">
+            <field name="name">hr_benefits_view_form</field>
+            <field name="model">hr.benefits</field>
+            <field name="arch" type="xml">
+                <form string="Employee Benefits">
+                    <sheet>
+                        <group>
+                            <field name="x_payslip_id"/>
+                            <field name="x_employee_id"/>
+                            <field name="x_type"/>
+                            <field name="x_currency_id" invisible="1"/>
+                            <field name="x_amount" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_benefits_view_tree" model="ir.ui.view">
+            <field name="name">hr_benefits_view_tree</field>
+            <field name="model">hr.benefits</field>
+            <field name="arch" type="xml">
+                <tree string="Employee Benefits">
+                    <field name="x_payslip_id"/>
+                    <field name="x_employee_id"/>
+                    <field name="x_type"/>
+                    <field name="x_currency_id" invisible="1"/>
+                    <field name="x_amount" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr_benefits_view_graph" model="ir.ui.view">
+            <field name="name">hr_benefits_view_graph</field>
+            <field name="model">hr.benefits</field>
+            <field name="arch" type="xml">
+                <graph string="Activities Analysis" stacked="True" type="bar">
+                    <field name="x_amount" type="measure"/>
+                    <field name="x_employee_id" type="row"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="hr_benefits_view_search" model="ir.ui.view">
+           <field name="name">hr_benefits_view_search</field>
+           <field name="model">hr.benefits</field>
+            <field name="arch" type="xml">
+                <search string="Employee Benefits">
+                    <field name="x_payslip_id"/>
+                    <field name="x_employee_id"/>
+                    <group expand="0" name="Group By">
+                        <filter name="employee" string="Employee" context="{'group_by': 'x_employee_id'}"/>
+                        <filter name="type" string="Type" context="{'group_by': 'x_type'}"/>
+                    </group>
+                </search>
+           </field>
+        </record>
+
+        <record id="hr_benefits_action" model="ir.actions.act_window">
+            <field name="name">Employee Benefits</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.benefits</field>
+            <field name="view_mode">graph,tree,form</field>
+            <field name="context">
+                {'search_default_employee': 1, 'search_default_type': 1}
+            </field>
+            <field name="view_id" ref="hr_benefits_view_graph"/>
+            <field name="search_view_id" ref="hr_benefits_view_search"/>
+        </record>
+
+        <menuitem id="hr_benefits_menu"
+                  name="Benefits"
+                  parent="om_hr_payroll.menu_payroll_employee"
+                  action="hr_benefits_action"
+                  groups="om_hr_payroll.group_hr_payroll_user"
+                  sequence="30"/>
+    </data>
+</odoo>
+
+
+
+

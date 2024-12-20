@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_partner_form_customization_1">
+        <field name="name">res.partner.form.customization.1</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="customizations.view_partner_form_customization_0"/>
+        <field name="arch" type="xml">
+            <data>
+                <field name="x_distributor" position="after">
+                    <field name="x_is_forwarder" attrs="{'invisible': [('x_partner_type','!=', 'Vendor')]}"/>
+                </field>
+            </data>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_res_partner_filter_customization_1">
+        <field name="name">res.partner.select.customization.1</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="customizations.view_res_partner_filter_customization"/>
+        <field name="priority" eval="99" />
+        <field name="arch" type="xml">
+            <data>
+                <filter name="distributor" position="after">
+                    <filter string="Forwarder" name="forwarder" domain="[('x_is_forwarder', '=', True)]"/>
+                </filter>
+            </data>
+        </field>
+    </record>
+
+    <record id="action_forwarder_contacts" model="ir.actions.act_window">
+        <field name="name">Forwarders</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form,activity</field>
+        <field name="search_view_id" ref="base.view_res_partner_filter"/>
+        <field name="context">{'default_is_company': True, 'search_default_forwarder': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a contact in your address book
+            </p>
+            <p>
+                Odoo helps you to easily track all activities related to a customer.
+            </p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="cus_accounts_journal_dashboard_kanban_view" model="ir.ui.view">
+            <field name="name">cus_accounts_journal_dashboard_kanban_view</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.account_journal_dashboard_kanban_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//t[@t-name='JournalManage']/div[last()]" position="after">
+                     <div>
+                        <a role="menuitem" type="object" name="open_action" context="{'action_name': 'action_account_moves_ledger_general'}">General Ledger</a>
+                    </div>
+                </xpath>
+                <xpath expr="//t[@t-name='JournalManage']/div/div/div[3]/a[@name='open_action_with_context']" position="attributes">
+                    <attribute name="context">{'action_name': 'action_bank_statement_line', 'search_default_journal': True, 'search_default_active': 1}</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

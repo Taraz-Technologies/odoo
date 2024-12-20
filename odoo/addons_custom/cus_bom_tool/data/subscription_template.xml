@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="bom_tool_subtype" model="mail.message.subtype">
+        <field name="name">BoM Lines updates</field>
+        <field name="res_model">bom.tool</field>
+        <field name="description">
+            BoM Lines Parts Update Notifications
+        </field>
+        <field name="default" eval="False" />
+    </record>
+</odoo>

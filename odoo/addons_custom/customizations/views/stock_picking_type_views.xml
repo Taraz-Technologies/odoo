@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_picking_type_form_customization_0" model="ir.ui.view">
+        <field name="name">stock.picking.type.form.customization</field>
+        <field name="model">stock.picking.type</field>
+        <field name="inherit_id" ref="stock.view_picking_type_form"/>
+        <field name="priority" eval="99" />
+        <field name="arch" type="xml">
+            <data>
+				<field name="name" position="before">
+					<field name="display_name"/>
+				</field>
+				<field name="name" position="after">
+					<field name="x_type"/>
+					<field name="x_contact_id"/>
+				</field>
+            </data>
+        </field>
+    </record>
+
+    <record id="view_stock_picking_type_tree_customization_0" model="ir.ui.view">
+        <field name="name">stock.picking.type.tree.customization</field>
+        <field name="model">stock.picking.type</field>
+        <field name="inherit_id" ref="stock.view_picking_type_tree"/>
+        <field name="priority" eval="99" />
+        <field name="arch" type="xml">
+            <data>
+				<field name="name" position="before">
+					<field name="display_name"/>
+				</field>
+				<field name="name" position="after">
+					<field name="x_type"/>
+					<field name="x_contact_id"/>
+				</field>
+            </data>
+        </field>
+    </record>
+</odoo>

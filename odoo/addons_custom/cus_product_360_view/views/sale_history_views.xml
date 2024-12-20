@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+<!--    Sale Order Views-->
+    <record id="view_order_form_custom_0" model="ir.ui.view">
+        <field name="name">sale.order.form.custom</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <field name="user_id" position="after">
+                    <fieds name="x_update_history" invisible="1"/>
+                </field>
+            </data>
+        </field>
+    </record>
+<!--    Sale History Views-->
+    <record id="view_sale_history_form" model="ir.ui.view">
+        <field name="name">sale.history.form</field>
+        <field name="model">sale.history</field>
+        <field name="arch" type="xml">
+            <form string="Sale History">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="x_product_id" invisible="1"/>
+                            <field name="x_product_quotation_id" widget="many2one"
+                                   attrs="{'invisible': [('x_product_quotation_id', '=', False)]}"/>
+                            <field name="x_product_sale_order_id" widget="many2one"
+                                   attrs="{'invisible': [('x_product_sale_order_id', '=', False)]}"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="x_order_id" widget="many2one"/>
+                            <field name="x_order_date"/>
+                            <field name="x_partner_id" widget="many2one"/>
+                            <field name="x_partner_invoice_id" widget="many2one"/>
+                            <field name="x_partner_shipping_id" widget="many2one"/>
+                            <field name="x_end_user_id" widget="many2one"/>
+                            <field name="x_currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="x_product_uom_qty"/>
+                            <field name="x_qty_delivered"/>
+                            <field name="x_qty_invoiced"/>
+                            <field name="x_product_uom"/>
+                            <field name="x_price_unit" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+                            <field name="x_discount"/>
+                            <field name="x_price_subtotal" widget="monetary" options="{'currency_field': 'x_currency_id'}"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sale_history_tree" model="ir.ui.view">
+        <field name="name">sale.history.tree</field>
+        <field name="model">sale.history</field>
+        <field name="arch" type="xml">
+            <tree string="Sale History">
+                <field name="x_product_id" invisible="1"/>
+                <field name="x_order_id" widget="many2one"/>
+                <field name="x_order_date"/>
+                <field name="x_partner_id" widget="many2one"/>
+                <field name="x_currency_id" invisible="1"/>
+                <field name="x_product_uom_qty" sum="Total"/>
+                <field name="x_qty_delivered" sum="Total"/>
+                <field name="x_qty_invoiced" sum="Total"/>
+                <field name="x_product_uom"/>
+                <field name="x_price_unit" widget="monetary" options="{'currency_field': 'x_currency_id'}" avg="Average"/>
+                <field name="x_discount"/>
+                <field name="x_price_subtotal" widget="monetary" options="{'currency_field': 'x_currency_id'}" sum="Total"/>
+                <field name="x_unit_cost" widget="monetary" options="{'currency_field': 'x_currency_id'}" avg="Average"/>
+                <field name="x_cost" widget="monetary" options="{'currency_field': 'x_currency_id'}" sum="Total"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_sale_history_graph" model="ir.ui.view">
+        <field name="name">sale.history.graph</field>
+        <field name="model">sale.history</field>
+        <field name="arch" type="xml">
+            <graph string="Sale History">
+                <field name="x_order_id"/>
+                <field name="x_price_subtotal" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_sale_history_search" model="ir.ui.view">
+        <field name="name">sale.history.search</field>
+        <field name="model">sale.history</field>
+        <field name="arch" type="xml">
+            <search string="Sale History">
+                <field name="x_product_id"/>
+                <field name="x_partner_id"/>
+                <field name="x_order_id"/>
+				<group col="4" colspan="4" expand="0" string="Group By">
+                    <filter string="Products" name="product_id" context="{'group_by':'x_product_id'}"/>
+                    <filter string="Customer" name="partner_id" context="{'group_by':'x_partner_id'}"/>
+                    <filter string="Sale Orders" name="order_id" context="{'group_by':'x_order_id'}"/>
+                    <filter string="Date" name="order_date" context="{'group_by':'x_order_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sale_history" model="ir.actions.act_window">
+		<field name="name">Sale History</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">sale.history</field>
+		<field name="view_mode">tree,form,graph</field>
+		<field name="context">{'search_default_product_id': 1}</field>
+		<field name="domain">{}</field>
+		<field name="search_view_id" ref="view_sale_history_search"/>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				No History to Show
+			</p>
+		</field>
+    </record>
+
+    <menuitem id="menu_sale_history"
+              name="Sale History"
+              parent="cus_product_360_view.menu_product_360"
+              action="cus_product_360_view.action_sale_history"
+              sequence="1"/>
+</odoo>

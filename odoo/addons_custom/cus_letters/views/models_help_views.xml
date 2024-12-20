@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+	<record id="res_help_view_form" model="ir.ui.view">
+		<field name="name">res.help.view.form</field>
+		<field name="model">res.help</field>
+		<field name="arch" type="xml">
+			<form string="Help">
+				<sheet>
+					<group col="4">
+						<field name="x_model_id"/>
+					</group>
+					<field name="x_memo"/>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="res_help_view_tree" model="ir.ui.view">
+		<field name="name">res.help.view.tree</field>
+		<field name="model">res.help</field>
+		<field name="arch" type="xml">
+			<tree string="Help">
+				<field name="x_model_id"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="res_help_view_search" model="ir.ui.view">
+		<field name="name">res.help.view.search</field>
+		<field name="model">res.help</field>
+		<field name="arch" type="xml">
+			<search string="Help">
+				<field name="x_model_id"/>
+			</search>
+		</field>
+	</record>
+
+    <record id="action_res_help" model="ir.actions.act_window">
+		<field name="name">Help</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">res.help</field>
+		<field name="view_mode">tree,form</field>
+		<field name="search_view_id" ref="res_help_view_search"/>
+    </record>
+</odoo>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record id="base_bom_form_view" model="ir.ui.view">
+		<field name="name">base.bom.form.view</field>
+		<field name="model">base.bom</field>
+		<field name="arch" type="xml">
+			<form string="Input BoMs">
+				<sheet>
+					<group col="6">
+						<field name="x_name"/>
+						<field name="x_product_id"/>
+						<field name="x_bom_tool_id"/>
+						<field name="x_bom_file"/>
+						<field name="x_pnp_file"/>
+						<field name="x_routing_id"/>
+					</group>
+					<field name="x_bom_comment" placeholder="BoM Comments"/>
+					<separator col="4" string="BoM Lines"/>
+					<field name="x_bom_line_ids">
+						<tree editable="bottom">
+							<field name="x_base_bom_id" invisible="1"/>
+							<field name="x_bom_tool_id" invisible="1"/>
+							<field name="x_base_product_id" invisible="1"/>
+							<field name="x_line_select" invisible="1"/>
+							<field name="x_routing_id" invisible="1"/>
+							<field name="image_128" widget="image" class="o_kanban_image_fill_left" optional="hide"/>
+							<field name="x_name" optional="show"/>
+							<field name="x_part_description" optional="hide"/>
+							<field name="x_ref_des"/>
+							<field name="x_old_product_id" widget="many2one" optional="hide"/>
+							<field name="x_taraz_part_id" widget="many2one" optional="show"/>
+							<field name="x_product_id" widget="many2one"/>
+							<field name="x_active" optional="hide"/>
+							<field name="x_quantity" optional="hide"/>
+							<field name="x_uom_id" optional="hide"/>
+							<field name="x_description" optional="hide"/>
+							<field name="x_line_block_id" readonly="1" optional="hide"/>
+							<field name="x_notes" optional="hide"/>
+							<field name="x_move_to_tool_id" options="{'no_quick_create': True, 'no_create_edit': True}" widget="many2one" optional="hide"/>
+							<field name="x_type" optional="show"/>
+							<field name="x_operation_id" options="{'no_quick_create':True,'no_create_edit':True}" optional="hide"/>
+
+							<field name="x_dnp" optional="show"/>
+							<field name="x_critical" optional="show"/>
+							<field name="x_variant" optional="show"/>
+
+							<field name="x_design_new" optional="hide"/>
+							<field name="x_design_modified" optional="hide"/>
+							<field name="x_design_deleted" optional="hide"/>
+							<field name="x_new" optional="hide"/>
+							<field name="x_modified" optional="hide"/>
+							<field name="x_deleted" optional="hide"/>
+
+							<field name="x_investor_product" optional="hide"/>
+						</tree>
+					</field>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="base_bom_tree_view" model="ir.ui.view">
+		<field name="name">base.bom.tree.view</field>
+		<field name="model">base.bom</field>
+		<field name="arch" type="xml">
+			<tree string="Input BoMs">
+				<field name="x_name"/>
+				<field name="x_product_id"/>
+				<field name="x_bom_tool_id"/>
+				<field name="x_bom_comment"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="base_bom_search_view" model="ir.ui.view">
+		<field name="name">base.bom.search.view</field>
+		<field name="model">base.bom</field>
+		<field name="arch" type="xml">
+			<search string="Input BoMs">
+				<field name="x_name" string="Input BoM"
+					   filter_domain="
+					   ['|', '|', '|',
+					   ('display_name', 'ilike', self), ('x_name', 'ilike', self),
+					   ('x_bom_tool_id', 'ilike', self), ('x_product_id', 'ilike', self)
+					   ]"
+				/>
+				<field name="x_name" string="And Input BoM"
+					   filter_domain="
+					   ['|', '|', '|',
+					   ('display_name', 'ilike', self), ('x_name', 'ilike', self),
+					   ('x_bom_tool_id', 'ilike', self), ('x_product_id', 'ilike', self)
+					   ]"
+				/>
+				<field name="x_bom_line_ids"/>
+				<field name="x_bom_comment"/>
+				<group expand="0" string="Group By">
+					<filter name="product" string="Product" domain="" context="{'group_by': 'x_product_id'}"/>
+					<filter name="bom_tool" string="BoM Tool" domain="" context="{'group_by': 'x_bom_tool_id'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+
+	<record id="action_view_base_bom" model="ir.actions.act_window">
+		<field name="name">Input BoMs</field>
+		<field name="res_model">base.bom</field>
+		<field name="view_mode">tree,form</field>
+		<field name="search_view_id" ref="base_bom_search_view"/>
+		<field name="view_id" ref="base_bom_tree_view"/>
+	</record>
+</odoo>
