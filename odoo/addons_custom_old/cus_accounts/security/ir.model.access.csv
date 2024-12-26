@@ -1,6 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_add_move_source,access.add.move.source,model_add_move_source,,1,1,1,1
-access_account_account_gl_group,access_account_account_gl_group,model_account_account_gl_group,,1,1,1,1
-access_account_account_gl_type,access_account_account_gl_type,model_account_account_gl_type,,1,1,1,1
-
-

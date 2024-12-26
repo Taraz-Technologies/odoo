@@ -1,6 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_quality_control_manager,access.quality.control.manager,model_quality_control,,1,1,1,1
-access_qc_checklist,access.qc.checklist,model_qc_checklist,,1,1,1,1
-access_qc_employee_fines,access.qc.employee.fines,model_qc_employee_fines,,1,1,1,1
-
-

@@ -1,6 +1,0 @@
-from . import account
-from . import account_bank_statement
-from . import account_move
-from . import ir_attachment
-from . import partner
-from . import res_currency

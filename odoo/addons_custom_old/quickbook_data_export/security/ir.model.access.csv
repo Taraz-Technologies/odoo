@@ -1,6 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_data_quickbooks,access.data.quickbooks,model_data_quickbooks,,1,1,1,1
-access_accounts_quickbooks,access.accounts.quickbooks,model_accounts_quickbooks,,1,1,1,1
-access_contacts_quickbooks,access.contacts.quickbooks,model_contacts_quickbooks,,1,1,1,1
-
-

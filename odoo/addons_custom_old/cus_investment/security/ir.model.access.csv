@@ -1,7 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_res_investment,access.res.investment,model_res_investment,,1,1,1,1
-access_res_investors,access.res.investors,model_res_investors,,1,1,1,1
-access_investment_product,access.investment.product,model_investment_product,,1,1,1,1
-access_res_investment_return,access.res.investment.return,model_res_investment_return,,1,1,1,1
-
-

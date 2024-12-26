@@ -1,5 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_scrum_project,access.scrum.project,model_scrum_project,scrum_methodology.scrum_group_user,1,1,1,1
-access_scrum_project_type,access.scrum.project.type,model_scrum_project_type,scrum_methodology.scrum_group_user,1,1,1,1
-access_scrum_task,access.scrum.task,model_scrum_task,scrum_methodology.scrum_group_user,1,1,1,1
-access_scrum_task_type,access.scrum.task.type,model_scrum_task_type,scrum_methodology.scrum_group_user,1,1,1,1

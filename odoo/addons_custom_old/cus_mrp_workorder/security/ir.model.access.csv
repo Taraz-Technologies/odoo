@@ -1,5 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_mrp_workorder_stage,access.mrp.workorder.stage user,model_mrp_workorder_stage,mrp.group_mrp_user,1,1,1,1
-access_mrp_workorder_stage_stock_worker,access.mrp.workorder.stage stock_worker,model_mrp_workorder_stage,stock.group_stock_user,1,0,0,0
-access_mrp_workorder_stage_manager,mrp.workorder.stage manager,model_mrp_workorder_stage,mrp.group_mrp_manager,1,0,0,0
-access_qc_checklist,access.qc.checklist,model_qc_checklist,,1,1,1,1
