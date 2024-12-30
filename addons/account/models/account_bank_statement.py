@@ -751,6 +751,9 @@ class AccountBankStatementLine(models.Model):
         '''
         self.ensure_one()
 
+        if not self.journal_id.suspense_account_id:
+            self.journal_id.suspense_account_id = self.journal_id.default_account_id.id
+
         if not counterpart_account_id:
             counterpart_account_id = self.journal_id.suspense_account_id.id
 

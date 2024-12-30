@@ -185,6 +185,8 @@ class AccountPayment(models.Model):
             'inbound-customer': _("Customer Payment"),
             'outbound-supplier': _("Vendor Payment"),
             'inbound-supplier': _("Vendor Reimbursement"),
+            'outbound-employee': _("Employee Payment"),
+            'inbound-employee': _("Employee Reimbursement"),
         }
 
     def _prepare_move_line_default_vals(self, write_off_line_vals=None):
