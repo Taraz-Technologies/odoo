@@ -1,0 +1,3 @@
+[submodule "/opt/odoo15/odoo/addons_custom"]
+	path = /opt/odoo15/odoo/addons_custom
+	url = git@github.com:Taraz-Technologies/odoo_addons_custom.git
