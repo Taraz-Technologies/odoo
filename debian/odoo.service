@@ -1,14 +1,15 @@
 [Unit]
-Description=Odoo Open Source ERP and CRM
-After=network.target
+Description=Odoo 14 (Open Source ERP and CRM)
+Requires=postgresql.service
+After=network.target postgresql.service
 
 [Service]
 Type=simple
-User=odoo
-Group=odoo
-ExecStart=/usr/bin/odoo --config /etc/odoo/odoo.conf --logfile /var/log/odoo/odoo-server.log
+User=taraz
+Group=taraz
+ExecStart=/opt/odoo/venv/bin/python3.8 /opt/odoo/odoo-bin --config /etc/odoo.conf
 KillMode=mixed
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
-
