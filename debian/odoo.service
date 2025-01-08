@@ -7,7 +7,7 @@ After=network.target postgresql.service
 Type=simple
 User=taraz
 Group=taraz
-ExecStart=/opt/odoo/venv/bin/python3.8 /opt/odoo/odoo-bin --config /etc/odoo.conf
+ExecStart=/opt/odoo14/venv/bin/python3.8 /opt/odoo14/odoo-bin --config /etc/odoo.conf
 KillMode=mixed
 Restart=always
 
