@@ -15,7 +15,7 @@ goto-statement==1.2
 html2text==2020.1.16
 isodate==0.6.1
 mock==2.0.0
-numpy==1.24.4
+numpy
 openpyxl==3.0.10
 pandas==2.0.3
 paramiko==3.3.1
@@ -35,9 +35,8 @@ PyNaCl==1.5.0
 pyparsing==2.2.0
 python-stdnum==1.19
 requests-toolbelt==1.0.0
-scipy==1.10.1
+scipy
 six==1.16.0
 soupsieve==2.5
 tzdata==2024.1
-vatnumber==1.2
 vobject==0.9.6.1
