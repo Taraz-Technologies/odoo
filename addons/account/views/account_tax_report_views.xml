@@ -55,7 +55,7 @@
             <field name="arch" type="xml">
                 <tree>
                     <field name="company_id" invisible="1"/>
-                    <field name="tax_report_country_id" invisible="1"/>
+<!--                    <field name="tax_report_country_id" invisible="1"/>-->
                     <field name="tax_report_id" invisible="1"/>
                     <field name="name"/>
                     <field name="date"/>
@@ -75,7 +75,7 @@
                             <group>
                                 <field name="tax_report_id" invisible="1"/>
                                 <field name="name"/>
-                                <field name="tax_report_country_id"/>
+<!--                                <field name="tax_report_country_id"/>-->
                                 <field name="foreign_vat_fiscal_position_id"/>
                             </group>
                             <group>
