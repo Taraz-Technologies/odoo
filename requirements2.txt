@@ -14,6 +14,7 @@ Genshi==0.7.7
 goto-statement==1.2
 html2text==2020.1.16
 isodate==0.6.1
+Mako==1.0.7
 mock==2.0.0
 numpy
 openpyxl==3.0.10
