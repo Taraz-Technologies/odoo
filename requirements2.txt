@@ -40,3 +40,4 @@ six==1.16.0
 soupsieve==2.5
 tzdata==2024.1
 vobject==0.9.6.1
+Mako==1.0.7
