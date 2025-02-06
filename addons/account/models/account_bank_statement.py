@@ -941,12 +941,12 @@ class AccountBankStatementLine(models.Model):
                 company_currency = st_line.journal_id.company_id.currency_id
                 journal_currency = st_line.journal_id.currency_id if st_line.journal_id.currency_id != company_currency else False
 
-                if len(liquidity_lines) != 1:
-                    raise UserError(_(
-                        "The journal entry %s reached an invalid state regarding its related statement line.\n"
-                        "To be consistent, the journal entry must always have exactly one journal item involving the "
-                        "bank/cash account."
-                    ) % st_line.move_id.display_name)
+                # if len(liquidity_lines) != 1:
+                #     raise UserError(_(
+                #         "The journal entry %s reached an invalid state regarding its related statement line.\n"
+                #         "To be consistent, the journal entry must always have exactly one journal item involving the "
+                #         "bank/cash account."
+                #     ) % st_line.move_id.display_name)
 
                 st_line_vals_to_write.update({
                     'payment_ref': liquidity_lines.name,
